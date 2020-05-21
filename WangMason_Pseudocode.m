@@ -4,7 +4,6 @@
 
 %define the constants B1, B2, B3: ALL are COM initial position (x1 and y1), masses, radius of gyration dependant.
 % ^ equations: 19-21
-
 %define the constants So and Co: both are initial COM velocities dependant (ydot_1o, ....) and initial COM position dependant (x1 and y1),
 % ^ equations: 22-23
 
@@ -17,4 +16,12 @@
 
 %define and identify small s (constant name s) from the inequalities using an if statement.
 % ^ equation: 49
-% define P_d and P_q: 
+% define P_d and P_q:  Mu, the Bs, So and Co, and s dependant, all that are defined above
+% ^equations: 35-36
+
+%log in the measured post impact data
+% define the contact point velocity (xdot_1c and ydot_1c): initial COM velocities dependant (ydot_1o, ....)
+% ^paper 2 equations 8 and 9
+
+% define the error metric in the first paper: dependant on the previous contact velocity 
+% ^ first paper equations 4 to 7
