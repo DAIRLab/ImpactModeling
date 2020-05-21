@@ -28,7 +28,15 @@
 
 %define e as a SYMBOL
 
-%using poisson's model, find the sticking mode: P_d, P_q, and e dependant: mu, mu_s, So, Co, s, and the Bs dependant
+%using poisson's model, find the contact mode: P_d, P_q, and e dependant: mu, mu_s, So, Co, s, and the Bs dependant
 % ^ page 639 table 1
+% ^ since we do not know e, we won't actually know what contact mode we are experiencing
+% so, we define all the the resulting impulses Px and Py (in terms of e) for all contact modes and find for each contact mode
+% the e that minimizes the metric error. and the contact mode with the e that results in the smallest metric error
+%is the correct and most realistic contact mode.
+%
+%so here after this section, we have an e that minimizes the metric error, and the most realistic Px and Py. But all of 
+%this is mu dependant and I haven't thought of how to approach that yet.
+
 
 
