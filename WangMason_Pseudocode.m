@@ -25,3 +25,8 @@
 
 % define the error metric in the first paper: dependant on the previous contact velocity 
 % ^ first paper equations 4 to 7
+
+%define e as a SYMBOL
+
+%using poisson's model, find the sticking mode: P_d, P_q, and e dependant: mu, mu_s, So, Co, s, and the Bs dependant
+% ^ page 639 table 1
