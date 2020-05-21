@@ -13,13 +13,22 @@
     %p1             radius of gyration of interia
     %x1             x coordinate of center of mass
     %y1             y coordinate of center of mass
-    %xdot_1o        initial x velocity 
-    %ydot_1o        initial y velocity
+    %xdot_1o        pre-impact x velocity 
+    %ydot_1o        pre-impact y velocity
     %thetadot_1o    initial rotational velocity 
     
     %SECOND OBJECT, same format as above
     
 %Outputs:
+    %xdot_1           Post-impact x velocity
+    %ydot_1          post-impact y velocity
+    %-------
+    
+%Additional variables used:
+    %Px             tangential impulse
+    %Py             normal impulse
+    %e              coefficient of restitution
+    %mu             frictional coefficient
 
 function [output] = WangMason(firstObj, secondObj)
     %% Assign variable names for input vectors
@@ -73,8 +82,23 @@ function [output] = WangMason(firstObj, secondObj)
     C_o = (ydot_1o + thetadot_1o * x1) ...
         - (ydot_2o + thetadot_2o * x2); %(23) 
     
-    %% Determine Contact Mode
+   %% Determine mu
+   
+   
+   
+   
+   %% Determine e to minimize metric error
+   
+   
+   
+   %% Determine Contact Mode 
+    
+    
+    
+    
     
     %% Solve for Output
+    xdot_1 = (Px/m1)
+    
 
 end
