@@ -10,15 +10,16 @@
     % I1 - Moment of Inertia of Object 1
 
 %define the constants B1, B2, B3: ALL are COM initial position (x1 and y1), masses, radius of gyration dependant.
-% ^ equations: 19-21
     B1 = (p1^2 + y1^2) / I1;
     B2 = (p1^2 + x1^2) / I1;
     B3 = x1 * y1 / I1;
+% ^ equations: 19-21
 
 %define the constants So and Co: both are initial COM velocities dependant (ydot_1o, ....) and initial COM position dependant (x1 and y1),
 % ^ equations: 22-23
 
 % define Mu_s: B3 and B1 dependant
+    mu_s = -B3 / B1;
 % ^ equation: 34
 
 %define and identify small s (constant name s) from the inequalities using an if statement. only So dependant
