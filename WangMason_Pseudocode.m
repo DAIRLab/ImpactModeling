@@ -42,12 +42,10 @@
 % realistic e and mu that fit 80 trials) we can find an e that is reasonable (or maybe find e values for all trials and then 
 % average them?) 
 % we can end this code here (aka a code to specifically find a good value of e) and then have another function that calls out
-%this function to calculate the impulses and post impact state like mentioned below)
+%this function to get an e value, then use that e value in the if statement in table 1 to figure out the mode of contact
+%and then use this mode of contact's equations to get values for the impulses Px and Py
 
-
-%so here after the previuos section, we have an e that minimizes the metric error on average for a good number of trials
-%and then we can use that e to get the most realistic Px and Py given an input of preimpact velocities and positions.
 % but all of this is mu dependant and I haven't thought of how to approach that yet.
 
-%find the post impact velocities (xdot_1 and ...)
+%find the post impact velocities (xdot_1 and ...) using the previously calculated Px and Py
 % ^ equations 5-7
