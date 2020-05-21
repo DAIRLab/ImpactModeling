@@ -9,11 +9,8 @@
 %define the constants So and Co: both are initial COM velocities dependant (ydot_1o, ....) and initial COM position dependant (x1 and y1),
 % ^ equations: 22-23
 
-
 % define Mu_s: B3 and B1 dependant
 % ^ equation: 34
-
-%figure out a way to find mu (e dependant)
 
 %define and identify small s (constant name s) from the inequalities using an if statement. only So dependant
 % ^ equation: 49
@@ -27,7 +24,7 @@
 % define the error metric in the first paper: dependant on the previous contact velocity 
 % ^ first paper equations 4 to 7
 
-%define e as a SYMBOL
+%define e as a SYMBOL %figure out a way to find mu (e dependant) % use a double for loop as a gridsearch to find a good set of mu and e
 
 %using poisson's model, find the contact mode: P_d, P_q, and e dependant: mu, mu_s, So, Co, s, e, and the Bs dependant
 % ^ page 639 table 1
