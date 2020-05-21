@@ -4,7 +4,7 @@
 %Step 3: Solve for post impact velocities given constants from step 2, mu, and epsilon
 %Step 4: Perform a grid search over mu and epislon to minimize the error of the post impact velocities 
 %Step 5: Return optimal mu, epsilon, and post impact velocities
-
+hello
 % ----------------------------------
 %Hi This is a starting pseudocode file to write down the flow of the code
 %before we make changes to the main wang mason code file
