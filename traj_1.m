@@ -9,8 +9,7 @@
 
 s = 0.06; %m (side length of square)
 
-Izz = s^4 / 12; %moment of inertia about the axis of rotation - m^4
-rad_gyr = sqrt(Izz / s^2); %radius of gyration of square - m
+rad_gyr = sqrt(s^2 / 6); %radius of gyration of square - m
 
 disp("radius of gyration is " + Izz + " meters");
 
