@@ -39,10 +39,14 @@
 % Since the Poisson Hypothesis of restitution says that the coefficient of restitution e is ONLY MATERIAL DEPENDANT, If we run
 %this section multiple times for multiple trials (like what was done in paper 1, they "fit" the models to find the most
 % realistic e and mu that fit 80 trials) we can find an e that is reasonable (or maybe find e values for all trials and then 
-% average them?)
+% average them?) 
+% we can end this code here (aka a code to specifically find a good value of e) and then have another function that calls out
+%this function to calculate the impulses and post impact state like mentioned below)
 %so here after this section, we have an e that minimizes the metric error on average for a good number of trials
 %and then we can use that e to get the most realistic Px and Py.
 % but all of this is mu dependant and I haven't thought of how to approach that yet.
+
+
 
 
 
