@@ -32,6 +32,7 @@
 
 %using poisson's model, find the contact mode: P_d, P_q, and e dependant: mu, mu_s, So, Co, s, and the Bs dependant
 % ^ page 639 table 1
+
 % ^ since we do not know e, we won't actually know what contact mode we are experiencing
 % so, we define all the the resulting impulses Px and Py (in terms of e) for all contact modes and find for each contact mode
 % the e that minimizes the metric error. and the contact mode with the e that results in the smallest metric error
@@ -42,9 +43,13 @@
 % average them?) 
 % we can end this code here (aka a code to specifically find a good value of e) and then have another function that calls out
 %this function to calculate the impulses and post impact state like mentioned below)
-%so here after this section, we have an e that minimizes the metric error on average for a good number of trials
+
+
+%so here after the previuos section, we have an e that minimizes the metric error on average for a good number of trials
 %and then we can use that e to get the most realistic Px and Py.
 % but all of this is mu dependant and I haven't thought of how to approach that yet.
+
+%de
 
 
 
