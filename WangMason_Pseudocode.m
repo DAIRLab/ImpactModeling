@@ -36,9 +36,13 @@
 % so, we define all the the resulting impulses Px and Py (in terms of e) for all contact modes and find for each contact mode
 % the e that minimizes the metric error. and the contact mode with the e that results in the smallest metric error
 %is the correct and most realistic contact mode.
-%
-%so here after this section, we have an e that minimizes the metric error, and the most realistic Px and Py. But all of 
-%this is mu dependant and I haven't thought of how to approach that yet.
+% Since the Poisson Hypothesis of restitution says that the coefficient of restitution e is ONLY MATERIAL DEPENDANT, If we run
+%this section multiple times for multiple trials (like what was done in paper 1, they "fit" the models to find the most
+% realistic e and mu that fit 80 trials) we can find an e that is reasonable (or maybe find e values for all trials and then 
+% average them?)
+%so here after this section, we have an e that minimizes the metric error on average for a good number of trials
+%and then we can use that e to get the most realistic Px and Py.
+% but all of this is mu dependant and I haven't thought of how to approach that yet.
 
 
 
