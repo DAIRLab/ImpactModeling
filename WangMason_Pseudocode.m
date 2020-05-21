@@ -30,3 +30,5 @@
 
 %using poisson's model, find the sticking mode: P_d, P_q, and e dependant: mu, mu_s, So, Co, s, and the Bs dependant
 % ^ page 639 table 1
+
+
