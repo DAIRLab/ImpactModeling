@@ -16,7 +16,7 @@
 % define Mu_s: B3 and B1 dependant
 % ^ equation: 34
 
-%define and identify small s (constant name s) from the inequalities using an if statement.
+%define and identify small s (constant name s) from the inequalities using an if statement. only So dependant
 % ^ equation: 49
 % define P_d and P_q:  Mu, the Bs, So and Co, and s dependant, all that are defined above
 % ^equations: 35-36
