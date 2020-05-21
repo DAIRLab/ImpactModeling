@@ -1,6 +1,8 @@
 %Hi This is a starting pseudocode file to write down the flow of the code
 %before we make changes to the main wang mason code file
 
+%PS by initial quantities i mean preimpact quanitities
+
 
 %define the constants B1, B2, B3: ALL are COM initial position (x1 and y1), masses, radius of gyration dependant.
 % ^ equations: 19-21
