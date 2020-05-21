@@ -2,10 +2,19 @@
 %before we make changes to the main wang mason code file
 
 %PS by initial quantities i mean preimpact quanitities
+%NOTE: Object 1 is a SQUARE with side length 0.06 meters
 
+%Defining Variables:
+    % (x1, y1) - COM position of object 1
+    % p1 - Radius of Gyration of Object 1
+    % I1 - Moment of Inertia of Object 1
 
 %define the constants B1, B2, B3: ALL are COM initial position (x1 and y1), masses, radius of gyration dependant.
 % ^ equations: 19-21
+    B1 = (p1^2 + y1^2) / I1;
+    B2 = (p1^2 + x1^2) / I1;
+    B3 = x1 * y1 / I1;
+
 %define the constants So and Co: both are initial COM velocities dependant (ydot_1o, ....) and initial COM position dependant (x1 and y1),
 % ^ equations: 22-23
 
