@@ -31,3 +31,8 @@ elseif (Pd < Pq)
 else
     disp("Error, none of contact mode requirements met");
 end
+
+%% use error metric to determine best mu and e
+% 1. compute error of the matrix containing Px & Py values by comparing to actual data
+% 2. determine the minimum error and its position in the matrix
+% 3. based on the position in the matrix, determine the mu and e values
