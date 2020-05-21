@@ -1,3 +1,11 @@
+%%Overall Goal
+%Step 1: Get initial velcoity values as well as information about object to solve for I
+%Step 2: Solve for constants S0, C0, B1, B2, and B3 given values from step 1
+%Step 3: Solve for post impact velocities given constants from step 2, mu, and epsilon
+%Step 4: Perform a grid search over mu and epislon to minimize the error of the post impact velocities 
+%Step 5: Return optimal mu, epsilon, and post impact velocities
+
+% ----------------------------------
 %Hi This is a starting pseudocode file to write down the flow of the code
 %before we make changes to the main wang mason code file
 
