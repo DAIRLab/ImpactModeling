@@ -10,11 +10,10 @@
 % ^ equations: 22-23
 
 
-%figure out a way to find mu (e dependant)
-
-
 % define Mu_s: B3 and B1 dependant
 % ^ equation: 34
+
+%figure out a way to find mu (e dependant)
 
 %define and identify small s (constant name s) from the inequalities using an if statement. only So dependant
 % ^ equation: 49
