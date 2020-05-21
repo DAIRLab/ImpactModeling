@@ -22,14 +22,15 @@
     %      simply set it equal to 1
     %B1, B2, and B3 - constants dependant on geometry and mass properties
     %                 of the system
-    % s - side length of object being dropped 
+    % sl - side length of object being dropped 
+    % s - initial sign of sliding velocity S0
     
 %% Set up Variables
 stepSize = 0.05;
-s = 0.06; %side length of square from data README
-rho = sqrt(s^2/6); %using I/m where I = m *s^4 / 12
+sl = 0.06; %side length of square from data README
+rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
 m1 = 1; %cancels out as explained in variables section above
-I1 = m * s^4 / 12; % moment of inertia of square
+I1 = m * sl^4 / 12; % moment of inertia of square
 % initialize a matrix to hold the error values
 errors = zeros(401,401); %size based on using 0.05 intervals
     
@@ -48,8 +49,14 @@ C_0 = (y1dot_0 + thetadot1_0 * x1) - (y2dot_0 + thetadot2_0 * x2); %(23)
 B1 = 1 + y1^2/(m1*rho^2); %(19)
 B2 = 1 + x1^2/(m1*rho^2); %(20)
 B3 = x1 * y1/m1/rho^2;    %(21)
-%mu_s 
+%Static friction coefficiant 
 u_s = -B3/B1; %(34)
+%Initial Sign of Sliding Velocity 
+if (S_0 ~= 0) 
+    s = sign(S_0);
+else
+    s = 1;
+end
 
 
 %% use error metric to determine best mu and e
