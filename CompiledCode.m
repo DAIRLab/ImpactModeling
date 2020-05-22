@@ -85,15 +85,17 @@ end
     % columns will be varying epsilon
     % rows will be varying mu
     
-for u = 0.05:stepSize:0.95 %varying mu from [0, 1] in intervals of 0.05
+for a = 1:19 %varying mu from [0.05, 0.95]
+    u = 0.05 * a;
+    
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
     Pq = (u * B1 + s * B3)*(-C_0);     %(36)
     
-    for e = 0.05:stepSize:0.95 %varying epsilon from [0, 1] in intervals of 0.05
-    
+    for b = 1:19 %varying epsilon from [0, 1] in intervals of 0.05.05, 0.95]
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
         %Sliding (Second Row of Table)
+        e = 0.05 * b;
         if (Pd > (1+e)*Pq)
             Py = - (1+e) * C_0 / (B2 + s * u * B3); %(40)
             Px = - s * u * Py;                      %(39)
@@ -129,7 +131,7 @@ for u = 0.05:stepSize:0.95 %varying mu from [0, 1] in intervals of 0.05
         % calculate error via least squares method ??
         error = (x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2; 
         % input error into error matrix
-        errors(floor(u/stepSize), floor(e/stepSize)) = error;
+        errors(a, b) = error;
     end
 end
 
