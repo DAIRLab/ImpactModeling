@@ -26,7 +26,7 @@
     % s - initial sign of sliding velocity S0
     
 %% Set up Variables
-stepSize = 0.05;
+stepSize = 0.1;
 sl = 0.06; %side length of square from data README
 rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
 m1 = 1; %cancels out as explained in variables section above
@@ -128,6 +128,68 @@ end
 % determine the "best" mu and epsilon value which yields the minimum error
     bestMu = i * stepSize;
     bestEpsilon = j * stepSize;
+
+%% Repeat the whole process again to find more precise mu and Epsilon
+
+for u = (bestMu-0.05):0.01:(bestMu+0.05) %varying mu from [0, 1] in intervals of 0.05
+    Pd = (B2 + s * u * B3) * s * S_0;  %(35)
+    Pq = (u * B1 + s * B3)*(-C_0);     %(36)
+    
+    for e = (bestEpsilon-0.05):0.01:(bestEpsilon+0.05) %varying epsilon from [0, 1] in intervals of 0.05
+    
+        %Use Table 1 to determine modes (conditionals)
+        %Apply equations 39 - 48 based on mode
+        %Sliding (Second Row of Table)
+        if (Pd > (1+e)*Pq)
+            Py = - (1+e) * C_0 / (B2 + s * u * B3); %(40)
+            Px = - s * u * Py;                      %(39)
+        %R (Third Row of Table)
+        elseif (Pq < Pd) && (Pd < (1+e) * Pq)
+
+            if u > abs(u_s) %R-Sticking
+                Py = -(1+e)* C_0 /(B2 + s * u * B3);  %(44)
+                Px = (B3*Py - S_0) / B1;              %(43)
+
+            else %R-Reversed Sliding
+                Py = -(1+e) * C_0/(B2 + s * u * B3);              %(48)
+                Px = s * u * (Py - 2 * S_0 / (B3 + s * u * B1));  %(47)
+            end
+        %C (Fourth Row of Table)   
+        elseif (Pd < Pq)
+
+             if u > abs(u_s) %C-Sticking
+                 Py = -(1+e) * (B1 * C_0 + B3 * S_0)/(B1*B2 - B3^2); %(42)
+                 Px = (B3 * Py - S_0)/B1;                            %(41)
+             else %C-Reversed Sliding
+                 Py = -(1+e)/(B2 - s * u * B3)* (C_0 + ...
+                     (2*s*B3*S_0)/(B3 + s * u * B1));               %(46)
+                 Px = s * u *(Py - 2 * S_0 / (B3 + s * u * B1));    %(45)
+             end    
+        else
+            disp("Error, none of contact mode requirements met");
+        end    
+
+        % calculate the post impact velocities according to the contact
+        % mode
+        x1dot_calc = (Px * rho^2)/I1 + pre(1); 
+        y1dot_calc = (Py * rho^2)/I1 + pre(2); 
+
+        % calculate error via least squares method ??
+        error = (x1dot_calc - post(1))^2 + (y1dot_calc - post(2))^2; 
+
+        % input error into error matrix
+        errors(u/0.01 + 1, e/0.01 + 1) = error;
+
+    end
+end
+
+% determine minimum error 
+    minimum = min(min(errors));
+% determine the indices of the minimum error
+    [i,j] = find(A == minimum);
+% determine the "best" mu and epsilon value which yields the minimum error
+    bestMuFinal = i * 0.01;
+    bestEpsilonFinal = j * 0.01; 
     
 %% Helper Functions
 
