@@ -69,11 +69,11 @@ end
     % columns will be varying epsilon
     % rows will be varying mu
     
-for u = 0:stepSize:1/StepSize %varying mu from [0, 1] in intervals of 0.05
+for u = 0:stepSize:1 %varying mu from [0, 1] in intervals of 0.05
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
     Pq = (u * B1 + s * B3)*(-C_0);     %(36)
     
-    for e = 0:stepSize:1/stepSize %varying epsilon from [0, 1] in intervals of 0.05
+    for e = 0:stepSize:1 %varying epsilon from [0, 1] in intervals of 0.05
     
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
