@@ -32,7 +32,7 @@ rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
 m1 = 1; %cancels out as explained in variables section above
 I1 = m1 * sl^4 / 12; % moment of inertia of square
 % initialize a matrix to hold the error values
-errors = zeros(21,21); %size based on using 0.05 intervals
+errors = zeros(19,19); %size based on using 0.05 intervals
     
 %% Find Impact Data
 % access actual data of first trajectory
@@ -85,11 +85,11 @@ end
     % columns will be varying epsilon
     % rows will be varying mu
     
-for u = 0:stepSize:1 %varying mu from [0, 1] in intervals of 0.05
+for u = 0.05:stepSize:0.95 %varying mu from [0, 1] in intervals of 0.05
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
     Pq = (u * B1 + s * B3)*(-C_0);     %(36)
     
-    for e = 0:stepSize:1 %varying epsilon from [0, 1] in intervals of 0.05
+    for e = 0.05:stepSize:0.95 %varying epsilon from [0, 1] in intervals of 0.05
     
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
@@ -99,7 +99,6 @@ for u = 0:stepSize:1 %varying mu from [0, 1] in intervals of 0.05
             Px = - s * u * Py;                      %(39)
         %R (Third Row of Table)
         elseif (Pq < Pd) && (Pd < (1+e) * Pq)
-
             if u > abs(u_s) %R-Sticking
                 Py = -(1+e)* C_0 /(B2 + s * u * B3);  %(44)
                 Px = (B3*Py - S_0) / B1;              %(43)
@@ -110,7 +109,6 @@ for u = 0:stepSize:1 %varying mu from [0, 1] in intervals of 0.05
             end
         %C (Fourth Row of Table)   
         elseif (Pd < Pq)
-
              if u > abs(u_s) %C-Sticking
                  Py = -(1+e) * (B1 * C_0 + B3 * S_0)/(B1*B2 - B3^2); %(42)
                  Px = (B3 * Py - S_0)/B1;                            %(41)
@@ -127,13 +125,12 @@ for u = 0:stepSize:1 %varying mu from [0, 1] in intervals of 0.05
         % mode
         x1dot_calc = Px/m1 + pre(1,4); 
         y1dot_calc = Py/m1 + pre(1,5); 
-
+    
         % calculate error via least squares method ??
         error = (x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2; 
-
         % input error into error matrix
-        errors(round(u/stepSize + 1), round(e/stepSize + 1)) = error;
-        disp(round(u/stepSize + 1)+ " " + round(e/stepSize + 1)); 
+        errors(floor(u/stepSize), floor(e/stepSize)) = error;
+        disp(floor(u/stepSize)+ " " + floor(e/stepSize)); 
     end
 end
 
