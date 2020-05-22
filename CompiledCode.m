@@ -130,6 +130,14 @@ end
     bestEpsilon = j * stepSize;
 
 %% Repeat the whole process again to find more precise mu and Epsilon
+%The only thing that this branch has extra is that it now has two for loops - 
+%the exact same for loop of the original, but twice - essentially, the idea is that 
+%the first for loop would have a bigger stepSize, so after sweeping through the range of 
+%e and mu it would return the approximate optimal e and mu. The second for loop takes as an 
+%input these e and mu, but has a finer stepSize set around these e and mu. It does the same 
+%thing, but overall should give a slightly more precise e and mu. In theory, these two for 
+%loops should run faster than the single for loop since we can avoid sweeping through 
+%some areas, hence, we are looking at less cases!
 
 for u = (bestMu-0.05):0.01:(bestMu+0.05) %varying mu from [0, 1] in intervals of 0.05
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
