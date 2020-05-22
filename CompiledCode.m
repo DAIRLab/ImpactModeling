@@ -30,16 +30,26 @@ stepSize = 0.1;
 sl = 0.06; %side length of square from data README
 rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
 m1 = 1; %cancels out as explained in variables section above
-I1 = m * sl^4 / 12; % moment of inertia of square
+I1 = m1 * sl^4 / 12; % moment of inertia of square
 % initialize a matrix to hold the error values
 errors = zeros(401,401); %size based on using 0.05 intervals
     
 %% Find Impact Data
 % access actual data of first trajectory
 
-% pre - vector of pre impact x and y velocities [x1dot_0, y1dot_0]
-% post - vector of post impact x and y velocities [x1dot_act, y1dot_act]
-[pre, post] = actualVelocities('traj_1.csv'); 
+% pre - vector of pre impact [line, x1_0, y1_0, th1_0, x1dot_0, y1dot_0, thetadot1_0]
+% post - vector of post impact [line, x1_act, y1_act, th1_act, x1dot_act, y1dot_act, thetadot1_act]
+[Pre, Post] = ReadData
+
+%This is all information related to the first impact
+x1 = Pre(1,1)
+y1 = Pre(1,2);
+theta = Pre(1,3);
+x1dot_0 = Pre(1,4);
+y1dot_0 = Pre(1,5);
+thetadot_0 = Pre(1,6);
+
+%Question: should we assume that x2, y2, and all object 2 related stuff is just not moving?
 
 %% Solve for Constants
 %S_0 and C_0
@@ -204,32 +214,66 @@ end
 % This function takes in the specified .csv file and outputs the pre and
 % post impact velocities of the first impact
 % INPUTS: csvFile - name of the .csv file to be accessed
-% OUTPUTS: pre - vector of pre impact x and y velocities [x1dot_0, y1dot_0]
-%          post - vector of post impact x and y velocities [x1dot_act, y1dot_act]
-function [pre, post] = actualVelocities(csvFile) 
+% OUTPUTS: pre - vector of pre impact x and y velocities [line, x1_0, y1_0, th1_0, x1dot_0, y1dot_0, thetadot1_0]
+%          post - vector of post impact x and y velocities [line, x1_act, y1_act, th1_act, x1dot_act, y1dot_act, thetadot1_act]
 
-    %load data
-    traj = readtable(csvFile);
-    
-    %convert from table to matrix
-    trajectory = traj{:, :};
-    
-    %initial impact matrix 
-    impacts = zeros(1, 6, 2);
+function [Pre, Post] = ReadData
 
-    %iterator variable to keep track of impact #
-    curr = 1; 
-    
-    %loop through all of data 
-    for i = 2:length(trajectory)-1
-        if (trajectory(i-1,5) < 0) && (trajectory(i,5) > 0)
-            impacts(curr, :, 1) = trajectory(i-1,:);  %preimpact data (first array)
-            impacts(curr, :, 2) = trajectory(i,:);    %post impact data (second array)
-            curr = curr + 1; 
-        end
-    end
-    
-    pre = [impacts(1,4,1), impacts(1,5,1)];
-    post = [impacts(1,4,2), impacts(1,5,2)];
-    
+%This code takes as an input a csv file that contains information about the
+%object's position and velocity in the plane. The code will identify the
+%regions of the data where an impact has occurred, and will output the
+%pre-impact and post-impact set position and velocity of the object
+
+%Be sure to change this depending on which computer you are using this. Use
+%the command window to find the directory of where your files are
+D = readmatrix('/Users/andyeske/Desktop/Simulations/dice-data-processed/traj_1.csv');
+
+%Column 1: x position 
+x = D(:,1);
+%Column 2: z position
+z = D(:,2);
+%Column 3: theta
+th = D(:,3);
+%Column 4: xDot
+xDot = D(:,4);
+%Column 5: zDot
+zDot = D(:,5);
+%Column 6: thetaDot
+thDot = D(:,6);
+
+%To identify the positions at which an impact occurred, we will take a look
+%at the changes in zDot over time - in essence, we will try to
+%find the parts where zDot changes sign. When an object hits the ground
+%from above, it velocity should reverse. Hence, we implement the
+%following code:
+
+l = length(zDot);
+imp = [];
+
+%This for loop finds a vector imp, which tracks all the times zDot changes
+%sign
+for k = 2:l
+    if sign(zDot(k)) ~= sign (zDot(k-1))
+        imp = [k, imp];
+    end  
 end
+
+l2 = length(imp);
+imp = imp - 1;
+impR = [];
+
+%This for loop compares the previous imp vector against the z positions, to
+%find only the values at which z is at a local minima
+for h = 1:l2
+    a = imp(h);
+    if z(a) < z(a+1) && z(a) < z(a-1) 
+        impR = [a,impR];    
+    end
+end
+
+%output: two matrices that contains all the information for the pre and
+%post impacts, for each impact
+impR2 = impR + 1;
+
+Pre = [impR', x(impR), z(impR), th(impR), xDot(impR), zDot(impR), thDot(impR)];
+Post = [impR2', x(impR2), z(impR2), th(impR2), xDot(impR2), zDot(impR2), thDot(impR2)];
