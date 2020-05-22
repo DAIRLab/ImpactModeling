@@ -149,11 +149,16 @@ end
 %loops should run faster than the single for loop since we can avoid sweeping through 
 %some areas, hence, we are looking at less cases!
 
-for u = (bestMu-0.05):0.01:(bestMu+0.05) %varying mu from [0, 1] in intervals of 0.05
+%define tune as the finer stepSize
+tune = 0.01;
+
+%we subtract and add from both bestMu and bestEpsilon 0.05 to get the bounds
+
+for u = (bestMu-0.05):tune:(bestMu+0.05) %varying mu from [0, 1] in intervals of 0.05
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
     Pq = (u * B1 + s * B3)*(-C_0);     %(36)
     
-    for e = (bestEpsilon-0.05):0.01:(bestEpsilon+0.05) %varying epsilon from [0, 1] in intervals of 0.05
+    for e = (bestEpsilon-0.05):tune:(bestEpsilon+0.05) %varying epsilon from [0, 1] in intervals of 0.05
     
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
@@ -196,7 +201,7 @@ for u = (bestMu-0.05):0.01:(bestMu+0.05) %varying mu from [0, 1] in intervals of
         error = (x1dot_calc - post(1))^2 + (y1dot_calc - post(2))^2; 
 
         % input error into error matrix
-        errors(u/0.01 + 1, e/0.01 + 1) = error;
+        errors(u/tune + 1, e/tune + 1) = error;
 
     end
 end
@@ -204,10 +209,13 @@ end
 % determine minimum error 
     minimum = min(min(errors));
 % determine the indices of the minimum error
-    [i,j] = find(A == minimum);
+    [i,j] = find(A == minimum); %Is there a matric called A?
 % determine the "best" mu and epsilon value which yields the minimum error
-    bestMuFinal = i * 0.01;
-    bestEpsilonFinal = j * 0.01; 
+    bestMuFinal = i * tune;
+    bestEpsilonFinal = j * tune; 
+%Note - there might be a problem here, since the scale of the doubleForLoops is no longer from 0 to 1 - 
+%we will need to adjust based on the fact that the original bestMu and bestEpsilon lie in the middle of the scale
+    
     
 %% Helper Functions
 
