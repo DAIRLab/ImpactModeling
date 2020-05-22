@@ -30,7 +30,7 @@ stepSize = 0.05;
 sl = 0.06; %side length of square from data README
 rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
 m1 = 1; %cancels out as explained in variables section above
-I1 = m1 * sl^4 / 12; % moment of inertia of square
+I1 = m1 * sl^2 / 6; % moment of inertia of square
 % initialize a matrix to hold the error values
 errors = zeros(19,19); %size based on using 0.05 intervals
     
@@ -39,10 +39,10 @@ errors = zeros(19,19); %size based on using 0.05 intervals
 
 % pre - vector of pre impact x and y velocities [x1dot_0, y1dot_0]
 % post - vector of post impact x and y velocities [x1dot_act, y1dot_act]
-[pre, post] = actualVelocities('traj_1.csv'); 
+[pre, post] = readImpactData('traj_2.csv'); 
 
 %assign pre impact velocities for object 1
-x1 = pre(1,1);
+x1 = sqrt(sl^2/2 - pre(1,2)^2);
 y1 = pre(1,2);
 theta1 = pre(1,3);
 x1dot_0 = pre(1,4);
@@ -85,15 +85,26 @@ end
     % columns will be varying epsilon
     % rows will be varying mu
     
+<<<<<<< Updated upstream
 for u = 0.05:stepSize:0.95 %varying mu from [0, 1] in intervals of 0.05
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
     Pq = (u * B1 + s * B3)*(-C_0);     %(36)
     
     for e = 0.05:stepSize:0.95 %varying epsilon from [0, 1] in intervals of 0.05
     
+=======
+for a = 1:19 %varying mu from [0.05, 0.95]
+    u = 0.05 * a;
+    
+    Pd = (B2 + s * u * B3) * s * S_0;  %(35)
+    Pq = (u * B1 + s * B3)*(-C_0);     %(36)
+    
+    for b = 1:19 %varying epsilon from [0, 1] in intervals of 0.05.05, 0.95]
+>>>>>>> Stashed changes
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
         %Sliding (Second Row of Table)
+        e =0.05 * b;
         if (Pd > (1+e)*Pq)
             Py = - (1+e) * C_0 / (B2 + s * u * B3); %(40)
             Px = - s * u * Py;                      %(39)
@@ -127,10 +138,16 @@ for u = 0.05:stepSize:0.95 %varying mu from [0, 1] in intervals of 0.05
         y1dot_calc = Py/m1 + pre(1,5); 
     
         % calculate error via least squares method ??
+<<<<<<< Updated upstream
         error = (x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2; 
         % input error into error matrix
         errors(floor(u/stepSize), floor(e/stepSize)) = error;
         disp(floor(u/stepSize)+ " " + floor(e/stepSize)); 
+=======
+        error = (x1dot_calc - post(1,4))^6 + (y1dot_calc - post(1,5))^2; 
+        % input error into error matrix
+        errors(a, b) = error;
+>>>>>>> Stashed changes
     end
 end
 
@@ -141,6 +158,7 @@ end
 % determine the "best" mu and epsilon value which yields the minimum error
     bestMu = (i-1) * stepSize;
     bestEpsilon = (j-1) * stepSize;
+<<<<<<< Updated upstream
     
 %% Helper Functions
 
@@ -162,17 +180,6 @@ function [pre, post] = actualVelocities(csvFile)
 
     %iterator variable to keep track of impact #
     curr = 1; 
+=======
+>>>>>>> Stashed changes
     
-    %loop through all of data 
-    for i = 2:length(trajectory)-1
-        if (trajectory(i-1,5) < 0) && (trajectory(i,5) > 0)
-            impacts(curr, :, 1) = trajectory(i-1,:);  %preimpact data (first array)
-            impacts(curr, :, 2) = trajectory(i,:);    %post impact data (second array)
-            curr = curr + 1; 
-        end
-    end
-    
-    pre = impacts(1,:,1);
-    post = impacts(1,:,2);
-    
-end
