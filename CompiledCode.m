@@ -1,5 +1,5 @@
 %% Find Contact Mode and Apply Equations
-
+%Authors: Joah, Phil, Natalie, Andy
  
 % VARIABLES:
     % stepSize - stepSize to vary the mu/epsilon by
@@ -30,7 +30,7 @@ stepSize = 0.05;
 sl = 0.06; %side length of square from data README
 rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
 m1 = 1; %cancels out as explained in variables section above
-I1 = m * sl^4 / 12; % moment of inertia of square
+I1 = m1 * sl^4 / 12; % moment of inertia of square
 % initialize a matrix to hold the error values
 errors = zeros(401,401); %size based on using 0.05 intervals
     
@@ -41,10 +41,26 @@ errors = zeros(401,401); %size based on using 0.05 intervals
 % post - vector of post impact x and y velocities [x1dot_act, y1dot_act]
 [pre, post] = actualVelocities('traj_1.csv'); 
 
+%assign pre impact velocities for object 1
+x1 = pre(1,1);
+y1 = pre(1,2);
+theta1 = pre(1,3);
+x1dot_0 = pre(1,4);
+y1dot_0 = pre(1,5);
+theta1dot_0 = pre(1,6);
+
+%assign pre impact velocities for object 2
+x2 = 1; %these are arbitrary since the velocities are 0 anyway
+y2 = 1;
+theta2 = 1;
+x2dot_0 = 0;
+y2dot_0 = 0;
+theta2dot_0 = 0;
+
 %% Solve for Constants
 %S_0 and C_0
-S_0 = (x1dot_0 + thetadot1_0 * y1) - (x2dot_0 + thetadot2_0 * y2); %(22)
-C_0 = (y1dot_0 + thetadot1_0 * x1) - (y2dot_0 + thetadot2_0 * x2); %(23)
+S_0 = (x1dot_0 + theta1dot_0 * y1) - (x2dot_0 + theta2dot_0 * y2); %(22)
+C_0 = (y1dot_0 + theta1dot_0 * x1) - (y2dot_0 + theta2dot_0 * x2); %(23)
 %B1, B2, and B3
 B1 = 1 + y1^2/(m1*rho^2); %(19)
 B2 = 1 + x1^2/(m1*rho^2); %(20)
@@ -69,11 +85,11 @@ end
     % columns will be varying epsilon
     % rows will be varying mu
     
-for u = 0:stepSize:1/StepSize %varying mu from [0, 1] in intervals of 0.05
+for u = 0:stepSize:1 %varying mu from [0, 1] in intervals of 0.05
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
     Pq = (u * B1 + s * B3)*(-C_0);     %(36)
     
-    for e = 0:stepSize:1/stepSize %varying epsilon from [0, 1] in intervals of 0.05
+    for e = 0:stepSize:1 %varying epsilon from [0, 1] in intervals of 0.05
     
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
@@ -109,22 +125,22 @@ for u = 0:stepSize:1/StepSize %varying mu from [0, 1] in intervals of 0.05
 
         % calculate the post impact velocities according to the contact
         % mode
-        x1dot_calc = (Px * rho^2)/I1 + pre(1); 
-        y1dot_calc = (Py * rho^2)/I1 + pre(2); 
+        x1dot_calc = (Px * rho^2)/I1 + pre(1,4); 
+        y1dot_calc = (Py * rho^2)/I1 + pre(1,5); 
 
         % calculate error via least squares method ??
-        error = (x1dot_calc - post(1))^2 + (y1dot_calc - post(2))^2; 
+        error = (x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2; 
 
         % input error into error matrix
-        errors(u/stepSize + 1, e/stepSize + 1) = error;
-
+        errors(round(u/stepSize + 1), round(e/stepSize + 1)) = error;
+        disp(round(u/stepSize + 1)+ " " + round(e/stepSize + 1)); 
     end
 end
 
 % determine minimum error 
     minimum = min(min(errors));
 % determine the indices of the minimum error
-    [i,j] = find(A == minimum);
+    [i,j] = find(errors == minimum);
 % determine the "best" mu and epsilon value which yields the minimum error
     bestMu = i * stepSize;
     bestEpsilon = j * stepSize;
@@ -132,10 +148,10 @@ end
 %% Helper Functions
 
 % This function takes in the specified .csv file and outputs the pre and
-% post impact velocities of the first impact
+% post impact states of the first impact
 % INPUTS: csvFile - name of the .csv file to be accessed
-% OUTPUTS: pre - vector of pre impact x and y velocities [x1dot_0, y1dot_0]
-%          post - vector of post impact x and y velocities [x1dot_act, y1dot_act]
+% OUTPUTS: pre - vector of pre impact state
+%          post - vector of post impact state
 function [pre, post] = actualVelocities(csvFile) 
 
     %load data
@@ -159,7 +175,7 @@ function [pre, post] = actualVelocities(csvFile)
         end
     end
     
-    pre = [impacts(1,4,1), impacts(1,5,1)];
-    post = [impacts(1,4,2), impacts(1,5,2)];
+    pre = impacts(1,:,1);
+    post = impacts(1,:,2);
     
 end
