@@ -32,7 +32,7 @@ rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
 m1 = 1; %cancels out as explained in variables section above
 I1 = m1 * sl^4 / 12; % moment of inertia of square
 % initialize a matrix to hold the error values
-errors = zeros(401,401); %size based on using 0.05 intervals
+errors = zeros(21,21); %size based on using 0.05 intervals
     
 %% Find Impact Data
 % access actual data of first trajectory
@@ -125,8 +125,8 @@ for u = 0:stepSize:1 %varying mu from [0, 1] in intervals of 0.05
 
         % calculate the post impact velocities according to the contact
         % mode
-        x1dot_calc = (Px * rho^2)/I1 + pre(1,4); 
-        y1dot_calc = (Py * rho^2)/I1 + pre(1,5); 
+        x1dot_calc = Px/m1 + pre(1,4); 
+        y1dot_calc = Py/m1 + pre(1,5); 
 
         % calculate error via least squares method ??
         error = (x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2; 
@@ -142,8 +142,8 @@ end
 % determine the indices of the minimum error
     [i,j] = find(errors == minimum);
 % determine the "best" mu and epsilon value which yields the minimum error
-    bestMu = i * stepSize;
-    bestEpsilon = j * stepSize;
+    bestMu = (i-1) * stepSize;
+    bestEpsilon = (j-1) * stepSize;
     
 %% Helper Functions
 
