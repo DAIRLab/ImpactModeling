@@ -130,7 +130,6 @@ for u = 0.05:stepSize:0.95 %varying mu from [0, 1] in intervals of 0.05
         error = (x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2; 
         % input error into error matrix
         errors(floor(u/stepSize), floor(e/stepSize)) = error;
-        disp(floor(u/stepSize)+ " " + floor(e/stepSize)); 
     end
 end
 
