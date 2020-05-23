@@ -39,7 +39,7 @@ errors = zeros(19,19); %size based on using 0.05 intervals
 
 % pre - vector of pre impact x and y velocities [x1dot_0, y1dot_0]
 % post - vector of post impact x and y velocities [x1dot_act, y1dot_act]
-[pre, post] = readImpactData('traj_2.csv'); 
+[pre, post] = readImpactData('traj_10.csv'); 
 
 %assign pre impact velocities for object 1
 x1 = sqrt(sl^2/2 - pre(1,2)^2);
@@ -86,7 +86,7 @@ end
     % rows will be varying mu
     
 for a = 1:19 %varying mu from [0.05, 0.95]
-    u = 0.05 * a;
+    u = stepSize * a;
     
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
     Pq = (u * B1 + s * B3)*(-C_0);     %(36)
@@ -95,11 +95,12 @@ for a = 1:19 %varying mu from [0.05, 0.95]
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
         %Sliding (Second Row of Table)
-        e =0.05 * b;
+        e = stepSize * b;
         if (Pd > (1+e)*Pq)
             Py = - (1+e) * C_0 / (B2 + s * u * B3); %(40)
             Px = - s * u * Py;                      %(39)
-        %R (Third Row of Table)
+        
+            %R (Third Row of Table)
         elseif (Pq < Pd) && (Pd < (1+e) * Pq)
             if u > abs(u_s) %R-Sticking
                 Py = -(1+e)* C_0 /(B2 + s * u * B3);  %(44)
@@ -109,12 +110,13 @@ for a = 1:19 %varying mu from [0.05, 0.95]
                 Py = -(1+e) * C_0/(B2 + s * u * B3);              %(48)
                 Px = s * u * (Py - 2 * S_0 / (B3 + s * u * B1));  %(47)
             end
-        %C (Fourth Row of Table)   
+            
+        %C (Fourth Row of Table)
         elseif (Pd < Pq)
-             if u > abs(u_s) %C-Sticking
+            if u > abs(u_s) %C-Sticking
                  Py = -(1+e) * (B1 * C_0 + B3 * S_0)/(B1*B2 - B3^2); %(42)
                  Px = (B3 * Py - S_0)/B1;                            %(41)
-             else %C-Reversed Sliding
+            else %C-Reversed Sliding
                  Py = -(1+e)/(B2 - s * u * B3)* (C_0 + ...
                      (2*s*B3*S_0)/(B3 + s * u * B1));               %(46)
                  Px = s * u *(Py - 2 * S_0 / (B3 + s * u * B1));    %(45)
@@ -129,7 +131,7 @@ for a = 1:19 %varying mu from [0.05, 0.95]
         y1dot_calc = Py/m1 + pre(1,5); 
     
         % calculate error via least squares method ??
-        error = (x1dot_calc - post(1,4))^6 + (y1dot_calc - post(1,5))^2; 
+        error = (x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2; 
         % input error into error matrix
         errors(a, b) = error;
     end
@@ -140,6 +142,6 @@ end
 % determine the indices of the minimum error
     [i,j] = find(errors == minimum);
 % determine the "best" mu and epsilon value which yields the minimum error
-    bestMu = (i-1) * stepSize;
-    bestEpsilon = (j-1) * stepSize;
+    bestMu = i * stepSize;
+    bestEpsilon = j * stepSize;
     
