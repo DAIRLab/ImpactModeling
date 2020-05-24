@@ -26,20 +26,21 @@
     % s - initial sign of sliding velocity S0
     
 %% Set up Variables
-stepSize = 0.05;
+stepSize = 0.01;
 sl = 0.06; %side length of square from data README
 rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
 m1 = 1; %cancels out as explained in variables section above
 I1 = m1 * sl^2 / 6; % moment of inertia of square
 % initialize a matrix to hold the error values
-errors = zeros(19,19); %size based on using 0.05 intervals
+sz = 1/stepSize - 1;
+errors = zeros(sz,sz); %size based on using 0.05 intervals
     
 %% Find Impact Data
 % access actual data of first trajectory
 
 % pre - vector of pre impact x and y velocities [x1dot_0, y1dot_0]
 % post - vector of post impact x and y velocities [x1dot_act, y1dot_act]
-[pre, post] = readImpactData('traj_10.csv'); 
+[pre, post] = readImpactData('traj_3.csv'); 
 
 %assign pre impact velocities for object 1
 x1 = sqrt(sl^2/2 - pre(1,2)^2);
@@ -85,13 +86,13 @@ end
     % columns will be varying epsilon
     % rows will be varying mu
     
-for a = 1:19 %varying mu from [0.05, 0.95]
+for a = 1:sz %varying mu from [0, 1]
     u = stepSize * a;
     
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
     Pq = (u * B1 + s * B3)*(-C_0);     %(36)
     
-    for b = 1:19 %varying epsilon from [0, 1] in intervals of 0.05.05, 0.95]
+    for b = 1:sz %varying epsilon from [0, 1] in intervals of 0.05.05, 0.95]
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
         %Sliding (Second Row of Table)
@@ -144,4 +145,3 @@ end
 % determine the "best" mu and epsilon value which yields the minimum error
     bestMu = i * stepSize;
     bestEpsilon = j * stepSize;
-    
