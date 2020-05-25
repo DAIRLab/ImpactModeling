@@ -14,13 +14,18 @@ for jj = 1:5
 %creates a vector with 80 random numbers ranging from 1 to 80
 v = randi([1 500],1,80);
 
-Mu = zeros(1,80);
-Ep = zeros(1,80);
+Mu = [];
+Ep = [];
 
 for k = 1:80
     [bMu, bEp] = Error(v(k));
-    Mu(k) = bMu;
-    Ep(k) = bEp;
+    len = length(bMu);
+    if len == 1
+        Mu = [bMu, Mu];
+        Ep = [bEp, Ep];
+    else
+        disp('long')
+    end
 end
 
 finalMu = mean(Mu);
@@ -33,4 +38,3 @@ end
 
 M = mean(fMu)
 E = mean(fEp)
-
