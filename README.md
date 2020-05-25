@@ -1,3 +1,13 @@
 # ImpactModeling
+#Andy, Joah, Natalie and Phil advised by Will
+#Dr. Posa 
+#DAIR Lab
 
-#Testing to see if this can be viewed on my desktop
+#Wang Mason Model
+#Our first goal was to understand and create a function that applies the Wang Mason model for impacts
+#It takes in a given pre-impact state and returns the post impact state.
+
+#We then took our code for the Wang Mason model and applied it to data from Nima Fazeli
+
+ 
+
