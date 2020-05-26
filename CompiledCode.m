@@ -1,3 +1,5 @@
+% This function calculates the best Mu and best Epsilon for one trial
+
 function [stick, bestMu, bestEpsilon] = Error(n)
 
 %%Find Contact Mode and Apply Equations
@@ -22,7 +24,7 @@ function [stick, bestMu, bestEpsilon] = Error(n)
     % C_0 - initial compression velocity (calculated from data)
     % m1 - mass of object one, but since it will cancel itself out, we
     %      simply set it equal to 1
-    %B1, B2, and B3 - constants dependant on geometry and mass properties
+    % B1, B2, and B3 - constants dependant on geometry and mass properties
     %                 of the system
     % sl - side length of object being dropped 
     % s - initial sign of sliding velocity S0
@@ -35,7 +37,7 @@ m1 = 1; %cancels out as explained in variables section above
 I1 = m1 * sl^2 / 6; % moment of inertia of square
 % initialize a matrix to hold the error values
 sz = 1/stepSize - 1;
-errors = zeros(sz,sz); %size based on using 0.05 intervals
+errors = zeros(sz,sz); %size based on using intervals that exclude 0 and 1
     
 %% Find Impact Data
 % access actual data of first trajectory
@@ -49,32 +51,32 @@ string = ['traj_' num2str(n) '.csv'];
 theta1 = pre(1,3);
 
 %find the sign of x1, ie whether it is on the left or right of the contact point.
-sign =0;
-if theta1>0 %turning anticlockwise
+signx1 = 0;
+if theta1 > 0 %turning anticlockwise
     r = rem(theta1,pi)/pi;
-    if r >0 && r<0.25 || r >0.5 && r<0.75 %angle between 0 to 90 degrees and 180-270
-        sign = 1; %x1 is to the right of contact point
-    elseif r >0.25 && r<0.5 || r>0.75 %angle between 90 and 180 and 270-360
-        sign = -1; %x1 will be on the left
+    if r > 0 && r < 0.25 || r > 0.5 && r < 0.75 %angle between 0 to 90 degrees and 180-270
+        signx1 = 1; %x1 is to the right of contact point
+    elseif r > 0.25 && r < 0.5 || r > 0.75 %angle between 90 and 180 and 270-360
+        signx1 = -1; %x1 will be on the left
     else %when it is right on top
-        sign = 1;
+        signx1 = 1;
     end
-elseif theta1 <0 %turning clockwise
+elseif theta1 < 0 %turning clockwise
     r = rem(abs(theta1),pi)/pi;
-    if r >0 && r<0.25 || r >0.5 && r<0.75 %angle between 0 to 90 degrees and 180-270
-        sign = -1; %x1 is to the left of contact point
-    elseif r >0.25 && r<0.5 || r>0.75 %angle between 90 and 180 and 270-360
-        sign = 1; %x1 will be on the right
+    if r > 0 && r < 0.25 || r > 0.5 && r < 0.75 %angle between 0 to 90 degrees and 180-270
+        signx1 = -1; %x1 is to the left of contact point
+    elseif r > 0.25 && r < 0.5 || r > 0.75 %angle between 90 and 180 and 270-360
+        signx1 = 1; %x1 will be on the right
     else %when it is right on top
-        sign = 1;
+        signx1 = 1;
     end
 elseif theta1 == 0 %doesn't even rotate
-    sign = 1;
+    signx1 = 1;
 else
-    sign = 1; 
+    signx1 = 1; 
 end
 
-x1 = sign*sqrt(sl^2/2 - pre(1,2)^2);
+x1 = signx1*sqrt(sl^2/2 - pre(1,2)^2);
 y1 = pre(1,2);
 x1dot_0 = pre(1,4);
 y1dot_0 = pre(1,5);
@@ -162,7 +164,7 @@ for a = 1:sz %varying mu from [0, 1]
         y1dot_calc = Py/m1 + pre(1,5); 
     
         % calculate error via least squares method ??
-        error = (x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2; 
+        error = ((x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2)/(post(1,4)^2 + post(1,5)^2); 
         % input error into error matrix
         errors(a, b) = error;
     end
