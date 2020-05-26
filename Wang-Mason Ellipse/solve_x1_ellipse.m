@@ -1,4 +1,4 @@
-function x1v = solve_x1_ellipse(y0,h0,k0,th0)
+function x1v = solve_x1_ellipse
 
 syms x y h k a b th
 
