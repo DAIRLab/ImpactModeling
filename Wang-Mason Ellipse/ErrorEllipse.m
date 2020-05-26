@@ -32,10 +32,11 @@ function [stick, bestMu, bestEpsilon] = ErrorEllipse(n)
     
 %% Set up Variables
 stepSize = 0.01;
-sl = 0.06; %side length of square from data README
-rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
+a0 = 0.7/2; %semi-major axis
+b0 = 0.5/2; %semi-minor axis
+rho = 0.5 * sqrt(a0^2 + b0^2); %using rho = sqrt(I/m) where I = m*(a^2 + b^2)/4
 m1 = 1; %cancels out as explained in variables section above
-I1 = m1 * sl^2 / 6; % moment of inertia of square
+I1 = m1 * (a0^2 + b0^2) / 4; % moment of inertia of elliptical disk
 % initialize a matrix to hold the error values
 sz = 1/stepSize - 1;
 errors = zeros(sz,sz); %size based on using intervals that exclude 0 and 1
@@ -96,7 +97,7 @@ th0 = theta1; %tilting angle
 y0= -y1; %distance from com to contact point (going down from com to contact point hence the negative sign) because y1 
 %goes up from the table ie contact point to COM (
 
-%solving for x1v
+%solving for x1
 x1 = subs(x1eq, [a,b,h,k,th,y], [a0,b0,h0,k0,th0,y0]); %gives out the x distance from the COM to the contact point in both positive
 %negative since the answer is a square root (a vector of 2 elements)
 
