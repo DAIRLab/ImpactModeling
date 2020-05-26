@@ -51,6 +51,8 @@ load('ellpse_uniform.mat');
 
 %assign pre impact velocities for object 1
 theta1 = pre(1,3);
+y1 = pre(1,2); 
+
 
 %find the sign of x1, ie whether it is on the left or right of the contact point.
 signx1 = 0;
@@ -78,8 +80,12 @@ else
     signx1 = 1; 
 end
 
+
+eq1 = (((x)*cos(theta1) + (y1)*sin(theta1))^2)/a^2 + (((x)*sin(theta1) - (y1)*cos(theta1))^2)/b^2 == 1;
+x1 = solve(eq1, sym('x'));
+
 x1 = signx1*sqrt(sl^2/2 - pre(1,2)^2);
-y1 = pre(1,2);
+
 x1dot_0 = pre(1,4);
 y1dot_0 = pre(1,5);
 theta1dot_0 = pre(1,6);
