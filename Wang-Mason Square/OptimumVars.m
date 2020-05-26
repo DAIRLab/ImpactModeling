@@ -16,7 +16,7 @@ for z = 1:80
     [stick,Mu,Ep] = Error(n); %we can eedit output of this code
     if stick == 1
         MuStickVec(end+1) = Mu;
-        sickcount = stickcount+1;
+        stickcount = stickcount+1;
         EpsVec(z) = Ep;
     else
         MuVec(z) = Mu;
