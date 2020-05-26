@@ -1,12 +1,9 @@
-function x1v = solve_x1_ellipse
+function x1 = solve_x1_ellipse
 
 syms x y h k a b th
 
 eq1 = (((x-h)*cos(th) + (y-k)*sin(th))^2)/a^2 + (((x-h)*sin(th) - (y-k)*cos(th))^2)/b^2 == 1;
-eq1_2 = (((x)*cos(th) + (y)*sin(th))^2)/a^2 + (((x)*sin(th) - (y)*cos(th))^2)/b^2 == 1;
-
-x1 = solve(eq1, sym('x'));
-x1_2 = solve(eq1_2, sym('x'));
+x1eq = solve(eq1, sym('x'));
 
 
 a0 = 0.07/2; %semi axis major
@@ -17,7 +14,7 @@ th0 = theta1; %tilting angle
 y0= y1; %distance from com to contact point
 
 %solving for x1v
-x1v = subs(x1, [a,b,h,k,th,y], [a0,b0,h0,k0,th0,y0]); %gives out the x distance from the COM to the contact point in both positive
+x1 = subs(x1eq, [a,b,h,k,th,y], [a0,b0,h0,k0,th0,y0]); %gives out the x distance from the COM to the contact point in both positive
 %negative since the answer is a square root
 
  
