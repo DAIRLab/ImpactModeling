@@ -46,9 +46,36 @@ string = ['traj_' num2str(n) '.csv'];
 [pre, post] = readImpactData(string); 
 
 %assign pre impact velocities for object 1
-x1 = sqrt(sl^2/2 - pre(1,2)^2);
-y1 = pre(1,2);
 theta1 = pre(1,3);
+
+%find the sign of x1, ie whether it is on the left or right of the contact point.
+sign =0;
+if theta1>0 %turning anticlockwise
+    r = rem(theta1,pi)/pi;
+    if r >0 && r<0.25 || r >0.5 && r<0.75 %angle between 0 to 90 degrees and 180-270
+        sign = 1; %x1 is to the right of contact point
+    elseif r >0.25 && r<0.5 || r>0.75 %angle between 90 and 180 and 270-360
+        sign = -1; %x1 will be on the left
+    else %when it is right on top
+        sign = 1;
+    end
+elseif theta1 <0 %turning clockwise
+    r = rem(abs(theta1),pi)/pi;
+    if r >0 && r<0.25 || r >0.5 && r<0.75 %angle between 0 to 90 degrees and 180-270
+        sign = -1; %x1 is to the left of contact point
+    elseif r >0.25 && r<0.5 || r>0.75 %angle between 90 and 180 and 270-360
+        sign = 1; %x1 will be on the right
+    else %when it is right on top
+        sign = 1;
+    end
+elseif theta1 == 0 %doesn't even rotate
+    sign = 1;
+else
+    sign = 1; 
+end
+
+x1 = sign*sqrt(sl^2/2 - pre(1,2)^2);
+y1 = pre(1,2);
 x1dot_0 = pre(1,4);
 y1dot_0 = pre(1,5);
 theta1dot_0 = pre(1,6);
