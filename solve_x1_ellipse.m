@@ -5,3 +5,12 @@ eq1_2 = (((x)*cos(th) + (y)*sin(th))^2)/a^2 + (((x)*sin(th) - (y)*cos(th))^2)/b^
 
 x1 = solve(eq1, sym('x'));
 x1_2 = solve(eq1_2, sym('x'));
+
+%establishing the variables:
+a = 0.07;
+b = 0.05;
+%h = got to fill these guys out
+%k = 
+%y =
+
+subs(x1);
