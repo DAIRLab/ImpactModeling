@@ -6,28 +6,28 @@
 % of the mus and epsilons normally
 
 function [OptMu, OptEps] = OptimumVars
-    ran = randi([1 500],1,80);
-    MuVec = zeros(1,80);
-    EpsVec = zeros(1,80);
-    MuStickVec = [];
-    stickcount = 0;
-    for z = 1:80
-        n = ran(z);
-        [stick, Mu, Ep] = Error(n); %we can eedit output of this code
-        if stick == 1
-            MuStickVec(end+1) = Mu;
-            stickcount = stickcount+1;
-            EpsVec(z) = Ep;
-        else
-            MuVec(z) = Mu;
-            EpsVec(z) = Ep;
-        end
+ran = randi([1 500],1,80);
+MuVec = zeros(1,80);
+EpsVec = zeros(1,80);
+MuStickVec = [];
+stickcount = 0;
+for z = 1:80
+    n = ran(z);
+    [stick,Mu,Ep] = Error(n); %we can eedit output of this code
+    if stick == 1
+        MuStickVec(end+1) = Mu;
+        stickcount = stickcount+1;
+        EpsVec(z) = Ep;
+    else
+        MuVec(z) = Mu;
+        EpsVec(z) = Ep;
     end
     maxstickMu = max(MuStickVec);
     MuStick_w = 0; %maxstickMu*stickcount; %weigh the value of the max mu of the sticking trials
     [i,j] = size(MuVec);
     OptMu = (sum(MuVec)+MuStick_w)/(j+stickcount);
 
-    [i,j] = size(EpsVec);
-    OptEps = sum(EpsVec)/j;
+[i,j] = size(EpsVec);
+OptEps = sum(EpsVec)/j;
 end
+
