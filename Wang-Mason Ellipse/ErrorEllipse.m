@@ -80,11 +80,13 @@ else
     signx1 = 1; 
 end
 
+%use a tilted ellipse equation to find x1 (x distance between the COM and the contact point)
+%g is the half the minor axis
+%h is half the major axis
 
-eq1 = (((x)*cos(theta1) + (y1)*sin(theta1))^2)/a^2 + (((x)*sin(theta1) - (y1)*cos(theta1))^2)/b^2 == 1;
+eq1 = (((x)*cos(theta1) + (y1)*sin(theta1))^2)/g^2 + (((x)*sin(theta1) - (y1)*cos(theta1))^2)/h^2 == 1;
 x1 = solve(eq1, sym('x'));
-
-x1 = signx1*sqrt(sl^2/2 - pre(1,2)^2);
+%use the signx1 script above to pick a positive or negative x1 from the solution above
 
 x1dot_0 = pre(1,4);
 y1dot_0 = pre(1,5);
