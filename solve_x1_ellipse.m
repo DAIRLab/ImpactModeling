@@ -11,6 +11,7 @@ a = 0.07;
 b = 0.05;
 %h = got to fill these guys out
 %k = 
+%th =
 %y =
 
 subs(x1);
