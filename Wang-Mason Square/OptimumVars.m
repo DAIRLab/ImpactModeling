@@ -22,12 +22,12 @@ for z = 1:80
         MuVec(z) = Mu;
         EpsVec(z) = Ep;
     end
-end
-maxstickMu = max(MuStickVec);
-MuStick_w = maxstickMu*stickcount; %weigh the value of the max mu of the sticking trials
-[i,j] = size(MuVec);
-OptMu = (sum(MuVec)+MuStick_w)/(j+stickcount);
+    maxstickMu = max(MuStickVec);
+    MuStick_w = 0; %maxstickMu*stickcount; %weigh the value of the max mu of the sticking trials
+    [i,j] = size(MuVec);
+    OptMu = (sum(MuVec)+MuStick_w)/(j+stickcount);
 
 [i,j] = size(EpsVec);
 OptEps = sum(EpsVec)/j;
 end
+

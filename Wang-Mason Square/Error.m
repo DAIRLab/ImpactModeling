@@ -45,14 +45,14 @@ errors = zeros(sz,sz); %size based on using intervals that exclude 0 and 1
 
 % pre - vector of pre impact x and y velocities [x1dot_0, y1dot_0]
 % post - vector of post impact x and y velocities [x1dot_act, y1dot_act]
-string = ['traj_' num2str(n) '.csv'];
+string = ['dice-data-processed/traj_' num2str(n) '.csv'];
 [pre, post] = readImpactData(string); 
 
 %assign pre impact velocities for object 1
 theta1 = pre(1,3);
 
 %find the sign of x1, ie whether it is on the left or right of the contact point.
-signx1 = 0;
+signx1 = 1;
 if theta1 > 0 %turning anticlockwise
     r = rem(theta1,pi)/pi;
     if r > 0 && r < 0.25 || r > 0.5 && r < 0.75 %angle between 0 to 90 degrees and 180-270
@@ -131,6 +131,7 @@ for a = 1:sz %varying mu from [0, 1]
         %Sliding (Second Row of Table)
         e = stepSize * b;
         if (Pd > (1+e)*Pq)
+            %disp("s");
             Py = - (1+e) * C_0 / (B2 + s * u * B3); %(40)
             Px = - s * u * Py;                      %(39)
         
