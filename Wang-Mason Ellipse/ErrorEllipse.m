@@ -97,7 +97,11 @@ y0= y1; %distance from com to contact point
 
 %solving for x1v
 x1 = subs(x1eq, [a,b,h,k,th,y], [a0,b0,h0,k0,th0,y0]); %gives out the x distance from the COM to the contact point in both positive
-%negative since the answer is a square root
+%negative since the answer is a square root (a vector of 2 elements)
+
+x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
+%value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
+%have the same value just different signs
 
 
 x1dot_0 = pre(1,4);
