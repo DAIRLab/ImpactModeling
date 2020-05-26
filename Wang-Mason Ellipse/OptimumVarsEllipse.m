@@ -13,7 +13,7 @@ MuStickVec = [];
 stickcount = 0;
 for z = 1:80
     n = ran(z);
-    [stick,Mu,Ep] = Error(n); %we can eedit output of this code
+    [stick,Mu,Ep] = ErrorEllipse(n); %we can eedit output of this code
     if stick == 1
         MuStickVec(end+1) = Mu;
         sickcount = stickcount+1;
