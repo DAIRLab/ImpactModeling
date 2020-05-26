@@ -1,4 +1,4 @@
-function [bestMu, bestEpsilon] = Error(n)
+function [stick, bestMu, bestEpsilon] = Error(n)
 
 %%Find Contact Mode and Apply Equations
 %Authors: Joah, Phil, Natalie, Andy
@@ -175,6 +175,14 @@ end
 % determine the "best" mu and epsilon value which yields the minimum error
     bMu = i * stepSize;
     bEpsilon = j * stepSize;
+    
+    [g,h] = size(bMu);
+    if g>1 || h>1 
+        stick = 1; %multiple best mus - sticking
+    else
+        stick = 0; %a single best my - no sticking
+    end
+    
     bestMu = min(bMu);
     bestEpsilon = min(bEpsilon);
     
