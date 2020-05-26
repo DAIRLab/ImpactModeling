@@ -32,10 +32,11 @@ function [x1dot_calc,y1dot_calc] = FindPostStateEllipse(n)
 
 %% Set up Variables
 stepSize = 0.01;
-sl = 0.06; %side length of square from data README
-rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
+a0 = 0.7/2; %semi-major axis
+b0 = 0.5/2; %semi-minor axis
+rho = 0.5 * sqrt(a0^2 + b0^2); %using rho = sqrt(I/m) where I = m*(a^2 + b^2)/4
 m1 = 1; %cancels out as explained in variables section above
-I1 = m1 * sl^2 / 6; % moment of inertia of square
+I1 = m1 * (a0^2 + b0^2) / 4; % moment of inertia of elliptical disk
 % initialize a matrix to hold the error values
 sz = 1/stepSize - 1;
 errors = zeros(sz,sz); %size based on using intervals excluding 0 and 1
