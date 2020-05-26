@@ -16,7 +16,7 @@ for z = 1:80
     [stick,Mu,Ep] = Error(n); %we can eedit output of this code
     if stick == 1
         MuStickVec(end+1) = Mu;
-        sickcount = stickcount+1;
+        stickcount = stickcount+1;
         EpsVec(z) = Ep;
     else
         MuVec(z) = Mu;
@@ -24,7 +24,7 @@ for z = 1:80
     end
 end
 maxstickMu = max(MuStickVec);
-MuStick_w = maxstickMu*stickcount; %weigh the value of the max mu of the sticking trials
+MuStick_w = 0; %maxstickMu*stickcount; %weigh the value of the max mu of the sticking trials
 [i,j] = size(MuVec);
 OptMu = (sum(MuVec)+MuStick_w)/(j+stickcount);
 
