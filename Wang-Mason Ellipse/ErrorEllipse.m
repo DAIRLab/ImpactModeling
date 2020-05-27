@@ -1,6 +1,6 @@
 % This function calculates the best Mu and best Epsilon for one trial
 
-function [stick, bestMu, bestEpsilon] = ErrorEllipse(n)
+function [stick, bestMu, bestEpsilon] = ErrorEllipse(n,pre,post)
 
 %%Find Contact Mode and Apply Equations
 %Authors: Joah, Phil, Natalie, Andy
