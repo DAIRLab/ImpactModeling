@@ -6,7 +6,7 @@
 % of the mus and epsilons normally
 
 function [OptMu, OptEps] = OptimumVarsEllipse
-ran = randi([1 500],1,80);
+ran = randi([1 2000],1,80);
 MuVec = [];
 EpsVec = zeros(1,80);
 MuStickVec = [];
