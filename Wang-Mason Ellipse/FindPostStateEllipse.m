@@ -155,7 +155,7 @@ end
 
 % calculate the post impact velocities according to the contact
 % mode
-x1dot_calc = Px/m1 + pre(1,4)
-y1dot_calc = Py/m1 + pre(1,5)
+x1dot_calc = Px/m1 + pre(1,4);
+y1dot_calc = Py/m1 + pre(1,5);
 
 end
