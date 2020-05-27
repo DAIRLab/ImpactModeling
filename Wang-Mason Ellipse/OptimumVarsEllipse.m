@@ -7,7 +7,7 @@
 
 function [OptMu, OptEps] = OptimumVarsEllipse
 ran = randi([1 500],1,80);
-MuVec = zeros(1,80);
+MuVec = [];
 EpsVec = zeros(1,80);
 MuStickVec = [];
 stickcount = 0;
@@ -16,10 +16,10 @@ for z = 1:80
     [stick,Mu,Ep] = ErrorEllipse(n); %we can eedit output of this code
     if stick == 1
         MuStickVec(end+1) = Mu;
-        sickcount = stickcount+1;
+        stickcount = stickcount+1;
         EpsVec(z) = Ep;
     else
-        MuVec(z) = Mu;
+        MuVec = [Mu,MuVec];
         EpsVec(z) = Ep;
     end
 end
