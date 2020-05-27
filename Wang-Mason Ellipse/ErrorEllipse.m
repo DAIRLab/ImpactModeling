@@ -1,6 +1,5 @@
 % This function calculates the best Mu and best Epsilon for one trial
 
-
 function [stick, bestMu, bestEpsilon] = ErrorEllipse(n)
 
 %%Find Contact Mode and Apply Equations
@@ -54,7 +53,6 @@ load('ellipse_uniform.mat');
 theta1 = pre(1,3);
 y1 = pre(1,2); 
 
-
 %find the sign of x1, ie whether it is on the left or right of the contact point.
 signx1 = 0;
 if theta1 > 0 %turning anticlockwise
@@ -83,23 +81,7 @@ end
 
 %use a tilted ellipse equation to find x1 (x distance between the COM and the contact point)
 
-syms x y h k a b th
-
-eq1 = (((x-h)*cos(th) + (y-k)*sin(th))^2)/a^2 + (((x-h)*sin(th) - (y-k)*cos(th))^2)/b^2 == 1;
-x1eq = solve(eq1, sym('x'));
-
-
-a0 = 0.07/2; %semi axis major
-b0 = 0.05/2; %semi axis minor
-h0 = 0; %h0 and k0 are 0 since we assume the com is the origin of the ellipse
-k0 = 0;
-th0 = theta1; %tilting angle
-y0= -y1; %distance from com to contact point (going down from com to contact point hence the negative sign) because y1 
-%goes up from the table ie contact point to COM (
-
-%solving for x1
-x1 = subs(x1eq, [a,b,h,k,th,y], [a0,b0,h0,k0,th0,y0]); %gives out the x distance from the COM to the contact point in both positive
-%negative since the answer is a square root (a vector of 2 elements)
+x1 = double(solve_x1_ellipse(-y1,0,0,theta1));
 
 x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
 %value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
@@ -213,7 +195,7 @@ end
         stick = 0; %a single best my - no sticking
     end
     
-    bestMu = min(bMu);
-    bestEpsilon = min(bEpsilon);
+    bestMu = min(bMu)
+    bestEpsilon = min(bEpsilon)
     
 end
