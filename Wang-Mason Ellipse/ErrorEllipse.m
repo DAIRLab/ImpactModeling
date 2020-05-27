@@ -194,7 +194,7 @@ end
         stick = 0; %a single best my - no sticking
     end
     
-    bestMu = min(bMu)
-    bestEpsilon = min(bEpsilon)
+    bestMu = min(bMu);
+    bestEpsilon = min(bEpsilon);
     
 end
