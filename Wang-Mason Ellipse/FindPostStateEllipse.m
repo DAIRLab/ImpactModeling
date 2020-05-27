@@ -79,8 +79,12 @@ else
     signx1 = 1;
 end
 
-x1 = signx1*sqrt(sl^2/2 - pre(1,2)^2);
 y1 = pre(1,2);
+x1 = double(solve_x1_ellipse(-y1,0,0,theta1));
+x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
+%value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
+%have the same value just different signs
+
 x1dot_0 = pre(1,4);
 y1dot_0 = pre(1,5);
 theta1dot_0 = pre(1,6);
