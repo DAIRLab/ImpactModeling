@@ -82,7 +82,6 @@ end
 %use a tilted ellipse equation to find x1 (x distance between the COM and the contact point)
 
 x1 = double(solve_x1_ellipse(-y1,0,0,theta1));
-
 x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
 %value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
 %have the same value just different signs
