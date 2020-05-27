@@ -43,7 +43,7 @@ errors = zeros(sz,sz); %size based on using intervals that exclude 0 and 1
     
 %% Find Impact Data
 % access actual data of first trajectory
-load('ellpse_uniform.mat');
+load('ellipse_uniform.mat');
 
 % pre - vector of pre impact state [x1_0, y1_0, theta1_0, x1dot_0, y1dot_0, theta1dot_0]
 % post - vector of post impact state [x1_act, y1_act, theta1_act, x1dot_act, y1dot_act, thetadot_act]
