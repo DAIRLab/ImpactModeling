@@ -172,8 +172,8 @@ for a = 1:sz %varying mu from [0, 1]
         x1dot_calc = Px/m1 + pre(1,4); 
         y1dot_calc = Py/m1 + pre(1,5); 
     
-        % calculate error via least squares method ??
-        error = sqrt(((x1dot_calc - post(1,4))^2)/(post(1,4)^2) + ((y1dot_calc - post(1,5))^2)/(post(1,5)^2)); 
+        % calculate error via least squares method 
+        error = sqrt((x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2)/sqrt(post(1,4)^2 + post(1,5)^2); 
         % input error into error matrix
         errors(a, b) = error;
     end
