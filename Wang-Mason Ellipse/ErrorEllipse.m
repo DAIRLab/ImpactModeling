@@ -80,8 +80,15 @@ else
 end
 
 %use a tilted ellipse equation to find x1 (x distance between the COM and the contact point)
+a = 0.035;
+b = 0.025;
+th = theta1;
+k = 0;
+h = 0;
+y = -y1;
 
-x1 = double(solve_x1_ellipse(-y1,0,0,theta1));
+x1 = double((a*b*(b^2*cos(th)^2 - k^2*cos(th)^4 + a^2*sin(th)^2 - y^2*cos(th)^4 - k^2*sin(th)^4 - y^2*sin(th)^4 + 2*k*y*cos(th)^4 + 2*k*y*sin(th)^4 - 2*k^2*cos(th)^2*sin(th)^2 - 2*y^2*cos(th)^2*sin(th)^2 + 4*k*y*cos(th)^2*sin(th)^2)^(1/2) + b^2*h*cos(th)^2 + a^2*h*sin(th)^2 - a^2*k*cos(th)*sin(th) + b^2*k*cos(th)*sin(th) + a^2*y*cos(th)*sin(th) - b^2*y*cos(th)*sin(th))/(a^2*sin(th)^2 + b^2*cos(th)^2));
+
 x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
 %value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
 %have the same value just different signs
