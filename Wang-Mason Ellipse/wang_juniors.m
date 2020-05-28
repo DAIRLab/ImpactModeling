@@ -4,22 +4,32 @@
 %state using the Wang Mason Model
 
 %Inputs
-%   u - mu, coefficiant of friction 
-%   e - epsilon, coefficiant of restitution
+%   m - objects mass
 %   S_0 - Initial sliding velocity
 %   C_0 - Initial compression velocity
 %   B - 3x1 column vector containing B1, B2, and B3 (constants)
 %   v_0 - 3x1 column vector with initial x, y, and rotational velocity
+%   u - mu, coefficiant of friction 
+%   e - epsilon, coefficiant of restitution
 
 
 %Outputs
 %   v_1 - 2x1 column vector with predicted post impact x and y velocities
 
-function [v_1]=wang_juniors(u, e, S_0, C_0, B, v_0)
+function [v_1]=wang_juniors(m, S_0, C_0, B, v_0, u ,e)
     %Assign B vector to propper B variables
     B1 = B(2);
     B2 = B(2);
     B3 = B(3);
+    
+    u_s = -B3/B1; %(34)
+    %Initial Sign of Sliding Velocity 
+    if (S_0 ~= 0) 
+        s = sign(S_0);
+    else
+        s = 1;
+    end
+
 
     %Use Table 1 to determine modes (conditionals)
     Pd = (B2 + s * u * B3) * s * S_0;  %(35)
@@ -57,8 +67,8 @@ function [v_1]=wang_juniors(u, e, S_0, C_0, B, v_0)
     end    
 
     % calculate the post impact velocities according to the contact mode
-    x1dot_calc = Px/m1 + pre(1,4); 
-    y1dot_calc = Py/m1 + pre(1,5); 
+    x1dot_calc = Px/m + v_0(1); 
+    y1dot_calc = Py/m + v_0(2); 
     
     %format into output vector
     v_1 = [x1dot_calc; y1dot_calc];
