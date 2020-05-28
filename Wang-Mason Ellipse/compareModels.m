@@ -6,7 +6,7 @@
 %% Set up Variables
 n = 5; %current trial for data being examined
 
-u = 0.057; %mu, coefficiant of friction
+u = 0.057;  %mu, coefficiant of friction
 e = 0.612;  %epsilon, coeeficiant of restitution 
 
 load('ellipse_uniform.mat'); %load in ellipse collision data
@@ -33,9 +33,17 @@ ha = h*[0;-g;0];
 %create Jacobian
 J = [d; n];
 
-% Minv = J*(Mass\J');
-% M    = inv(Minv);
+Minv = J*(mass\J');
+M    = inv(Minv);
 
+a_e = 70/1000/2;
+b_e = 50/1000/2;
+I_inertia = mass*(b_e^2+a_e^2)/5;
+Mass = [mass,0,0;
+        0,mass,0;
+        0,0,I_inertia];
+    
+    
 %%  Solve for constants
 %find the sign of x1, ie whether it is on the left or right of the contact point.
 if th > 0 %turning anticlockwise
@@ -93,7 +101,15 @@ out_juniors = wang_juniors(mass, S_0, C_0, [B1; B2; B3], pre(4:6), u ,e);
 
 
 %% Run Nima's Model
-[out_nima, z] = wang_nima(mass, n', d', pre(4:6)', ha, u, e);
+[out_nima, z] = wang_nima(Mass, n', d', pre(4:6)', ha, u, e);
 
 
 %% Compare Results
+disp("Actual Velocity")
+disp(post(4:5))
+disp("Our Model")
+disp(out_juniors)
+disp("Nima's Model")
+disp(out_nima(1:2))
+% norm(out_juniors - post(4:5))
+% norm(out_nima - post(4:5))
