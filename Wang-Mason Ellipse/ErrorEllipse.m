@@ -99,11 +99,6 @@ x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if sta
 %value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
 %have the same value just different signs
 
-
-
-
-
-
 x1dot_0 = pre(1,4);
 y1dot_0 = pre(1,5);
 theta1dot_0 = pre(1,6);
