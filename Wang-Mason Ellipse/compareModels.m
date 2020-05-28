@@ -4,10 +4,10 @@
 %Nima Fazeli's differantial equation approach
 
 %% Set up Variables
-n = 1; %current trial for data being examined
+n = 5; %current trial for data being examined
 
-u = 0.05; %mu, coefficiant of friction
-e = 0.5;  %epsilon, coeeficiant of restitution 
+u = 0.057; %mu, coefficiant of friction
+e = 0.612;  %epsilon, coeeficiant of restitution 
 
 load('ellipse_uniform.mat'); %load in ellipse collision data
 %pre and post impact data
@@ -93,8 +93,7 @@ out_juniors = wang_juniors(mass, S_0, C_0, [B1; B2; B3], pre(4:6), u ,e);
 
 
 %% Run Nima's Model
-[out_nima, z] = wang_nima(mass, n', d', pre(4:6), ha, u, e);
+[out_nima, z] = wang_nima(mass, n', d', pre(4:6)', ha, u, e);
 
 
 %% Compare Results
-
