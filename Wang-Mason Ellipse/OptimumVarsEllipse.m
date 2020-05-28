@@ -1,6 +1,14 @@
+This code calulates the average best mu and epsilon for a number of
+% trials. We can have the compiled code error function output if the
+% trial is a sticking trial and the min mu for that specific trial. We 
+% then have this code select the max mu for all sticking trials and weight
+% that mu with the number of sticking trials, then go on and do an average
+% of the mus and epsilons normally
+
+function [OptMu, OptEps] = OptimumVarsEllipse
 ran = randi([1 2000],1,500);
 MuVec = [];
-EpsVec = zeros(1,500);
+EpsVec = [];
 MuStickVec = [];
 stickcount = 0;
 
@@ -14,16 +22,18 @@ for z = 1:500
     % post - vector of post impact state [x1_act, y1_act, theta1_act, x1dot_act, y1dot_act, thetadot_act]
     pre = bounce_array(n).states(1:6); 
     post = bounce_array(n).states(7:12);
-    [stick,Mu,Ep] = ErrorEllipse(n,pre,post); %we can eedit output of this code
+    J = [bounce_array(n).n; bounce_array(n).d];
+    [stick,Mu,Ep] = ErrorEllipse(n,pre,post,J); %we can eedit output of this code
     
     if stick == 1
         MuStickVec(end+1) = Mu;
         stickcount = stickcount+1;
-        EpsVec(z) = Ep;
+        EpsVec = [Ep,EpsVec];
     else
         MuVec = [Mu,MuVec];
-        EpsVec(z) = Ep;
+        EpsVec = [Ep,EpsVec];
     end
+    
 end
 maxstickMu = max(MuStickVec);
 MuStick_w = maxstickMu*stickcount; %weigh the value of the max mu of the sticking trials
