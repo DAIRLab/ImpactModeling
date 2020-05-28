@@ -1,6 +1,6 @@
-% This function calculates the best Mu and best Epsilon for one trial
+This function calculates the best Mu and best Epsilon for one trial
 
-function [stick, bestMu, bestEpsilon] = ErrorEllipse(n,pre,post)
+function [stick, bestMu, bestEpsilon] = ErrorEllipse(n,pre,post,J)
 
 %%Find Contact Mode and Apply Equations
 %Authors: Joah, Phil, Natalie, Andy
@@ -41,13 +41,6 @@ sz = 1/stepSize - 1;
 errors = zeros(sz,sz); %size based on using intervals that exclude 0 and 1
     
 %% Find Impact Data
-% access actual data of first trajectory
-load('ellipse_uniform.mat');
-
-% pre - vector of pre impact state [x1_0, y1_0, theta1_0, x1dot_0, y1dot_0, theta1dot_0]
-% post - vector of post impact state [x1_act, y1_act, theta1_act, x1dot_act, y1dot_act, thetadot_act]
-[pre] = bounce_array(n).states(1:6); 
-[post] = bounce_array(n).states(7:12);
 
 %assign pre impact velocities for object 1
 theta1 = pre(1,3);
@@ -80,19 +73,18 @@ else
 end
 
 %use a tilted ellipse equation to find x1 (x distance between the COM and the contact point)
-a = 0.035;
-b = 0.025;
+a = a0;
+b = b0;
 th = theta1;
 k = 0;
 h = 0;
 y = -y1;
 
 x1 = double((a*b*(b^2*cos(th)^2 - k^2*cos(th)^4 + a^2*sin(th)^2 - y^2*cos(th)^4 - k^2*sin(th)^4 - y^2*sin(th)^4 + 2*k*y*cos(th)^4 + 2*k*y*sin(th)^4 - 2*k^2*cos(th)^2*sin(th)^2 - 2*y^2*cos(th)^2*sin(th)^2 + 4*k*y*cos(th)^2*sin(th)^2)^(1/2) + b^2*h*cos(th)^2 + a^2*h*sin(th)^2 - a^2*k*cos(th)*sin(th) + b^2*k*cos(th)*sin(th) + a^2*y*cos(th)*sin(th) - b^2*y*cos(th)*sin(th))/(a^2*sin(th)^2 + b^2*cos(th)^2));
-
+ 
 x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
 %value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
 %have the same value just different signs
-
 
 x1dot_0 = pre(1,4);
 y1dot_0 = pre(1,5);
@@ -108,8 +100,12 @@ theta2dot_0 = 0;
 
 %% Solve for Constants
 %S_0 and C_0
-S_0 = (x1dot_0 + theta1dot_0 * y1) - (x2dot_0 + theta2dot_0 * y2); %(22)
-C_0 = (y1dot_0 + theta1dot_0 * x1) - (y2dot_0 + theta2dot_0 * x2); %(23)
+%S_02 = (x1dot_0 + theta1dot_0 * y1) - (x2dot_0 + theta2dot_0 * y2); %(22)
+%C_02 = (y1dot_0 + theta1dot_0 * x1) - (y2dot_0 + theta2dot_0 * x2); %(23)
+V_c = J*[pre(1,4);pre(1,5);pre(1,6)];
+S_0 = V_c(2);
+C_0 = V_c(1);
+
 %B1, B2, and B3
 B1 = 1 + y1^2/(m1*rho^2); %(19)
 B2 = 1 + x1^2/(m1*rho^2); %(20)
@@ -144,7 +140,7 @@ for a = 1:sz %varying mu from [0, 1]
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
         %Sliding (Second Row of Table)
-        e = stepSize * b;
+        e = (stepSize) * b ;
         if (Pd > (1+e)*Pq)
             Py = - (1+e) * C_0 / (B2 + s * u * B3); %(40)
             Px = - s * u * Py;                      %(39)
@@ -178,9 +174,15 @@ for a = 1:sz %varying mu from [0, 1]
         % mode
         x1dot_calc = Px/m1 + pre(1,4); 
         y1dot_calc = Py/m1 + pre(1,5); 
-    
-        % calculate error via least squares method 
-        error = sqrt((x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2)/sqrt(post(1,4)^2 + post(1,5)^2); 
+        x_post_calc = x1dot_calc + post(1,6)*y1;
+        y_post_calc = y1dot_calc - post(1,6)*x1;
+        V_cpost = J*[post(1,4);post(1,5);post(1,6)];
+        x_post = V_cpost(2);
+        y_post = V_cpost(1);
+
+        % calculate error via least squares method ??
+        %error = sqrt((x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2)/sqrt(post(1,4)^2 + post(1,5)^2);
+        error = sqrt((x_post - x_post_calc)^2 + (y_post - y_post_calc)^2)/sqrt(y_post^2 + x_post^2); 
         % input error into error matrix
         errors(a, b) = error;
     end
