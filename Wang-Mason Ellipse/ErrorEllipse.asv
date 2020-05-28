@@ -1,6 +1,6 @@
 % This function calculates the best Mu and best Epsilon for one trial
 
-function [stick, bestMu, bestEpsilon] = ErrorEllipse(n,pre,post, J)
+function [stick, bestMu, bestEpsilon] = ErrorEllipse(n,pre,post)
 
 %%Find Contact Mode and Apply Equations
 %Authors: Joah, Phil, Natalie, Andy
@@ -87,20 +87,14 @@ k = 0;
 h = 0;
 y = -y1;
 
-x1 = double((a*b*(b^2*cos(th)^2 - k^2*cos(th)^4 + a^2*sin(th)^2 ...
- - y^2*cos(th)^4 - k^2*sin(th)^4 - y^2*sin(th)^4 + 2*k*y*cos(th)^4 + ...
- 2*k*y*sin(th)^4 - 2*k^2*cos(th)^2*sin(th)^2 - ...
- 2*y^2*cos(th)^2*sin(th)^2  + 4*k*y*cos(th)^2*sin(th)^2)^(1/2) +...
- b^2*h*cos(th)^2 + a^2*h*sin(th)^2 - a^2*k*cos(th)*sin(th) + ...
- b^2*k*cos(th)*sin(th) + a^2*y*cos(th)*sin(th) -...
- b^2*y*cos(th)*sin(th))/(a^2*sin(th)^2 + b^2*cos(th)^2));
+x1 = double((a*b*(b^2*cos(th)^2 - k^2*cos(th)^4 + a^2*sin(th)^2 - y^2*cos(th)^4 - k^2*sin(th)^4 - y^2*sin(th)^4 + 2*k*y*cos(th)^4 + 2*k*y*sin(th)^4 - 2*k^2*cos(th)^2*sin(th)^2 - 2*y^2*cos(th)^2*sin(th)^2 + 4*k*y*cos(th)^2*sin(th)^2)^(1/2) + b^2*h*cos(th)^2 + a^2*h*sin(th)^2 - a^2*k*cos(th)*sin(th) + b^2*k*cos(th)*sin(th) + a^2*y*cos(th)*sin(th) - b^2*y*cos(th)*sin(th))/(a^2*sin(th)^2 + b^2*cos(th)^2));
 
 x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
 %value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
 %have the same value just different signs
 
 
-
+%We can also find x1 and y1 using the Jacobian if the data set provides it
 
 
 
@@ -118,14 +112,8 @@ theta2dot_0 = 0;
 
 %% Solve for Constants
 %S_0 and C_0
-% S_0 = (x1dot_0 + theta1dot_0 * y1) - (x2dot_0 + theta2dot_0 * y2); %(22)
-% C_0 = (y1dot_0 + theta1dot_0 * x1) - (y2dot_0 + theta2dot_0 * x2); %(23)
-%We can also find S_0 and C_0 using the Jacobian if the data set provides it
-
-V_c = J*[pre(1,4);pre(1,5);pre(1,6)];
-S_0 = V_c(2);
-C_0 = V_c(1);
-
+S_0 = (x1dot_0 + theta1dot_0 * y1) - (x2dot_0 + theta2dot_0 * y2); %(22)
+C_0 = (y1dot_0 + theta1dot_0 * x1) - (y2dot_0 + theta2dot_0 * x2); %(23)
 %B1, B2, and B3
 B1 = 1/m1 + y1^2/(m1*rho^2); %(19)
 B2 = 1/m1 + x1^2/(m1*rho^2); %(20)
