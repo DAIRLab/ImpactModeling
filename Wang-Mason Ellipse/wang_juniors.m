@@ -18,7 +18,7 @@
 
 function [v_1]=wang_juniors(m, S_0, C_0, B, v_0, u ,e)
     %Assign B vector to propper B variables
-    B1 = B(2);
+    B1 = B(1);
     B2 = B(2);
     B3 = B(3);
     

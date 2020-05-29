@@ -5,11 +5,11 @@
 data = zeros(10,6);
 
 %% Set up Variables
-for i = 1:1
+for i = 1:10
     n = i; %current trial for data being examined
 
-    u = 0.057;  %mu, coefficiant of friction
-    e = 0.612;  %epsilon, coeeficiant of restitution 
+    u = 0.3;%0.057;  %mu, coefficiant of friction
+    e = 0.95;%0.612;  %epsilon, coeeficiant of restitution 
 
     load('ellipse_uniform.mat'); %load in ellipse collision data
     %pre and post impact data
@@ -18,18 +18,23 @@ for i = 1:1
     d = bounce_array(n).d;
     n = bounce_array(n).n;
 
-    %assign pre impact positions for object 1
+    %assign pre impact velocities for object 1
     th = pre(1,3);
     y1 = pre(1,2); 
+
+    %Find rho
+    a0 = 0.07/2; %semi-major axis
+    b0 = 0.05/2; %semi-minor axis
 
 
     g = 9.81; %gravitational constant
     mass = 36.4*1e-3; %Mass of ellipse [kg]
-
+    h = 1/250;
+    ha = h*[0;-g;0];
 
     %create Jacobian
     J = [d; n];
-    %Nima's constants
+
     Minv = J*(mass\J');
     M    = inv(Minv);
 
@@ -39,10 +44,7 @@ for i = 1:1
     Mass = [mass,0,0;
             0,mass,0;
             0,0,I_inertia];
-    h = 1/250;
-    ha = h*[0;-g;0];
-    
-    %Find rho to use in equations for B1 -> B3
+
     rho = sqrt(I_inertia/mass); % sqrt(I/m)    
 
     %%  Solve for constants
@@ -90,7 +92,7 @@ for i = 1:1
 
     B1 = 1/mass + y1^2/(mass*rho^2); %(19)
     B2 = 1/mass + x1^2/(mass*rho^2); %(20)
-    B3 = x1 * -y1/mass/rho^2;    %(21)
+    B3 = x1 * y1/mass/rho^2;    %(21)
 
     V_c = J*[pre(1,4);pre(1,5);pre(1,6)];
     S_0 = V_c(1); %(22)
@@ -115,10 +117,9 @@ for i = 1:1
     % norm(out_juniors - post(4:5))
     % norm(out_nima - post(4:5))
     data(i, 1) = post(4);
-    %data(i, 2) = out_juniors(1);
-    data(i, 2) = out_nima(1)';
-    data(i, 3) = post(5);
-    %data(i, 5) = out_juniors(2);
-    data(i, 4) = out_nima(2)';
-    
+    data(i, 2) = out_juniors(1);
+    data(i, 3) = out_nima(1)';
+    data(i, 4) = post(5);
+    data(i, 5) = out_juniors21);
+    data(i, 6) = out_nima(1)';
 end
