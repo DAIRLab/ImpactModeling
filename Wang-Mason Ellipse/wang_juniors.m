@@ -55,13 +55,14 @@ function [v_1]=wang_juniors(m, S_0, C_0, B, v_0, u ,e)
 
     %C (Fourth Row of Table)
     elseif (Pd < Pq)
-        disp("C")
         if u > abs(u_s) %C-Sticking
+             disp("C-stick");
              Py = -(1+e) * (B1 * C_0 + B3 * S_0)/(B1*B2 - B3^2); %(42)
              Px = (B3 * Py - S_0)/B1;                            %(41)
         else %C-Reversed Sliding
+             disp("C-slide");
              Py = -(1+e)/(B2 - s * u * B3)* (C_0 + ...
-                 (2*s*B3*S_0)/(B3 + s * u * B1));               %(46)
+                 (2*s*u*B3*S_0)/(B3 + s * u * B1));               %(46)
              Px = s * u *(Py - 2 * S_0 / (B3 + s * u * B1));    %(45)
          end    
     else
