@@ -43,6 +43,7 @@ function [v_1]=wang_juniors(m, S_0, C_0, B, v_0, u ,e)
 
         %R (Third Row of Table)
     elseif (Pq < Pd) && (Pd < (1+e) * Pq)
+        disp("R")
         if u > abs(u_s) %R-Sticking
             Py = -(1+e)* C_0 /(B2 + s * u * B3);  %(44)
             Px = (B3*Py - S_0) / B1;              %(43)
@@ -54,6 +55,7 @@ function [v_1]=wang_juniors(m, S_0, C_0, B, v_0, u ,e)
 
     %C (Fourth Row of Table)
     elseif (Pd < Pq)
+        disp("C")
         if u > abs(u_s) %C-Sticking
              Py = -(1+e) * (B1 * C_0 + B3 * S_0)/(B1*B2 - B3^2); %(42)
              Px = (B3 * Py - S_0)/B1;                            %(41)
