@@ -5,7 +5,7 @@
 data = zeros(10,6);
 
 %% Set up Variables
-for i = 1:1
+for i = 1:30
     n = i; %current trial for data being examined
 
     u = 0.057;  %mu, coefficiant of friction
@@ -78,16 +78,20 @@ for i = 1:1
     h = 0;
     y = -y1;
 
-    x1 = double((a*b*(b^2*cos(th)^2 - k^2*cos(th)^4 + a^2*sin(th)^2 ...
-     - y^2*cos(th)^4 - k^2*sin(th)^4 - y^2*sin(th)^4 + 2*k*y*cos(th)^4 + ...
-     2*k*y*sin(th)^4 - 2*k^2*cos(th)^2*sin(th)^2 - ...
-     2*y^2*cos(th)^2*sin(th)^2  + 4*k*y*cos(th)^2*sin(th)^2)^(1/2) +...
-     b^2*h*cos(th)^2 + a^2*h*sin(th)^2 - a^2*k*cos(th)*sin(th) + ...
-     b^2*k*cos(th)*sin(th) + a^2*y*cos(th)*sin(th) -...
-     b^2*y*cos(th)*sin(th))/(a^2*sin(th)^2 + b^2*cos(th)^2));
+%     x1 = double((a*b*(b^2*cos(th)^2 - k^2*cos(th)^4 + a^2*sin(th)^2 ...
+%      - y^2*cos(th)^4 - k^2*sin(th)^4 - y^2*sin(th)^4 + 2*k*y*cos(th)^4 + ...
+%      2*k*y*sin(th)^4 - 2*k^2*cos(th)^2*sin(th)^2 - ...
+%      2*y^2*cos(th)^2*sin(th)^2  + 4*k*y*cos(th)^2*sin(th)^2)^(1/2) +...
+%      b^2*h*cos(th)^2 + a^2*h*sin(th)^2 - a^2*k*cos(th)*sin(th) + ...
+%      b^2*k*cos(th)*sin(th) + a^2*y*cos(th)*sin(th) -...
+%      b^2*y*cos(th)*sin(th))/(a^2*sin(th)^2 + b^2*cos(th)^2));
+% 
+%     x1 = signx1*abs(x1(1)); 
 
-    x1 = signx1*abs(x1(1)); 
-
+    %USING POSA'S SUGESTION
+    x1 = n(3);
+    y1 = d(3);
+    
     B1 = 1/mass + y1^2/(mass*rho^2); %(19)
     B2 = 1/mass + x1^2/(mass*rho^2); %(20)
     B3 = x1 * -y1/mass/rho^2;    %(21)
@@ -115,10 +119,10 @@ for i = 1:1
     % norm(out_juniors - post(4:5))
     % norm(out_nima - post(4:5))
     data(i, 1) = post(4);
-    %data(i, 2) = out_juniors(1);
-    data(i, 2) = out_nima(1)';
-    data(i, 3) = post(5);
-    %data(i, 5) = out_juniors(2);
-    data(i, 4) = out_nima(2)';
+    data(i, 2) = out_juniors(1);
+    data(i, 3) = out_nima(1)';
+    data(i, 4) = post(5);
+    data(i, 5) = out_juniors(2);
+    data(i, 6) = out_nima(2)';
     
 end
