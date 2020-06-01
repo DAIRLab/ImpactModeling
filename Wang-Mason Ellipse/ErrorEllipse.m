@@ -1,6 +1,6 @@
 % This function calculates the best Mu and best Epsilon for one trial
 
-function [stick, bestMu, bestEpsilon] = ErrorEllipse(n,pre,post, J)
+function [stick, bestMu, bestEpsilon, errorMatrix] = ErrorEllipse(n,pre,post,J)
 
 %%Find Contact Mode and Apply Equations
 %Authors: Joah, Phil, Natalie, Andy
@@ -41,61 +41,49 @@ sz = 1/stepSize - 1;
 errors = zeros(sz,sz); %size based on using intervals that exclude 0 and 1
     
 %% Find Impact Data
-% access actual data of first trajectory
-load('ellipse_uniform.mat');
-
-% pre - vector of pre impact state [x1_0, y1_0, theta1_0, x1dot_0, y1dot_0, theta1dot_0]
-% post - vector of post impact state [x1_act, y1_act, theta1_act, x1dot_act, y1dot_act, thetadot_act]
-[pre] = bounce_array(n).states(1:6); 
-[post] = bounce_array(n).states(7:12);
 
 %assign pre impact velocities for object 1
 theta1 = pre(1,3);
-y1 = pre(1,2); 
+y1 = J(2,3);
+x1 = J(1,3);
 
-%find the sign of x1, ie whether it is on the left or right of the contact point.
-signx1 = 0;
-if theta1 > 0 %turning anticlockwise
-    r = rem(theta1,pi)/pi;
-    if r > 0 && r < 0.25 || r > 0.5 && r < 0.75 %angle between 0 to 90 degrees and 180-270
-        signx1 = 1; %x1 is to the right of contact point
-    elseif r > 0.25 && r < 0.5 || r > 0.75 %angle between 90 and 180 and 270-360
-        signx1 = -1; %x1 will be on the left
-    else %when it is right on top
-        signx1 = 1;
-    end
-elseif theta1 < 0 %turning clockwise
-    r = rem(abs(theta1),pi)/pi;
-    if r > 0 && r < 0.25 || r > 0.5 && r < 0.75 %angle between 0 to 90 degrees and 180-270
-        signx1 = -1; %x1 is to the left of contact point
-    elseif r > 0.25 && r < 0.5 || r > 0.75 %angle between 90 and 180 and 270-360
-        signx1 = 1; %x1 will be on the right
-    else %when it is right on top
-        signx1 = 1;
-    end
-elseif theta1 == 0 %doesn't even rotate
-    signx1 = 1;
-else
-    signx1 = 1; 
-end
-
-%use a tilted ellipse equation to find x1 (x distance between the COM and the contact point)
-a = 0.035;
-b = 0.025;
-th = theta1;
-k = 0;
-h = 0;
-y = -y1;
-
-x1 = double((a*b*(b^2*cos(th)^2 - k^2*cos(th)^4 + a^2*sin(th)^2 ...
- - y^2*cos(th)^4 - k^2*sin(th)^4 - y^2*sin(th)^4 + 2*k*y*cos(th)^4 + ...
- 2*k*y*sin(th)^4 - 2*k^2*cos(th)^2*sin(th)^2 - ...
- 2*y^2*cos(th)^2*sin(th)^2  + 4*k*y*cos(th)^2*sin(th)^2)^(1/2) +...
- b^2*h*cos(th)^2 + a^2*h*sin(th)^2 - a^2*k*cos(th)*sin(th) + ...
- b^2*k*cos(th)*sin(th) + a^2*y*cos(th)*sin(th) -...
- b^2*y*cos(th)*sin(th))/(a^2*sin(th)^2 + b^2*cos(th)^2));
-
-x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
+% %find the sign of x1, ie whether it is on the left or right of the contact point.
+% signx1 = 0;
+% if theta1 > 0 %turning anticlockwise
+%     r1= rem(theta1,pi)/pi;
+%     if r > 0 && r < 0.25 || r > 0.5 && r < 0.75 %angle between 0 to 90 degrees and 180-270
+%         signx1 = 1; %x1 is to the right of contact point
+%     elseif r > 0.25 && r < 0.5 || r > 0.75 %angle between 90 and 180 and 270-360
+%         signx1 = -1; %x1 will be on the left
+%     else %when it is right on top
+%         signx1 = 1;
+%     end
+% elseif theta1 < 0 %turning clockwise
+%     r = rem(abs(theta1),pi)/pi;
+%     if r > 0 && r < 0.25 || r > 0.5 && r < 0.75 %angle between 0 to 90 degrees and 180-270
+%         signx1 = -1; %x1 is to the left of contact point
+%     elseif r > 0.25 && r < 0.5 || r > 0.75 %angle between 90 and 180 and 270-360
+%         signx1 = 1; %x1 will be on the right
+%     else %when it is right on top
+%         signx1 = 1;
+%     end
+% elseif theta1 == 0 %doesn't even rotate
+%     signx1 = 1;
+% else
+%     signx1 = 1; 
+% end
+% 
+% %use a tilted ellipse equation to find x1 (x distance between the COM and the contact point)
+% a = a0;
+% b = b0;
+% th = theta1;
+% k = 0;
+% h = 0;
+% y = -y1;
+% 
+% x1 = double((a*b*(b^2*cos(th)^2 - k^2*cos(th)^4 + a^2*sin(th)^2 - y^2*cos(th)^4 - k^2*sin(th)^4 - y^2*sin(th)^4 + 2*k*y*cos(th)^4 + 2*k*y*sin(th)^4 - 2*k^2*cos(th)^2*sin(th)^2 - 2*y^2*cos(th)^2*sin(th)^2 + 4*k*y*cos(th)^2*sin(th)^2)^(1/2) + b^2*h*cos(th)^2 + a^2*h*sin(th)^2 - a^2*k*cos(th)*sin(th) + b^2*k*cos(th)*sin(th) + a^2*y*cos(th)*sin(th) - b^2*y*cos(th)*sin(th))/(a^2*sin(th)^2 + b^2*cos(th)^2));
+%  
+% x1 = signx1*abs(x1(1)); %since we figured out the sign of x1 above in the if statement, we multiply it by the the absolute of the 
 %value of the first elemtent of the x1 vector. (it doesn't matter whether we choose the first or second elements because they
 %have the same value just different signs
 
@@ -113,17 +101,15 @@ theta2dot_0 = 0;
 
 %% Solve for Constants
 %S_0 and C_0
-% S_0 = (x1dot_0 + theta1dot_0 * y1) - (x2dot_0 + theta2dot_0 * y2); %(22)
-% C_0 = (y1dot_0 + theta1dot_0 * x1) - (y2dot_0 + theta2dot_0 * x2); %(23)
-%We can also find S_0 and C_0 using the Jacobian if the data set provides it
-
+%S_02 = (x1dot_0 + theta1dot_0 * y1) - (x2dot_0 + theta2dot_0 * y2); %(22)
+%C_02 = (y1dot_0 + theta1dot_0 * x1) - (y2dot_0 + theta2dot_0 * x2); %(23)
 V_c = J*[pre(1,4);pre(1,5);pre(1,6)];
 S_0 = V_c(2);
 C_0 = V_c(1);
 
 %B1, B2, and B3
-B1 = 1/m1 + y1^2/(m1*rho^2); %(19)
-B2 = 1/m1 + x1^2/(m1*rho^2); %(20)
+B1 = 1 + y1^2/(m1*rho^2); %(19)
+B2 = 1 + x1^2/(m1*rho^2); %(20)
 B3 = x1 * y1/m1/rho^2;    %(21)
 %Static friction coefficiant 
 u_s = -B3/B1; %(34)
@@ -155,7 +141,7 @@ for a = 1:sz %varying mu from [0, 1]
         %Use Table 1 to determine modes (conditionals)
         %Apply equations 39 - 48 based on mode
         %Sliding (Second Row of Table)
-        e = stepSize * b;
+        e = (stepSize) * b ;
         if (Pd > (1+e)*Pq)
             Py = - (1+e) * C_0 / (B2 + s * u * B3); %(40)
             Px = - s * u * Py;                      %(39)
@@ -178,20 +164,23 @@ for a = 1:sz %varying mu from [0, 1]
                  Px = (B3 * Py - S_0)/B1;                            %(41)
             else %C-Reversed Sliding
                  Py = -(1+e)/(B2 - s * u * B3)* (C_0 + ...
-                     (2*s*B3*S_0)/(B3 + s * u * B1));               %(46)
+                     (2*s*u*B3*S_0)/(B3 + s * u * B1));               %(46)
                  Px = s * u *(Py - 2 * S_0 / (B3 + s * u * B1));    %(45)
              end    
         else
             disp("Error, none of contact mode requirements met");
         end    
 
-        % calculate the post impact velocities according to the contact
+       % calculate the post impact velocities according to the contact
         % mode
         x1dot_calc = Px/m1 + pre(1,4); 
         y1dot_calc = Py/m1 + pre(1,5); 
-    
-        % calculate error via least squares method 
-        error = sqrt((x1dot_calc - post(1,4))^2 + (y1dot_calc - post(1,5))^2)/sqrt(post(1,4)^2 + post(1,5)^2); 
+        V_cpost = J*[post(1,4);post(1,5);post(1,6)];
+        x_post = V_cpost(2);
+        y_post = V_cpost(1);
+
+        % calculate error via least squares m
+        error = sqrt((x_post - x1dot_calc)^2 + (y_post - y1dot_calc)^2)/sqrt(y_post^2 + x_post^2); 
         % input error into error matrix
         errors(a, b) = error;
     end
@@ -204,7 +193,6 @@ end
 % determine the "best" mu and epsilon value which yields the minimum error
     bMu = i * stepSize;
     bEpsilon = j * stepSize;
-    
     [g,h] = size(bMu);
     if g>1 || h>1 
         stick = 1; %multiple best mus - sticking
@@ -212,7 +200,15 @@ end
         stick = 0; %a single best my - no sticking
     end
     
+    errorMatrix = errors;
     bestMu = min(bMu);
     bestEpsilon = min(bEpsilon);
     
+%     %plot contour plot
+%     mu = stepSize * (0:sz-1);
+%     epsilon = stepSize * (0:sz - 1);
+%     contourf(epsilon, mu, errors);
+%     xlabel('Epsilon')
+%     ylabel('Mu')
+%     title('Mu and Epsilon Errors')
 end
