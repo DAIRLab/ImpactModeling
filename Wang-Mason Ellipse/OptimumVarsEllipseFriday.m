@@ -15,14 +15,16 @@ stickcount = 0;
 % access actual data of first trajectory
 load('ellipse_uniform.mat');
 
-for n = 1:100
-    %n = ran(z);
+ErrorM = zeros(99,99);
+
+for n = 1:80
+    n = ran(z);
     % pre - vector of pre impact state [x1_0, y1_0, theta1_0, x1dot_0, y1dot_0, theta1dot_0]
     % post - vector of post impact state [x1_act, y1_act, theta1_act, x1dot_act, y1dot_act, thetadot_act]
     pre = bounce_array(n).states(1:6); 
     post = bounce_array(n).states(7:12);
     J = [bounce_array(n).n; bounce_array(n).d];
-    [stick,Mu,Ep] = ErrorEllipse(n,pre,post,J); %we can eedit output of this code
+    [stick,errors,Mu,Ep] = ErrorEllipseFriday(n,pre,post,J); %we can eedit output of this code
     
     if stick == 1
         MuStickVec(end+1) = Mu;
@@ -33,6 +35,8 @@ for n = 1:100
         EpsVec = [Ep,EpsVec];
     end
     
+    ErrorM = errors + ErrorM;
+    
 end
 maxstickMu = max(MuStickVec);
 MuStick_w = maxstickMu*stickcount; %weigh the value of the max mu of the sticking trials
@@ -42,4 +46,11 @@ UnweightedOptMu = mean([MuStickVec,MuVec])
 
 [i,j] = size(EpsVec);
 OptEps = sum(EpsVec)/j
+
+ErrorM = ErrorM/z;
+x = 0.01:0.01:.99;
+y = 0.01:0.01:.99;
+contourf(x,y,ErrorM,20)
+colorbar
+
 end
