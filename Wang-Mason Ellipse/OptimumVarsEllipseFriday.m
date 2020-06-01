@@ -16,8 +16,9 @@ stickcount = 0;
 load('ellipse_uniform.mat');
 
 ErrorM = zeros(99,99);
+minerr = [];
 
-for n = 1:80
+for z = 1:80
     n = ran(z);
     % pre - vector of pre impact state [x1_0, y1_0, theta1_0, x1dot_0, y1dot_0, theta1dot_0]
     % post - vector of post impact state [x1_act, y1_act, theta1_act, x1dot_act, y1dot_act, thetadot_act]
@@ -34,6 +35,10 @@ for n = 1:80
         MuVec = [Mu,MuVec];
         EpsVec = [Ep,EpsVec];
     end
+    
+    minimum = min(min(errors));
+    
+    minerr = [minimum,minerr];
     
     ErrorM = errors + ErrorM;
     
@@ -52,5 +57,25 @@ x = 0.01:0.01:.99;
 y = 0.01:0.01:.99;
 contourf(x,y,ErrorM,20)
 colorbar
+
+% minerr = zeros(1,99*99);
+% 
+% for k = 1:99
+%     a = 99*k;
+%     b = 99*(k-1)+1;
+%     minerr(b:a) = ErrorM(k,:);
+% end
+
+%Creating the distribution plot
+pd = fitdist(minerr','Normal');
+step = 2/(length(minerr)-1);
+x = 0:step:2;
+y = pdf(pd,x);
+plot(x,y,'LineWidth',2)
+standardEp = pd.sigma;
+yl = ylim;
+%title({'Density Function for 80 Random Cases', 'Mean Error = ' num2str(avgerr)})
+xlabel('Normalized Error Metric')
+ylabel('Probability Density Estimate')
 
 end
