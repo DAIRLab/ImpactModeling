@@ -8,7 +8,7 @@
 %preimpact states as well as information about the objects geometry
 
 % Inputs
-% M - 
+% M - mass matrix (3x3 Identity matrix but with [m, m, I] on the diagonals) 
 % d - tangential Jacobian (from data set)
 % n - normal Jacobian (from data set) 
 % v_pre - intial velocity of body including xdot, ydot, and thetadot
