@@ -1,0 +1,40 @@
+%% AP Poisson Model
+%From Formulating Dynamic Multi-Rigid-Body Contact Problems with Friction 
+% as Solvable Linear Complementarity Problems
+% M. ANITESCU
+% F. A. POTRA
+
+%This problems solves the LCP to resolve post impact states given the
+%preimpact states as well as information about the objects geometry
+
+% Inputs
+% v_in % intial velocity of body including xdot, ydot, and thetadot
+% M_in
+% d - tangential Jacobian (from data set) 
+% n - normal Jacobian (from data set) 
+% mu - coefficiant of friction (Coulumbic Friction)
+% epsilon - coefficiant of resitution
+
+
+%Outpts
+
+function [v_post] = APPoisson_juniors(n, d, v_in, mu, epsilon)
+%Set up variables
+
+%number of edges of the polygonal approximation
+u = 2; % two dimensional problem 
+e = ones(2,1); %vectors of ones
+D = [
+
+
+
+
+
+
+%Compression Phase
+
+%Decompression Phase
+
+
+
+end
