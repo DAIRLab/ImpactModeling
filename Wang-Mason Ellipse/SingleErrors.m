@@ -15,3 +15,16 @@ end
 
 histogram(errors)
     
+figure
+
+pd = fitdist(errors','Normal');
+step = 2/(length(errors)-1);
+x = 0:step:2;
+y = pdf(pd,x);
+plot(x,y,'LineWidth',2)
+standardEp = pd.sigma;
+yl = ylim;
+title({'Density Function for 2000 Cases', 'Mean Error = ' num2str(mean(errors))})
+xlabel('Normalized Error Metric')
+ylabel('Probability Density Estimate')
+    
