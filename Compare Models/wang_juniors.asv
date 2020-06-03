@@ -22,10 +22,9 @@ function [v_1]=wang_juniors(m, S_0, C_0, B, v_0, u ,e)
     B2 = B(2);
     B3 = B(3);
     
-    a_e = 70/1000/2;
-    b_e = 50/1000/2;
-    I_inertia = m*(b_e^2+a_e^2)/4;
-    rho = sqrt(I_inertia/m);
+    I_inertia = mass*(b_e^2+a_e^2)/5;
+
+    rho = sqrt(I_inertia/mass);
     
     u_s = -B3/B1; %(34)
     %Initial Sign of Sliding Velocity 
@@ -77,7 +76,7 @@ function [v_1]=wang_juniors(m, S_0, C_0, B, v_0, u ,e)
     % calculate the post impact velocities according to the contact mode
     x1dot_calc = Px/m + v_0(4); 
     y1dot_calc = Py/m + v_0(5); 
-    theta1dot_calc = ( (Px*v_0(2) + Py*v_0(1)) / (m*rho^2) ) + v_0(6);
+    theta1dot_calc = (Px*v_0(2) - Py*v_0(1))/m/(rho^2) + v_0(6);
     
     %format into output vector
     v_1 = [x1dot_calc; y1dot_calc; theta1dot_calc];
