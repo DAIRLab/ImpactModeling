@@ -42,6 +42,7 @@ function [w,z] = LCPSolve(M,q)
 pivtol = 1e-8; 
 maxits = 1e4;
 n = length(q);
+q = q';
 
 if size(M)~=[n n]; 
     error('Matrices are not compatible'); 
