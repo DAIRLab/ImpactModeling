@@ -99,10 +99,10 @@ for i = 1:30
     V_c = J*[pre(1,4);pre(1,5);pre(1,6)];
     S_0 = V_c(1); %(22)
     C_0 = V_c(2); %(23)
-
+    pre(1:2) = [x1, y1];
 
     %% Run Our Model
-    out_juniors = wang_juniors(mass, S_0, C_0, [B1; B2; B3], pre(4:6), u ,e);
+    out_juniors = wang_juniors(mass, S_0, C_0, [B1; B2; B3], pre, u ,e);
 
 
     %% Run Nima's Model
@@ -115,7 +115,7 @@ for i = 1:30
     disp("Our Model")
     disp(out_juniors)
     disp("Nima's Model")
-    disp(out_nima(1:2))
+    disp(out_nima)
     % norm(out_juniors - post(4:5))
     % norm(out_nima - post(4:5))
     data(i, 1) = post(4);
@@ -124,5 +124,8 @@ for i = 1:30
     data(i, 4) = post(5);
     data(i, 5) = out_juniors(2);
     data(i, 6) = out_nima(2)';
+    data(i, 7) = post(6);
+    data(i, 8) = out_juniors(3);
+    data(i, 9) = out_nima(3);
     
 end
