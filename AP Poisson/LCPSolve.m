@@ -9,22 +9,6 @@
 %   was successful, and a 2 if a ray termination resulted.  The second 
 %   component is the number of iterations performed in the outer loop.
 %
-% % Example problem
-% >> M=[2,-1;-1,1]; q=[-3;1];
-% 
-% >> [w,z,retcode] = LCPSolve(M,q);
-%
-% % Printed solution
-% w =
-%      0
-%      0
-%
-% z =
-%     2.0000
-%     1.0000
-% 
-% retcode =
-%      1     2
 %
 % % Copyright (c) 2013 Andreas Almqvist, Andrew Spencer and Peter Wall
 % All rights reserved.
