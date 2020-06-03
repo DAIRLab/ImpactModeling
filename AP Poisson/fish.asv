@@ -30,19 +30,11 @@ D = [-d,d]; %matrix with two columns, d and -d which represent vectors of
             %tangent space
             
 %Using Erleben's paper we can go from the Generalized LCP in Anitescu (eq. 
-%13) to a true LCP where we can solve for the post impact state given the
-%premimpact state and information about the geometry
-
-%Set up LCP using equation 27 from Erleben (Matrix in LCP)
+%13) to a true LCP where we can solve for the post impact state g         
 M = [n'*(Mass\n), n'*(Mass\D), 0;
      D'*(Mass\n), D'*(Mass\D), eps;
      mu, -eps', 0];
 
-%(Vector in LCP)
-%STILL NEED TO DOUBLE CHECK HOW WE GO FROM J * inv(M) * F to what we have
-%below
 q = [n'*(pre+ha); D'*(pre+ha); 0];
 
-%Given matrix M and vector q, we now have a well defined LCP and can solve
-%using an LCP solver
 [w,z] = LCPSolve(M,q)
