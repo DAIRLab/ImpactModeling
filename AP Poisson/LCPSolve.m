@@ -53,7 +53,7 @@
 % 
 % We acknowledge the work LCPSolve.py in the OpenOpt python package by
 % Rob Dittmar, Enzo Michelangeli and IT Vision Ltd
-function [w,z,retcode] = LCPSolve(M,q)
+function [w,z] = LCPSolve(M,q)
 
 pivtol = 1e-8; 
 maxits = 1e4;
