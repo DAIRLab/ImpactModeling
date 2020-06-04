@@ -5,7 +5,7 @@ load('ellipse_uniform.mat');
 mu = 0.3;
 e = 0.56;
 
-tr = 1;
+tr = 3;
 a0 = 0.07/2; %semi-major axis
 b0 = 0.05/2; %semi-minor axis
 m1 = 0.037; 
@@ -28,13 +28,14 @@ bt = D*vf;
 
 A = [Bnn Bnt 0; Btn Btt eps; mu -eps' 0];
 B = [Bnn Bnt; Btn Btt];
-b = [bn; bt; 0]
+b = [bn; bt; 0];
 
 [~,x] = LCPSolve(A,b);
 
 %z = [Cn, beta1, beta2, lambda];
 
-v = B*[x(1);x(2);x(3)] 
+%x1dot_calc = x(1)/m1 + pre(1,1)
+%y1dot_calc = x(2)/m1 + pre(1,2)
+x(1) = x(1) * (1 + e);
+v_calc = [M\n', M\D']*[x(1:3)]+(vf)
 post = bounce_array(tr).states(10:12)'
-
-
