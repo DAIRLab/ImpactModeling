@@ -30,12 +30,14 @@ A = [Bnn Bnt 0; Btn Btt eps; mu -eps' 0];
 B = [Bnn Bnt; Btn Btt];
 b = [bn; bt; 0];
 
+%Output x vector of normal and tangential impulses
 [~,x] = LCPSolve(A,b);
 
-%z = [Cn, beta1, beta2, lambda];
-
-%x1dot_calc = x(1)/m1 + pre(1,1)
-%y1dot_calc = x(2)/m1 + pre(1,2)
+%Poisson's Hypothesis - x(1) here corresponds to normal impulse
 x(1) = x(1) * (1 + e);
+
+%Recall that mass*delta_v = Impulse
+
+%This equation solves for delta_v and adds it to vf
 v_calc = [M\n', M\D']*[x(1:3)]+(vf)
 post = bounce_array(tr).states(10:12)'
