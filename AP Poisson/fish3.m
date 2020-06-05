@@ -51,6 +51,9 @@ for a = 1:99
         x(1) = x(1) * (1 + e);
 
         %Recall that mass*delta_v = Impulse
+        %And similarly F = d/dt(m*v)
+        
+        %See page 107, 110 of the paper Phil sent
 
         %This equation solves for delta_v and adds it to vf
         v_calc = [M\n', M\D']*[x(1:3)]+(vf);
