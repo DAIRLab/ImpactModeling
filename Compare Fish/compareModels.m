@@ -5,7 +5,7 @@
 data = zeros(10,6);
 
 %% Set up Variables
-for i = 1:30
+for i = 1:1
     n = i; %current trial for data being examined
 
     u = 0.057;  %mu, coefficiant of friction
