@@ -11,7 +11,7 @@ I1 = m1 * (a0^2 + b0^2) / 4;
 M = [m1,0,0;0,m1,0;0,0,I1];
 
 %% Set up interval
-iter = 20; %how many iterations of mu and epsilon we would like
+iter = 50; %how many iterations of mu and epsilon we would like
 sample = linspace(0.01, 0.99, iter); %set up sample vector
 trialError = zeros(iter);
 totalError = zeros(iter);
@@ -63,3 +63,15 @@ minError = min(min(averageError));  %get the minimum error
 %convert the index to mu and epsilon values
 bestEp = sample(a);
 bestMu = sample(b);
+
+%create contour plot
+colormap(flipud(gray))  %match color from Nima paper
+contourf(sample(21:36), sample(1:15), averageError(21:36, 1:15)', 40);
+colorbar('Direction','reverse'); 
+
+xlabel("Epsilon")
+ylabel("Mu")
+
+
+
+
