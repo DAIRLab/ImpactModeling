@@ -57,6 +57,7 @@ for a = 1:99
 
         %This equation solves for delta_v and adds it to vf
         v_calc = [M\n', M\D']*[x(1:3)]+(vf);
+        %Biggest unknown is why do this?
         post = bounce_array(tr).states(10:12)';
 
         error = sqrt((post(1) - v_calc(1))^2 + (post(2) - v_calc(2))^2)/sqrt(post(1)^2 + post(2)^2); 
