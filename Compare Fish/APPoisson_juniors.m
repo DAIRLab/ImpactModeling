@@ -45,10 +45,9 @@ function [v_post] = APPoisson_juniors(M, n, d, pre, mu, epsilon)
     %x(2) and x(3) are the tangential impulses
     x(1) = x(1) * (1 + epsilon);
 
-    %Recall that mass*delta_v = Impulse
-
-    %This equation solves for delta_v and adds it to v - so we get the final v
-    %Note that we "divide" by n and D because earlier we had to multiply    
-    v_post = [M\n', M\D']*[x(1:3)]+(vf);
+    %Derived From M*(v_+ - v_-) = J' * Impulse
+    %Rearrange to get v_+ 
+    J = [n; -d; d]; %Jacobian
+    v_post = vf + M\J'*x(1:3);
 
 end

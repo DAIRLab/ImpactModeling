@@ -21,7 +21,7 @@ totalError = zeros(iter);
 
 %% Run Simulation
 %loop over multiple trials
-numTrials = 100; %Number of Trials
+numTrials = 1000; %Number of Trials
 for trial = 1:numTrials
     %Get pre and post impact data from current trial
     pre = bounce_array(trial).states(4:6);
