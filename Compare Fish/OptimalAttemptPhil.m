@@ -46,8 +46,8 @@ for trial = 1:numTrials
             v_calc = APPoisson_juniors(M, n, d, pre, mu, epsilon);
             
             %calculate error for current trial
-            error = sqrt((post(1) - v_calc(1))^2 + ...
-                (post(2) - v_calc(2))^2)/sqrt(post(1)^2 + post(2)^2); 
+            error = sqrt(...%(post(1) - v_calc(1))^2 + ...
+                (post(2) - v_calc(2))^2);%/sqrt(post(1)^2 + post(2)^2); 
             trialError(i, j) = error;
             
         end
@@ -69,7 +69,7 @@ bestMu = sample(b);
 
 %create contour plot
 colormap(flipud(gray))  %match color from Nima paper
-contourf(sample(21:36), sample(1:15), averageError(21:36, 1:15)', 40);
+contourf(sample(21:36), sample(1:15), averageError(21:36, 1:15)', 60);
 colorbar; 
 
 xlabel("Epsilon")
