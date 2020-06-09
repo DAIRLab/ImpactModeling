@@ -11,7 +11,7 @@ I1 = m1 * (a0^2 + b0^2) / 4;
 M = [m1,0,0;0,m1,0;0,0,I1];
 
 %% Set up interval
-numTrials = 50;
+numTrials = 1;
 ran = randi([1 2000],1,numTrials);
 errorMatrix = zeros(99,99);
 totalError = zeros(99,99);
