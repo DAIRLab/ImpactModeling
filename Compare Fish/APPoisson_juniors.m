@@ -20,17 +20,17 @@
 %v_post - the post impact velocity 
 
 
-function [v_post] = APPoisson_juniors(M, n, d, pre, mu, epsilon)
+function [v_post] = APPoisson_juniors(Mass, n, d, pre, mu, epsilon)
     %--- Set up variables ----
     %number of edges of the polygonal approximation
     vf = pre' + (1/250)*[0;-9.8;0];
     
     eps = [1;1];
     D = [-d;d];
-    Bnn = n*(M^-1)*n';
-    Bnt = n*(M^-1)*D';
+    Bnn = n*(Mass^-1)*n';
+    Bnt = n*(Mass^-1)*D';
     Btn = Bnt';
-    Btt = D*(M^-1)*D';
+    Btt = D*(Mass^-1)*D';
     bn = n*vf;
     bt = D*vf;
 
@@ -48,6 +48,6 @@ function [v_post] = APPoisson_juniors(M, n, d, pre, mu, epsilon)
     %Derived From M*(v_+ - v_-) = J' * Impulse
     %Rearrange to get v_+ 
     J = [n; -d; d]; %Jacobian
-    v_post = vf + M\J'*x(1:3);
+    v_post = vf + Mass\J'*x(1:3);
 
 end
