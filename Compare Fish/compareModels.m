@@ -5,11 +5,11 @@
 data = zeros(10,6);
 
 %% Set up Variables
-for i = 3:3
+for i = 279:279
     n = i; %current trial for data being examined
 
     u = 0.071;  %mu, coefficiant of friction
-    e = 0.568  %epsilon, coeeficiant of restitution 
+    e = 0.568;  %epsilon, coeeficiant of restitution 
 
     load('ellipse_uniform.mat'); %load in ellipse collision data
     %pre and post impact data

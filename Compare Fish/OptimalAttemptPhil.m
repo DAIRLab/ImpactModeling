@@ -17,12 +17,15 @@ iter = 50; %how many iterations of mu and epsilon we would like
 sample = linspace(0.01, 0.99, iter); %set up sample vector
 trialError = zeros(iter);
 totalError = zeros(iter);
-
+count = 0;
 
 %% Run Simulation
 %loop over multiple trials
-numTrials = 1000; %Number of Trials
-for trial = 1:numTrials
+numTrials = 100; %Number of Trials
+ran = randi([1 2000],1,numTrials);
+
+for t = 1:numTrials
+    trial = ran(t);
     %Get pre and post impact data from current trial
     pre = bounce_array(trial).states(4:6);
     post = bounce_array(trial).states(10:12);
@@ -30,36 +33,44 @@ for trial = 1:numTrials
     %get normal and tangetnial Jacobians from dataset
     d = (bounce_array(trial).d);   %tangential
     n = (bounce_array(trial).n);   %normal
+    %variables for error calc
+    J = [d;n];
+    Minv = J*(M\J');
+    Ma = inv(Minv);
     
-    
-    %loop over all mu's
-    for i = 1:iter
-        %assign epsilon to value corresponding with loop
-        epsilon = sample(i);
+    if sum(bounce_array(trial).flags)<1
 
-        %loop over all epsilons
-        for j = 1:iter
-            %assign mu to value corresponding with loop
-            mu = sample(j);
+        %loop over all mu's
+        for i = 1:iter
+            %assign epsilon to value corresponding with loop
+            epsilon = sample(i);
 
-            %Run AP Poisson Model given mu and epsilon
-            v_calc = APPoisson_juniors(M, n, d, pre, mu, epsilon);
-            
-            %calculate error for current trial
-            error = sqrt(...%(post(1) - v_calc(1))^2 + ...
-                (post(2) - v_calc(2))^2);%/sqrt(post(1)^2 + post(2)^2); 
-            trialError(i, j) = error;
-            
+            %loop over all epsilons
+            for j = 1:iter
+                %assign mu to value corresponding with loop
+                mu = sample(j);
+
+                %Run AP Poisson Model given mu and epsilon
+                v_calc = APPoisson_juniors(M, n, d, pre, mu, epsilon);
+
+                %calculate error for current trial using Nima's Method
+                Pt = (Ma*(J*(post-pre)'));
+                p_hat = (Ma*(J*(v_calc-pre')));
+                error = norm(Pt-p_hat);
+                trialError(i, j) = error;
+
+            end
         end
+        %add trial error to total error
+        totalError = totalError + trialError;
+        count = count + 1;
     end
-    %add trial error to total error
-    totalError = totalError + trialError;
     
 end
 
 %% Post Process Results
 %Take the average of totalError
-averageError = totalError / numTrials;
+averageError = totalError / count;
 minError = min(min(averageError));  %get the minimum error
 [a, b] = find(averageError == minError); %find its index
 
