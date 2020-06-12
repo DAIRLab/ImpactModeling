@@ -116,7 +116,7 @@ for jj = 1:l2
     d = (bounce_array(vm2(jj)).d);   %tangential
     n = (bounce_array(vm2(jj)).n);   %normal    
     J = [d;n];
-    Matrix(kk,7) = sqrt(J(2,3)^2+J(1,3)^2);
+    Matrix(jj,7) = sqrt(J(2,3)^2+J(1,3)^2);
 end
 avg2 = mean(Matrix2)
 standard2 = std(Matrix2)
