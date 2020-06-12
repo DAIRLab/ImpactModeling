@@ -19,8 +19,6 @@ trialError = zeros(iter);
 totalError = zeros(iter);
 count = 0;
 
-bestMu = 0;
-bestEp = 0;
 %% Run Simulation
 %loop over multiple trials
 numTrials = 100; %Number of Trials
@@ -63,16 +61,15 @@ for t = 1:numTrials
 
             end
         end
+        minError = min(min(trialError));  %get the minimum error
+        [a, b] = find(trialError == minError);
+        bestMu = bestMu + a;
+        bestEp = bestEp + b;
         %add trial error to total error
         totalError = totalError + trialError;
         count = count + 1;
-        
-        minError = min(min(trialError));  %get the minimum error
-        [a, b] = find(trialError == minError);
-        bestMu = bestMu + sample(min(b));
-        bestEp = bestEp + sample(min(a));
     end
-
+    
 end
 
 %% Post Process Results
@@ -81,11 +78,9 @@ averageError = totalError / count;
 minError = min(min(averageError));  %get the minimum error
 [a, b] = find(averageError == minError); %find its index
 
-disp(bestMu / count);
-disp(bestEp / count);
 %convert the index to mu and epsilon values
-% bestEp = sample(a);
-% bestMu = sample(b);
+bestEp = sample(a);
+bestMu = sample(b);
 
 %create contour plot
 colormap(flipud(gray))  %match color from Nima paper
