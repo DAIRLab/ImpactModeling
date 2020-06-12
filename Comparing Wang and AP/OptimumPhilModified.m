@@ -113,16 +113,16 @@ Cases = l
 disp('Statistics for pre-impact data for all other mu')
 for jj = 1:l2
     Matrix2(jj,1:6) = bounce_array(vm2(jj)).states(1:6); 
-    d = (bounce_array(vm2(jj)).d);   %tangential
-    n = (bounce_array(vm2(jj)).n);   %normal    
-    J = [d;n];
-    Matrix(jj,7) = sqrt(J(2,3)^2+J(1,3)^2);
+    d2 = (bounce_array(vm2(jj)).d);   %tangential
+    n2 = (bounce_array(vm2(jj)).n);   %normal    
+    J2 = [d2;n2];
+    Matrix2(jj,7) = sqrt(J2(2,3)^2+J2(1,3)^2);
 end
 avg2 = mean(Matrix2)
 standard2 = std(Matrix2)
 Cases = l2
 
-disp('Columns:    x    y    theta    x_dot    y_dot    theta_dot')
+disp('Columns:    x    y    theta    x_dot    y_dot    theta_dot    radius')
 
 %mod(Matrix(:,3),pi/2)*180/pi
 %mod(Matrix2(:,3),pi/2)*180/pi
@@ -130,7 +130,16 @@ disp('Columns:    x    y    theta    x_dot    y_dot    theta_dot')
 tiledlayout(1,2) % Requires R2019b or later
 nexttile
 histogram(mod(Matrix(:,3),pi)*180/pi,36)
-title('Statistics for pre-impact data for minimum mu')
+title('Angles for pre-impact data for minimum mu')
 nexttile
 histogram(mod(Matrix2(:,3),pi)*180/pi,36)
-title('Statistics for pre-impact data for all other mu')
+title('Angles for pre-impact data for all other mu')
+
+figure
+tiledlayout(1,2) % Requires R2019b or later
+nexttile
+histogram(Matrix(:,7),40)
+title('Radii for pre-impact data for minimum mu')
+nexttile
+histogram(Matrix2(:,7),40)
+title('Radii for pre-impact data for all other mu')
