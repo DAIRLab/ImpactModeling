@@ -95,12 +95,16 @@ vm = find(v(bmv == 1));
 vm2 = find(v(bmv ~= 1));
 l = length(vm);
 l2 = length(vm2);
-Matrix = zeros(l,6);
-Matrix2 = zeros(l2,6);
+Matrix = zeros(l,7);
+Matrix2 = zeros(l2,7);
 
 disp('Statistics for pre-impact data for minimum mu')
 for kk = 1:l  
   Matrix(kk,1:6) = bounce_array(vm(kk)).states(1:6);
+  d = (bounce_array(vm(kk)).d);   %tangential
+  n = (bounce_array(vm(kk)).n);   %normal    
+  J = [d;n];
+  Matrix(kk,7) = sqrt(J(2,3)^2+J(1,3)^2);
 end
 avg = mean(Matrix)
 standard = std(Matrix)
@@ -108,7 +112,11 @@ Cases = l
 
 disp('Statistics for pre-impact data for all other mu')
 for jj = 1:l2
-    Matrix2(jj,1:6) = bounce_array(vm2(jj)).states(1:6);   
+    Matrix2(jj,1:6) = bounce_array(vm2(jj)).states(1:6); 
+    d = (bounce_array(vm2(jj)).d);   %tangential
+    n = (bounce_array(vm2(jj)).n);   %normal    
+    J = [d;n];
+    Matrix(kk,7) = sqrt(J(2,3)^2+J(1,3)^2);
 end
 avg2 = mean(Matrix2)
 standard2 = std(Matrix2)
@@ -121,8 +129,8 @@ disp('Columns:    x    y    theta    x_dot    y_dot    theta_dot')
 %Creating the plots
 tiledlayout(1,2) % Requires R2019b or later
 nexttile
-histogram(mod(Matrix(:,3),2*pi)*180/pi,18)
+histogram(mod(Matrix(:,3),pi)*180/pi,36)
 title('Statistics for pre-impact data for minimum mu')
 nexttile
-histogram(mod(Matrix2(:,3),2*pi)*180/pi,18)
+histogram(mod(Matrix2(:,3),pi)*180/pi,36)
 title('Statistics for pre-impact data for all other mu')
