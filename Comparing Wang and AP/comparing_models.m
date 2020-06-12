@@ -27,7 +27,7 @@ totalError = zeros(iter);
 numTrials = 2000; %Number of Trials
 bev = zeros(1,numTrials);
 bmv = zeros(1,numTrials);
-v = randi([1 numTrials],1,2000);
+v = randi([1 2000],1,numTrials);
 
 % for each Trial, call both the Wang and AP models,
 % 1) receive from each of them the optimal mu and e for that case,
