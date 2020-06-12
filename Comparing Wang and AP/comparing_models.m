@@ -9,8 +9,11 @@ b0 = 0.05/2; %semi-minor axis
 m1 = 0.037; 
 I1 = m1 * (a0^2 + b0^2) / 4;
 M = [m1,0,0;0,m1,0;0,0,I1];
-AP = 0;
-Wang = 0;
+AP_g = 0;
+Wang_g = 0;
+AP_i = 0;
+Wang_i = 0;
+
 
 % Set up interval
 iter = 50; %how many iterations of mu and epsilon we would like
@@ -89,8 +92,13 @@ for tr = 1:numTrials
     end
     
     [bm , be] = find(trialError == min(min(trialError)));
-    Wang = Wang + sum(sum(models == 1));
-    AP = AP + sum(sum(models == 2));
+    Wang_g = Wang_g + sum(sum(models == 1));
+    AP_g = AP_g + sum(sum(models == 2));
+    if models(bm,be) == 1
+        Wang_i = Wang_i + 1;
+    else
+        AP_i = AP_i + 1;
+    end
     bev(tr) = min(be);
     bmv(tr) = min(bm);
     
@@ -106,8 +114,9 @@ averageError = totalError / numTrials;
 minError = min(min(averageError));  %get the minimum error
 [a , b] = find(averageError == minError); %find its index
 %convert the index to mu and epsilon values
-bestEp = sample(a);
-bestMu = sample(b);
+disp('Best mu and e from taking the average of the added matrices')
+bestEp = sample(a)
+bestMu = sample(b)
 
 %create contour plot
 colormap(flipud(gray))  %match color from Nima paper
@@ -120,7 +129,12 @@ ylabel("Mu")
 %Computing average mu and e
 aa = mean(bev);
 bb = mean(bmv);
+disp('Best mu and e from taking the average of the best mu and e of each trial')
 mue = sample(floor(aa)) + (sample(floor(aa)+1)-sample(floor(aa)))/(1)*(aa-floor(aa)) 
 ee = sample(floor(bb)) + (sample(floor(bb)+1)-sample(floor(bb)))/(1)*(bb-floor(bb))
-Wang_per = Wang/(Wang+AP)
-AP_per = AP/(Wang+AP)
+disp('Percentage of times Wang and AP are chosen in the error matrix')
+Wang_gper = Wang_g/(Wang_g+AP_g)
+AP_gper = AP_g/(Wang_g+AP_g)
+disp('Percentage of times Wang and AP are chosen for best mu and e')
+Wang_iper = Wang_i/(Wang_i+AP_i)
+AP_iper = AP_i/(Wang_i+AP_i)
