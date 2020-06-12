@@ -24,7 +24,7 @@ totalError = zeros(iter);
 
 % Run Simulation
 %loop over multiple trials
-numTrials = 500; %Number of Trials
+numTrials = 2000; %Number of Trials
 bev = zeros(1,numTrials);
 bmv = zeros(1,numTrials);
 v = randi([1 numTrials],1,2000);
@@ -37,8 +37,8 @@ v = randi([1 numTrials],1,2000);
 % 3) choose the "best" model of the two in each trial, and create
 % a growing vector with the best mu and e
 
-for tr = 1:numTrials
-    trial = v(tr);
+for trial = 1:numTrials
+    %trial = v(tr);
     %Get pre and post impact data from current trial
     pre = bounce_array(trial).states(4:6);
     post = bounce_array(trial).states(10:12);
@@ -130,8 +130,8 @@ ylabel("Mu")
 aa = mean(bev);
 bb = mean(bmv);
 disp('Best mu and e from taking the average of the best mu and e of each trial')
-mue = sample(floor(aa)) + (sample(floor(aa)+1)-sample(floor(aa)))/(1)*(aa-floor(aa)) 
-ee = sample(floor(bb)) + (sample(floor(bb)+1)-sample(floor(bb)))/(1)*(bb-floor(bb))
+bestEp2 = sample(floor(bb)) + (sample(floor(bb)+1)-sample(floor(bb)))/(1)*(bb-floor(bb))
+bestMu2 = sample(floor(aa)) + (sample(floor(aa)+1)-sample(floor(aa)))/(1)*(aa-floor(aa)) 
 disp('Percentage of times Wang and AP are chosen in the error matrix')
 Wang_gper = Wang_g/(Wang_g+AP_g)
 AP_gper = AP_g/(Wang_g+AP_g)
