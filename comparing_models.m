@@ -9,6 +9,8 @@ b0 = 0.05/2; %semi-minor axis
 m1 = 0.037; 
 I1 = m1 * (a0^2 + b0^2) / 4;
 M = [m1,0,0;0,m1,0;0,0,I1];
+AP = 0;
+Wang = 0;
 
 % Set up interval
 iter = 50; %how many iterations of mu and epsilon we would like
@@ -19,7 +21,9 @@ totalError = zeros(iter);
 
 % Run Simulation
 %loop over multiple trials
-numTrials = 30; %Number of Trials
+numTrials = 500; %Number of Trials
+bev = zeros(1,numTrials);
+bmv = zeros(1,numTrials);
 v = randi([1 numTrials],1,2000);
 
 % for each Trial, call both the Wang and AP models,
@@ -83,6 +87,13 @@ for tr = 1:numTrials
             
         end
     end
+    
+    [bm , be] = find(trialError == min(min(trialError)));
+    Wang = Wang + sum(sum(models == 1));
+    AP = AP + sum(sum(models == 2));
+    bev(tr) = min(be);
+    bmv(tr) = min(bm);
+    
     %add trial error to total error
     totalError = totalError +  trialError;
     
@@ -100,8 +111,16 @@ bestMu = sample(b);
 
 %create contour plot
 colormap(flipud(gray))  %match color from Nima paper
-contourf(sample(1:end), sample(1:end), averageError(1:end, 1:end)', 30);
+contourf(sample(1:end), sample(1:end), averageError(1:end, 1:end)', 20);
 colorbar('Direction','reverse'); 
 
 xlabel("Epsilon")
 ylabel("Mu")
+
+%Computing average mu and e
+aa = mean(bev);
+bb = mean(bmv);
+mue = sample(floor(aa)) + (sample(floor(aa)+1)-sample(floor(aa)))/(1)*(aa-floor(aa)) 
+ee = sample(floor(bb)) + (sample(floor(bb)+1)-sample(floor(bb)))/(1)*(bb-floor(bb))
+Wang_per = Wang/(Wang+AP)
+AP_per = AP/(Wang+AP)
