@@ -14,6 +14,7 @@ Mass = [m1, 0, 0;
 
 %% Set up interval
 sumX = [0, 0];
+bests = [];
 count = 0;
 
 %set up mu and epsilon intervals for fmincon
@@ -23,8 +24,8 @@ lb = [mu_lim(1),ep_lim(1)];
 ub = [mu_lim(2),ep_lim(2)];
 %% Run Simulation
 %loop over multiple trials
-numTrials = 2000; %Number of Trials
-ran = 1:2000; %randi([1 2000],1,numTrials);
+numTrials = 100; %Number of Trials
+ran = randi([1 2000],1,numTrials);
 
 for t = 1:numTrials
     trial = ran(t);
@@ -56,6 +57,8 @@ for t = 1:numTrials
         count = count + 1;
         %add mu and epsilon to sum
         sumX = sumX + x;
+        
+        bests(count, :) = x;
     end
     
 end
