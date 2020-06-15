@@ -26,7 +26,7 @@ I1 = m1 * (a0^2 + b0^2) / 4;
 M = [m1,0,0;0,m1,0;0,0,I1]; 
 
 % Setting up the trial number
-trial = 3;
+trial = 5;
 
 % Finding pre and post impact velocities
 pre = bounce_array(trial).states(4:6)';
@@ -43,7 +43,7 @@ Initial = 0.5*pre'*M*pre;
 
 % Applying fmincon
 fun = @(x)norm(post - (pre + (M^-1)*J'*[x(1);x(2)]));
-nonlcon = @IRB;
+nonlcon = @(x) IRB(x, trial);
 x0 = [0 0];
 A = []; % No other constraints
 b = [];
@@ -51,9 +51,13 @@ Aeq = [];
 beq = [];
 lb = [];
 ub = [];
-x = fmincon(fun,x0,A,b,Aeq,beq,lb,ub,nonlcon)
+% output: x(1) - tangential impulse
+%         x(2) - normal impulse
+ x = fmincon(fun,x0,A,b,Aeq,beq,lb,ub,nonlcon)
 
-function [c,ceq] = IRB(x)
+
+% output: c - constraint (energy cannot increase)
+function [c,ceq] = IRB(x, trial)
 load('ellipse_uniform.mat');
 % Set up Constants
 a0 = 0.07/2; %semi-major axis
@@ -62,8 +66,6 @@ m1 = 0.037;
 I1 = m1 * (a0^2 + b0^2) / 4;
 M = [m1,0,0;0,m1,0;0,0,I1]; 
 
-% Setting up the trial number
-trial = 3;
 
 % Finding pre and post impact velocities
 pre = bounce_array(trial).states(4:6)';
@@ -78,4 +80,3 @@ J = [d;n];
 c(1) = 0.5*(pre + (M^-1)*J'*[x(1);x(2)])'*M*(pre + (M^-1)*J'*[x(1);x(2)]) - 0.5*pre'*M*pre;
 ceq = [];
 end
-
