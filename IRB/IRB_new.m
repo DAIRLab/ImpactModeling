@@ -12,7 +12,7 @@ Mass = [m1, 0, 0;
         0, 0, I1]; 
 
 %Select trial
-trial = 1;
+trial = 3;
 
 % Finding pre and post impact velocities / states
 pre = bounce_array(trial).states(4:6)';
@@ -23,14 +23,18 @@ n = (bounce_array(trial).n);   %normal
 
 J = [d;n]; %Jacobian
 
-fun = @(x)(findError(x, Mass, J, pre, post));
-nonlcon = @(x)(constraint(x, Mass, J, pre, post));
+fun = @(P)(findError(P, Mass, J, pre, post));
+nonlcon = @(P)(constraint(P, Mass, J, pre, post));
 
-x0 = [0 0];
+P0 = [0 0];
 A = []; % No other constraints
 b = [];
 Aeq = [];
 beq = [];
 lb = [];
 ub = [];
-x = fmincon(fun,x0,A,b,Aeq,beq,lb,ub,nonlcon);
+P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon);
+
+
+disp("Tangential Impulse: " + P(1) + " [N*s]")
+disp("Normal Impluse: " + P(2) + " [N*s]")
