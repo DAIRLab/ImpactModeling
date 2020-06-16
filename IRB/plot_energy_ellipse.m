@@ -1,4 +1,7 @@
 % Plots the energy ellipse with the Pt and Pn from fmincon
+% NOTE: uses Phil's separated functions (findError.m, constraint.m, IRB_new.m) but you need to change IRB_new to a function
+% that takes trial number as input and outputs P
+
 function plot_energy_ellipse(trial)
 
 syms x y
