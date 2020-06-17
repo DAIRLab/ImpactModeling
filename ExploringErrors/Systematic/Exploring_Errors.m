@@ -1,27 +1,24 @@
 % Exploring Errors
 
-function [bestEp2,bestMu2,Standard_e,Standard_mu] = Exploring_Errors(p1,p2) 
+function [bestEp2,bestMu2,Standard_e,Standard_mu] = Exploring_Errors(p1,p2,bounce_array) 
 
 % Step 1: set-up the # of trials
-numTrials = 100; %Number of Trials
+numTrials = 1000; %Number of Trials
 
-% Step 2: load in ellipse data 
-load('ellipse_uniform.mat');
-
-% Step 3: set-up the constants
+% Step 2: set-up the constants
 a0 = 0.07/2; %semi-major axis
 b0 = 0.05/2; %semi-minor axis
 m1 = 0.037; 
 I1 = m1 * (a0^2 + b0^2) / 4;
 M = [m1,0,0;0,m1,0;0,0,I1];
 
-% Step 4: set-up the interval
+% Step 3: set-up the interval
 iter = 50; %how many iterations of mu and epsilon we would like
 sample = linspace(0.01, 0.99, iter); %set up sample vector
 trialError = zeros(iter);
 totalError = zeros(iter);
 
-% Step 5: run the simulation
+% Step 4: run the simulation
 bev = zeros(1,numTrials);
 bmv = zeros(1,numTrials);
 %v = randi([1 2000],1,numTrials); %choose the random trials
@@ -69,7 +66,7 @@ for tr = 1:numTrials
     bmv(tr) = min(bm);
 end
 
-% Step 6: post-process results
+% Step 5: post-process results
 %Finding average mu and ep by taking the average of the best of each trial
 bb = mean(bev);
 aa = mean(bmv);
@@ -78,4 +75,3 @@ bestMu2 = sample(floor(aa)) + (sample(floor(aa)+1)-sample(floor(aa)))/(1)*(aa-fl
 
 Standard_e = std(sample(bev));
 Standard_mu = std(sample(bmv));
-
