@@ -34,7 +34,10 @@ s2 = linspace(1-pmax2, 1+pmax2, itr);
 standard = zeros(itr,itr);
 C = cell(itr,itr);
 
-% Step 2: run the double for-loop
+% Step 2: load in ellipse data 
+load('ellipse_uniform.mat');
+
+% Step 3: run the double for-loop
 for i = 1:itr
     
     p1 = s1(i);
@@ -48,7 +51,7 @@ for i = 1:itr
          % and mu for 1000 trials, as well as their standard deviations.
          % This is all data given the percentage change p1,p2 in the 
          % positions of impact
-         [avEp,avMu,Standard_e,Standard_mu] = Exploring_Errors(p1,p2);
+         [avEp,avMu,Standard_e,Standard_mu] = Exploring_Errors(p1,p2,bounce_array);
          standard(i, j) = Standard_mu;
          C{i,j} = {avEp,avMu,Standard_e,Standard_mu};
          
