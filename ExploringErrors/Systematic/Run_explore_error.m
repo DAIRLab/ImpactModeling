@@ -62,3 +62,20 @@ minStandard = min(min(standard));  %get the minimum standard
 disp(C{a,b})
 p1 = s1(a)
 p2 = s2(b)
+
+% Results: turns out that for the first 1000 cases, using only Wang's model,
+% we get that if the y position was 50% higher and the x position was 50% lower,
+% then the standard deviation for the mu is the lowest.
+
+% However, it should be noted that if we allowed the percentage changes to go
+% higher than this (to 90% for instance), we would observe a similar pattern, in
+% the sense that the standard deviation for mu is lowest when the y position is
+% 90% higher and the x position is 90% lower.
+
+% Furthermore, there is also an inverse relation between the standard deviation of
+% epsilon and that of mu - the lower the standard for mu, the higher the one for e
+% We are not really worrying too much about e because this can vary, since the 
+% impact initial conditions dictates a lot about this
+% In contrast, for mu, we should be expect a global value for it - this is why
+% we are trying to reduce its standard deviation, since that would indicate
+% most mus are close to each other.
