@@ -21,6 +21,10 @@
 % Our third goal is, once we identify the parameters, to see if 
 % they will reduce the standard deviation for all 2000 cases
 
+% Note: This code assumes there is a systematic mistake when
+% reporting the values for position and velocity that is 
+% repeated in every measurement
+
 % Step 1: set-up p1 and p2 (the max percentage change)
 pmax1 = 0.5;
 pmax2 = 0.5;
