@@ -45,7 +45,7 @@ for i = 1:length(ran)
         P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon, options);
 
         count = count + 1;
-        errorVector(count) = findError(P, Mass, J, pre, post);
+        errorVector(count) = findError(P, Mass, J, pre, post);%/norm(post);
         
      end
 
