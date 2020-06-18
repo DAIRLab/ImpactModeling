@@ -1,4 +1,5 @@
 %% Newer IRB
+clear; 
 
 load('ellipse_uniform.mat');
 
@@ -11,7 +12,7 @@ Mass = [m1, 0, 0;
         0, m1, 0; 
         0, 0, I1]; 
 
-numTrials = 1000; %Number of Trials
+numTrials = 1; %Number of Trials
 ran = randi([1 2000], 1, numTrials);
 
 count = 0; %counter variable
@@ -52,5 +53,5 @@ for i = 1:length(ran)
 end
 
 
-disp("Tangential Impulse: " + P(1) + " [N*s]")
-disp("Normal Impluse: " + P(2) + " [N*s]")
+% disp("Tangential Impulse: " + P(1) + " [N*s]")
+% disp("Normal Impluse: " + P(2) + " [N*s]")

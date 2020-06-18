@@ -12,14 +12,15 @@
 %c - constraint equations, written in <= 0 form
 
 
-function [c, ceq] = constraint(P, M, J, v_pre, v_post)
+function [c, ceq] = constraint(P, M, J, maxWidth, v_pre, v_post)
     %impact law prediction (ILP) for post impact velocity
-    ILP = v_pre + inv(M) * J' * P'; 
+    ILP = v_pre + inv(M) * J' * [P(1:2)'; P(3) * P(2)]; 
     %initial energy from pre impact velocity 
     initialEnergy = 1/2 * v_pre' * M * v_pre;
     %Simplified Energy Ellipse Equaion, written in terms of <= 0
-    c(1) = 1/2 * ILP' * M * ILP - initialEnergy; %TODO
-    
+    c(1) = 1/2 * ILP' * M * ILP - initialEnergy; 
+    %max width constraint, written in terms of <=
+    c(2) = P(3) - maxWidth;
     ceq = [];
 
 end
