@@ -39,8 +39,8 @@ J = [n;d];
 %% Find Impact Data
 
 %assign pre impact velocities for object 1
-y1 = J(2,3)*p1;
-x1 = J(1,3)*p2;
+y1 = J(2,3)*p2;
+x1 = J(1,3)*p1;
 
 x1dot_0 = pre(1,1);
 y1dot_0 = pre(1,2);
