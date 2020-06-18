@@ -51,12 +51,12 @@ for trials = 1:numTrials
 end
 
 % Step 5: processing data
-standard_vec = zeros(1,numTrials);
+min_error_vec = zeros(1,numTrials);
 percentage_vec = zeros(2,numTrials);
 C2 = cell(numTrials,1);
 for k = 1:numTrials  
 minEr = min(min(errorM(:,:,k)));  %get the minimum standard
-standard_vec(k) = minEr;
+min_error_vec(k) = minEr;
 [a , b] = find(errorM(:,:,k) == minEr); %find its index
 p1 = s1(a);
 p2 = s2(b);
