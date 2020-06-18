@@ -64,3 +64,6 @@ percentage_vec(1:2,k) = [p1;p2];
 c2{k,1} = C{a,b,k};
 end
 
+meanError = mean(min_error_vec)
+mean_p1 = mean(percentage_vec(1,:))
+mean_p2 = mean(percentage_vec(2,:))
