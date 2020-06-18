@@ -82,3 +82,9 @@ p2 = s2(b)
 % In contrast, for mu, we should be expect a global value for it - this is why
 % we are trying to reduce its standard deviation, since that would indicate
 % most mus are close to each other.
+
+% Statistics for first 1000 trials: code returns the cell {[0.4555] [0.0832] [0.1144]
+% [0.0388]} where the first value represents average epsilon, then mu, and then the
+% standard deviation for both e and mu - this value, of 0.0388 is the lowest that was
+% reached for mu, again, assuming there was a systematic error with the way that the
+% positions are measured
