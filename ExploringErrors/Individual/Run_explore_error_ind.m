@@ -22,9 +22,10 @@ s2 = linspace(1-pmax2, 1+pmax2, itr);
 load('ellipse_uniform.mat');
 
 % Step 3: set-up the number of trials
-numTrials = 100;
+numTrials = 200;
 errorM = zeros(itr,itr,numTrials);
 C = cell(itr,itr,numTrials);
+min_error_vec = zeros(3,numTrials);
 
 % Step 4: run the triple for-loop (outer: trials, double-inner: percentage
 % changes in position)
@@ -44,6 +45,10 @@ for trials = 1:numTrials
              errorM(i, j,trials) = minError;
              C{i,j,trials} = {avEp,avMu,minError};
 
+             if p1 == 1 & p2 == 1
+               min_error_vec(2,trials) = minError;  
+             end
+             
         end
         
     end
@@ -51,12 +56,12 @@ for trials = 1:numTrials
 end
 
 % Step 5: processing data
-min_error_vec = zeros(1,numTrials);
 percentage_vec = zeros(2,numTrials);
 C2 = cell(numTrials,1);
 for k = 1:numTrials  
 minEr = min(min(errorM(:,:,k)));  %get the minimum standard
-min_error_vec(k) = minEr;
+min_error_vec(1,k) = minEr;
+min_error_vec(3,k) = (minEr/min_error_vec(2,k))*100;
 [a , b] = find(errorM(:,:,k) == minEr); %find its index
 p1 = s1(a);
 p2 = s2(b);
@@ -64,6 +69,26 @@ percentage_vec(1:2,k) = [p1;p2];
 c2{k,1} = C{a,b,k};
 end
 
-meanError = mean(min_error_vec)
+meanOptimizedError = mean(min_error_vec(1,:))
+meanRegularError = mean(min_error_vec(2,:))
+avgPerChange = mean(min_error_vec(3,:))
 mean_p1 = mean(percentage_vec(1,:))
 mean_p2 = mean(percentage_vec(2,:))
+
+% Output vectors:
+% 1) min_error_vec: contains the optimized error after finding a p1 and p2
+% that yields a value lower than the regular error (row 1), the regular
+% error (row 2, when p1 and p2 both equal 1) and the percentage change,
+% which is the optimized error/regular error (row 3)
+% 2) percentage_vec: contains the values of p1 (row 1) and p2 (row 2) that
+% yield the smallest error (as a reminder, p1 modifies x1 and p2 modifies
+% x2)
+% min_error_vec and percentage_vec have the same number of columns, which
+% correspond to the trial number
+
+% Observations: when running this code, almost for every trial the new
+% optimized error < regular error, which means that just a slight change in
+% positions (determined by p1 and p2) can make our model way more accurate.
+% Furthermore, the values that are returned for p1 and for p2 are actually
+% quite reasonable. This makes us wonder whether the data that we got or
+% the approach to collecting it was actually well executed
