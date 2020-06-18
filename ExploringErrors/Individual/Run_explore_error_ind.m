@@ -12,8 +12,8 @@
 % standard deviation for mu
 
 % Step 1: set-up p1 and p2 (the max percentage change)
-pmax1 = 0.5;
-pmax2 = 0.5;
+pmax1 = 0.3;
+pmax2 = 0.3;
 itr = 11; %how many iterations we would like
 s1 = linspace(1-pmax1, 1+pmax1, itr); 
 s2 = linspace(1-pmax2, 1+pmax2, itr);
@@ -57,17 +57,39 @@ end
 
 % Step 5: processing data
 percentage_vec = zeros(2,numTrials);
+pos_vec = zeros(4,numTrials);
 C2 = cell(numTrials,1);
 for k = 1:numTrials  
-minEr = min(min(errorM(:,:,k)));  %get the minimum standard
-min_error_vec(1,k) = minEr;
-min_error_vec(3,k) = (minEr/min_error_vec(2,k))*100;
-[a , b] = find(errorM(:,:,k) == minEr); %find its index
-p1 = s1(a);
-p2 = s2(b);
-percentage_vec(1:2,k) = [p1;p2];
-c2{k,1} = C{a,b,k};
-end
+    % Minimum error vector
+    minEr = min(min(errorM(:,:,k)));  %get the minimum standard
+    min_error_vec(1,k) = minEr;
+    min_error_vec(3,k) = (minEr/min_error_vec(2,k))*100;
+    % Percentage change vector
+    [a , b] = find(errorM(:,:,k) == minEr); %find its index
+    p1 = s1(a);
+    p2 = s2(b);
+    percentage_vec(1:2,k) = [p1;p2];
+    c2{k,1} = C{a,b,k};
+    % Position vector
+    d = (bounce_array(k).d);   %tangential
+    n = (bounce_array(k).n); 
+    J = [n;d];
+    y1 = J(2,3);
+    x1 = J(1,3);
+    pos_vec(1:2,k) = [x1;x1*p1];
+    pos_vec(3:4,k) = [y1;y1*p2];
+    rad = sqrt((x1*p1)^2 + (y1*p2)^2);
+    % Sanity Check - how many of our cases make physical sense? In other
+    % words, does the new optimized x1 and y1 positions lie on the edge of
+    % the ellipse (the radius from x1,y1 to the center of the ellipse is
+    % between 0.025 and 0.0035)
+    if (x1*p1 < 0.035) & (y1*p2 < 0.035) & (rad < 0.035 & rad > 0.025)
+    pos_vec(5,k) = 1;
+    else
+    pos_vec(5,k) = 0;
+    end
+    
+    end
 
 meanOptimizedError = mean(min_error_vec(1,:))
 meanRegularError = mean(min_error_vec(2,:))
@@ -83,6 +105,8 @@ mean_p2 = mean(percentage_vec(2,:))
 % 2) percentage_vec: contains the values of p1 (row 1) and p2 (row 2) that
 % yield the smallest error (as a reminder, p1 modifies x1 and p2 modifies
 % x2)
+% 3) pos_vec: contains the values of x1, x1*p1, y1 and y1*p2 in  rows 1, 2,
+% 3 and 4 respectively
 % min_error_vec and percentage_vec have the same number of columns, which
 % correspond to the trial number
 
@@ -92,3 +116,33 @@ mean_p2 = mean(percentage_vec(2,:))
 % Furthermore, the values that are returned for p1 and for p2 are actually
 % quite reasonable. This makes us wonder whether the data that we got or
 % the approach to collecting it was actually well executed
+
+% Step 6: post-processing of the physically sensible cases
+vec = find(pos_vec(5,:) == 1);
+l = length(vec);
+percentage_vec2 = zeros(2,l);
+pos_vec2 = zeros(5,l);
+meanOptimizedError2 = mean(min_error_vec(1,vec));
+meanRegularError2 = mean(min_error_vec(2,vec));
+avgPerChange2 = mean(min_error_vec(3,vec));
+mean2_p1 = mean(percentage_vec(1,vec));
+mean2_p2 = mean(percentage_vec(2,vec));
+percentage_vec2(:,:) = percentage_vec(:,vec);
+pos_vec2(:,:) = pos_vec(:,vec);
+
+
+% Note: when we isolate these cases, the statistics become even better -
+% the average optimized error gets even smaller for instance.
+
+% Another important thing to mention is that the # of isolated could
+% potentially be expressed as a function of the percentage change. In other
+% words, the more we let x1 and y1 vary (using p1 and p2), the less the #
+% of isolated cases, since the pair won't be anymore within our desired
+% area of focus
+% For instance, for the first 200 cases, at a variation of p1 = 0.5 to 1.5
+% and p2 = 0.5 to 1.5, we get 70 isolated cases (which is, the number of
+% cases that make physical sense)
+% In contast, if we limit p1 = 0.3 to 1.3
+% and p2 = 0.3 to 1.3, we get 95 isolated cases. Also, at this range, we
+% get a value for avgPerChange that is larger than before - hence, the more
+% we can modify x1 and y1, the lower the errors we can get
