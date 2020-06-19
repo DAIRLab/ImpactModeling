@@ -1,4 +1,5 @@
 %Run_explore_error (individual version)
+% Run time: ~7  minutes for 2000 trials
 
 % This function goes trial by trial and computes the average mu and 
 % as we change the x1 and y1 position by a percentage (p1 and p2). In 
@@ -22,7 +23,7 @@ s2 = linspace(1-pmax2, 1+pmax2, itr);
 load('ellipse_uniform.mat');
 
 % Step 3: set-up the number of trials
-numTrials = 1000;
+numTrials = 100;
 errorM = zeros(itr,itr,numTrials);
 C = cell(itr,itr,numTrials);
 min_error_vec = zeros(3,numTrials);
@@ -43,7 +44,7 @@ for trials = 1:numTrials
 
              [avEp,avMu,minError] = Exploring_Errors_ind(p1,p2,bounce_array,trials);
              errorM(i, j,trials) = minError;
-             C{i,j,trials} = {avEp,avMu,minError};
+             C{i,j,trials} = {min(avEp),min(avMu),minError};
 
              if p1 == 1 & p2 == 1
                min_error_vec(2,trials) = minError;  
@@ -55,7 +56,8 @@ for trials = 1:numTrials
     disp(trials)
 end
 
-% Step 5: processing data
+% Step 5: processing data (of all cases, regardless of whether they make
+% physical sense or not)
 percentage_vec = zeros(2,numTrials);
 pos_vec = zeros(4,numTrials);
 C2 = cell(numTrials,1);
@@ -69,7 +71,7 @@ for k = 1:numTrials
     p1 = s1(a);
     p2 = s2(b);
     percentage_vec(1:2,k) = [p1;p2];
-    c2{k,1} = C{a,b,k};
+    C2{k,1} = C{a,b,k};
     % Position vector
     d = (bounce_array(k).d);   %tangential
     n = (bounce_array(k).n); 
@@ -157,7 +159,11 @@ min_error_vec2(:,:) = min_error_vec(:,vec);
 % cases: 1000, we get # isolated cases = 323, and avgPerChange = 24.0034
 % (and 23.3808)
 
-% Some graphs
+% When p1 = 0.5 to 1.5 and p2 = 0.5 to 1.5, and total
+% cases: 2000, we get # isolated cases = 644, and avgPerChange = 23.2232
+% (and 23.0018)
+
+% Step 7: some graphs
 plot(1:l,min_error_vec2(2,:))
 hold on
 plot(1:l,min_error_vec2(1,:))
@@ -168,3 +174,14 @@ ylabel('Normalized Velocity error')
 set(gca, 'FontSize', 12)
 annotation('textbox',[.13 0.7 .4 .2],'String',['Avg. Actual error = ' num2str(meanRegularError2)],'EdgeColor','none','FontSize',12)
 annotation('textbox',[.13 0.665 .4 .2],'String',['Avg. Optimized error = ' num2str(meanOptimizedError2)],'EdgeColor','none','FontSize',12)
+
+% Step 8: mu/epsilon statistics for all cases
+Stats = [C2{:,1}];
+Stats = cell2mat(Stats);
+AvgMu = mean(Stats(2:3:end));
+AvgEp = mean(Stats(1:3:end));
+% For the isolated cases
+Stats2 = [C2{vec,1}];
+Stats2 = cell2mat(Stats2);
+AvgMu2 = mean(Stats2(2:3:end));
+AvgEp2 = mean(Stats2(1:3:end));
