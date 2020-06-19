@@ -12,8 +12,8 @@
 % standard deviation for mu
 
 % Step 1: set-up p1 and p2 (the max percentage change)
-pmax1 = 0.3;
-pmax2 = 0.3;
+pmax1 = 0.5;
+pmax2 = 0.5;
 itr = 11; %how many iterations we would like
 s1 = linspace(1-pmax1, 1+pmax1, itr); 
 s2 = linspace(1-pmax2, 1+pmax2, itr);
@@ -22,7 +22,7 @@ s2 = linspace(1-pmax2, 1+pmax2, itr);
 load('ellipse_uniform.mat');
 
 % Step 3: set-up the number of trials
-numTrials = 200;
+numTrials = 1000;
 errorM = zeros(itr,itr,numTrials);
 C = cell(itr,itr,numTrials);
 min_error_vec = zeros(3,numTrials);
@@ -122,6 +122,7 @@ vec = find(pos_vec(5,:) == 1);
 l = length(vec);
 percentage_vec2 = zeros(2,l);
 pos_vec2 = zeros(5,l);
+min_error_vec2 = zeros(3,l);
 meanOptimizedError2 = mean(min_error_vec(1,vec));
 meanRegularError2 = mean(min_error_vec(2,vec));
 avgPerChange2 = mean(min_error_vec(3,vec));
@@ -129,6 +130,7 @@ mean2_p1 = mean(percentage_vec(1,vec));
 mean2_p2 = mean(percentage_vec(2,vec));
 percentage_vec2(:,:) = percentage_vec(:,vec);
 pos_vec2(:,:) = pos_vec(:,vec);
+min_error_vec2(:,:) = min_error_vec(:,vec);
 
 
 % Note: when we isolate these cases, the statistics become even better -
@@ -146,3 +148,23 @@ pos_vec2(:,:) = pos_vec(:,vec);
 % and p2 = 0.3 to 1.3, we get 95 isolated cases. Also, at this range, we
 % get a value for avgPerChange that is larger than before - hence, the more
 % we can modify x1 and y1, the lower the errors we can get
+
+% Some more statistics: p1 = 0.5 to 1.5 and p2 = 0.5 to 1.5, and total
+% cases: 500, we get # isolated cases = 168, and avgPerChange = 24.2365
+% (and 24.9757)
+
+% When p1 = 0.5 to 1.5 and p2 = 0.5 to 1.5, and total
+% cases: 1000, we get # isolated cases = 323, and avgPerChange = 24.0034
+% (and 23.3808)
+
+% Some graphs
+plot(1:l,min_error_vec2(2,:))
+hold on
+plot(1:l,min_error_vec2(1,:))
+legend('Actual error (p1, p2 = 1)','Optimized error (using p1, p2)')
+title({'Actual vs Optimized error', ['Isolated Cases = ' num2str(l) ' of ' num2str(numTrials)]})
+xlabel('Isolated Cases')
+ylabel('Normalized Velocity error')
+set(gca, 'FontSize', 12)
+annotation('textbox',[.13 0.7 .4 .2],'String',['Avg. Actual error = ' num2str(meanRegularError2)],'EdgeColor','none','FontSize',12)
+annotation('textbox',[.13 0.665 .4 .2],'String',['Avg. Optimized error = ' num2str(meanOptimizedError2)],'EdgeColor','none','FontSize',12)
