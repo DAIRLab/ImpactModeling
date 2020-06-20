@@ -69,7 +69,7 @@ end
 
 %% Post Process Data
 plot(widths, avgError)
-title("Maximum Allowable Width vs. Error Plot")
-xlabel("Maximum Allowable Width [M]")
+%title("Maximum Allowable Width vs. Error Plot")
+xlabel("Maximum Allowable Width [m]")
 ylabel("Average Normalized Error Across All Trials")
 
