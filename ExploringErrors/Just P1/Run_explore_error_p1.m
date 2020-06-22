@@ -77,8 +77,8 @@ meanOptimizedError = mean(min_error_vec(1,:))
 meanRegularError = mean(min_error_vec(2,:))
 avgPerChange = mean(min_error_vec(3,:))
 mean_p1 = mean(percentage_vec(1,:))
-meanPositionAbsolute = mean(pos_vec(3,:))
-meanPositionRegular = mean(pos_vec(4,:))
+meanPositionAbsolute = mean(pos_vec(3,:))*1000
+meanPositionRegular = mean(pos_vec(4,:))*1000
 
 % Step 6: making a scatter plot
 plot(1000*pos_vec(3,:),min_error_vec(1,:),'o')
