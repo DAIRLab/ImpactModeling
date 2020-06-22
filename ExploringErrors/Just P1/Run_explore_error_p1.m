@@ -20,7 +20,7 @@ s1 = linspace(1-pmax1, 1+pmax1, itr);
 load('ellipse_uniform.mat');
 
 % Step 3: set-up the number of trials
-numTrials = 500;
+numTrials = 200;
 errorM = zeros(1,itr,numTrials);
 C = cell(1,itr,numTrials);
 min_error_vec = zeros(3,numTrials);
@@ -51,7 +51,7 @@ end
 % Step 5: processing data (of all cases, regardless of whether they make
 % physical sense or not)
 percentage_vec = zeros(1,numTrials);
-pos_vec = zeros(3,numTrials);
+pos_vec = zeros(4,numTrials);
 C2 = cell(numTrials,1);
 for k = 1:numTrials  
     % Minimum error vector
@@ -70,21 +70,34 @@ for k = 1:numTrials
     x1 = J(1,3);
     pos_vec(1:2,k) = [x1;x1*p1];
     pos_vec(3,k) = abs(pos_vec(1,k)-pos_vec(2,k));
-    
+    pos_vec(4,k) = (pos_vec(1,k)-pos_vec(2,k));
     end
 
 meanOptimizedError = mean(min_error_vec(1,:))
 meanRegularError = mean(min_error_vec(2,:))
 avgPerChange = mean(min_error_vec(3,:))
 mean_p1 = mean(percentage_vec(1,:))
+meanPositionAbsolute = mean(pos_vec(3,:))
+meanPositionRegular = mean(pos_vec(4,:))
 
 % Step 6: making a scatter plot
 plot(1000*pos_vec(3,:),min_error_vec(1,:),'o')
-title(['Variation in error vs change in x1 position for the first ' num2str(numTrials) ' trials'])
+title(['Variation in error vs change in x1 position (absolute) for the first ' num2str(numTrials) ' trials'])
 xlabel('Variation in position (mm)')
 ylabel('Normalized Velocity error')
-annotation('textbox',[.57 0.7 .4 .2],'String',['Avg. Actual error = ' num2str(meanRegularError)],'EdgeColor','none','FontSize',12)
-annotation('textbox',[.57 0.665 .4 .2],'String',['Avg. Optimized error = ' num2str(meanOptimizedError)],'EdgeColor','none','FontSize',12)
+annotation('textbox',[.54 0.7 .4 .2],'String',['Avg. Actual error = ' num2str(meanRegularError)],'EdgeColor','none','FontSize',12)
+annotation('textbox',[.54 0.665 .4 .2],'String',['Avg. Optimized error = ' num2str(meanOptimizedError)],'EdgeColor','none','FontSize',12)
+annotation('textbox',[.54 0.63 .4 .2],'String',['Avg. Position (absolute) = ' num2str(meanPositionAbsolute)],'EdgeColor','none','FontSize',12)
+set(gca, 'FontSize', 12)
+
+figure
+plot(1000*pos_vec(4,:),min_error_vec(1,:),'o')
+title(['Variation in error vs change in x1 position (regular) for the first ' num2str(numTrials) ' trials'])
+xlabel('Variation in position (mm)')
+ylabel('Normalized Velocity error')
+annotation('textbox',[.54 0.7 .4 .2],'String',['Avg. Actual error = ' num2str(meanRegularError)],'EdgeColor','none','FontSize',12)
+annotation('textbox',[.54 0.665 .4 .2],'String',['Avg. Optimized error = ' num2str(meanOptimizedError)],'EdgeColor','none','FontSize',12)
+annotation('textbox',[.54 0.63 .4 .2],'String',['Avg. Position (regular) = ' num2str(meanPositionRegular)],'EdgeColor','none','FontSize',12)
 set(gca, 'FontSize', 12)
 
 figure
@@ -100,4 +113,3 @@ set(gca, 'FontSize', 12)
 % h = histogram(1000*pos_vec(3,:),30);
 % hold on
 % plot(conv(h.BinEdges, [0.5 0.5], 'valid'), h.BinCounts)
-
