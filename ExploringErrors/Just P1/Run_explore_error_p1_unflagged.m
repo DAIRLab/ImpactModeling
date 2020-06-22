@@ -123,3 +123,14 @@ set(gca, 'FontSize', 12)
 % hold on
 % plot(conv(h.BinEdges, [0.5 0.5], 'valid'), h.BinCounts)
 
+% Step 7: epsilon/mu analysis
+M = zeros(numTrials,3);
+for g = 1:numTrials
+ M(g,:) = cell2mat(C2{g,1});   
+end
+AvgEpMu = zeros(2,2);
+AvgEpMu(1,1) = mean(M(:,1));
+AvgEpMu(2,1) = std(M(:,1));
+AvgEpMu(1,2) = mean(M(:,2));
+AvgEpMu(2,2) = std(M(:,2));
+disp(AvgEpMu)
