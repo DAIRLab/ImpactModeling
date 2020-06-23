@@ -46,6 +46,12 @@ M(1,2) = mean(yvec_per);
 M(2,1) = std(xvec_per);
 M(2,2) = std(yvec_per);
 
+M2 = zeros(2,2);
+M2(1,1) = mean(yJacobian);
+M2(1,2) = mean(yEllipse);
+M2(2,1) = std(yJacobian);
+M2(2,2) = std(yEllipse);
+
 avg_y_Jacobian = mean(yJacobian);
 avg_y_Ellipse = mean(yEllipse);
 per_change_global = avg_y_Jacobian/avg_y_Ellipse
