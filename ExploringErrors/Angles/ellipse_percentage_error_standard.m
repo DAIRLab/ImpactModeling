@@ -11,6 +11,9 @@ load('ellipse_uniform.mat');
 numTrial = 2000;
 xvec_per = zeros(1,numTrial);
 yvec_per = zeros(1,numTrial);
+yJacobian = zeros(1,numTrial);
+yEllipse = zeros(1,numTrial);
+
 
 for trial = 1:numTrial
 
@@ -31,6 +34,9 @@ xper = (x1 - xvec(pos))/xvec(pos)*100;
 
 xvec_per(trial) = xper;
 yvec_per(trial) = yper;
+
+yJacobian(trial) = y1;
+yEllipse(trial) = min(yvec);
 disp(trial)
 end
 
@@ -39,3 +45,7 @@ M(1,1) = mean(xvec_per);
 M(1,2) = mean(yvec_per);
 M(2,1) = std(xvec_per);
 M(2,2) = std(yvec_per);
+
+avg_y_Jacobian = mean(yJacobian);
+avg_y_Ellipse = mean(yEllipse);
+per_change_global = avg_y_Jacobian/avg_y_Ellipse
