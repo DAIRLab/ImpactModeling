@@ -22,7 +22,7 @@ figure()
 %draw pre-impact 
 plot(x1,y1,'*','MarkerSize',10,'LineWidth',2,'Color','r')
 hold on
-ellipse_visual(ang, x0, y0)
+ellipse_visual(ang, x0, y0,'b')
 hold on
 plot([xlim],[y1 y1],'LineWidth',2,'Color','k')
 title("Trial #: " + trial, 'FontSize',15);
