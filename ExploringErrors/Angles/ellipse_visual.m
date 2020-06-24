@@ -1,4 +1,4 @@
-function h=ellipse_visual(ang,x0,y0)
+function [xvec,yvec] = ellipse_visual(ang,x0,y0,C)
 % Ellipse adds ellipses to the current plot
 %
 % ellipse_visual(ang,x0,y0) adds an ellipse with semimajor axis of ra,
@@ -12,8 +12,8 @@ function h=ellipse_visual(ang,x0,y0)
 % Setting up variables
 ra = 0.035;
 rb = 0.025;
-Nb = 300;
-C=get(gca,'colororder');
+Nb = 1000;
+if isstr(C),C=C(:);end;
  
 % work on the variable sizes
 x0=x0(:);
@@ -35,6 +35,11 @@ if length(ra)~=length(x0)
 else
   maxk=length(ra);
 end;
+
+% Storing values of the ellipse
+ xvec = [];
+ yvec = [];
+
 % drawing loop
 for k=1:maxk
   
@@ -74,6 +79,8 @@ for k=1:maxk
 %  x=radm*cos(the)*co-si*radn*sin(the)+xpos;
 %  y=radm*cos(the)*si+co*radn*sin(the)+ypos;
   p=line(radm*cos(the)*co-si*radn*sin(the)+xpos,radm*cos(the)*si+co*radn*sin(the)+ypos);
+  xvec = [radm*cos(the)*co-si*radn*sin(the)+xpos, xvec];
+  yvec = [radm*cos(the)*si+co*radn*sin(the)+ypos, yvec];
   set(p,'color',C(rem(k-1,size(C,1))+1,:));
   axis equal
   if nargout > 0
