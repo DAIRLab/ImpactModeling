@@ -35,7 +35,7 @@ J = [n;d];
 x1 = J(1,3)+x0;
 y1 = y0 - J(2,3);
 
-[xvec,yvec] = ellipse_visual(ang,x0,y0);
+[xvec,yvec] = ellipse_visual(ang,x0,y0,'b');
 pos = find(yvec == min(yvec));
 yper = (y1-min(yvec))/min(yvec)*100;
 xper = (x1 - xvec(pos))/xvec(pos)*100;
