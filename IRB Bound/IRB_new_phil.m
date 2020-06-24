@@ -27,7 +27,6 @@ for a = 1:length(widths)
     
     for i = 1:length(ran)
         trial = i; %ran(i);
-
         if sum(bounce_array(trial).flags) < 1
             % Finding pre and post impact velocities / states
             pre = bounce_array(trial).states(4:6)';
@@ -51,7 +50,7 @@ for a = 1:length(widths)
             options = optimoptions('fmincon','FiniteDifferenceType','central', ...
                     'StepTolerance',1e-10, 'Display','off');
             P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon, options);
-            
+            bestWidth(a, i) = P(3);
             %add the trial's error to error vector
             count = count + 1;
             errorVector(count) = findError(P, Mass, J, pre, post);
@@ -68,8 +67,73 @@ end
 % disp("Normal Impluse: " + P(2) + " [N*s]")
 
 %% Post Process Data
+avgW = max(bestWidth, [], 1);
+figure();
 plot(widths, avgError)
 %title("Maximum Allowable Width vs. Error Plot")
 xlabel("Maximum Allowable Width [m]")
 ylabel("Average Normalized Error Across All Trials")
+
+% figure();
+% hold on
+% for j = 1:100
+%     plot(bounce_array(j).states(4), avgW(j), 'r*');
+%     disp(j)
+% end 
+% 
+% ylabel("Avg Optimal Width [m]")
+% xlabel("Pre-Impact X Velocity [m]")
+% title("Optimal Width and X Velocity Correlation")
+% figure();
+% hold on
+% for j = 1:100
+%     plot(bounce_array(j).states(5), avgW(j), 'b*');
+%     disp(j)
+% end 
+% title("Optimal Width and Y Velocity Correlation")
+% ylabel("Avg Optimal Width [m]")
+% xlabel("Pre-Impact Y Velocity [m]")
+% 
+% figure();
+% hold on
+% for j = 1:100
+%     plot(bounce_array(j).states(6), avgW(j), 'g*');
+%     disp(j)
+% end 
+% title("Optimal Width and Rotational Velocity Correlation")
+% ylabel("Avg Optimal Width [m]")
+% xlabel("Pre-Impact Rotational Velocity [m]")
+
+figure();
+hold on
+for j = 1:100
+    plot(bounce_array(j).states(4), avgW(j), 'r*');
+    disp(j)
+end 
+
+ ylabel("Max Optimal Width [m]")
+ xlabel("Pre-Impact X Velocity [m]")
+ title("Optimal Width and X Velocity Correlation")
+ 
+ figure();
+hold on
+for j = 1:100
+    plot(bounce_array(j).states(5), avgW(j), 'r*');
+    disp(j)
+end 
+
+ ylabel("Max Optimal Width [m]")
+ xlabel("Pre-Impact Y Velocity [m]")
+ title("Optimal Width and Y Velocity Correlation")
+ 
+ figure();
+hold on
+for j = 1:100
+    plot(bounce_array(j).states(6), avgW(j), 'r*');
+    disp(j)
+end 
+
+ ylabel("Max Optimal Width [m]")
+ xlabel("Pre-Impact Rotational Velocity [m]")
+ title("Optimal Width and Rotational Velocity Correlation")
 
