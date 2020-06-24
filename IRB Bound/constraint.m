@@ -20,7 +20,7 @@ function [c, ceq] = constraint(P, M, J, maxWidth, v_pre, v_post)
     %Simplified Energy Ellipse Equaion, written in terms of <= 0
     c(1) = 1/2 * ILP' * M * ILP - initialEnergy; 
     %max width constraint, written in terms of <=
-    c(2) = P(3) - maxWidth;
+    c(2) = abs(P(3)) - maxWidth;
     ceq = [];
 
 end

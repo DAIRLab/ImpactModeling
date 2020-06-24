@@ -13,20 +13,20 @@ Mass = [m1, 0, 0;
         0, 0, I1]; 
     
 
-widths = linspace(0, 0.01, 5);
-numTrials = 50; %Number of Trials
+widths = linspace(0, 0.01, 20);
+numTrials = 100; %Number of Trials
 ran = randi([1 2000], 1, numTrials);
 
 count = 0; %counter variable
 
 for a = 1:length(widths) 
-    
+    %choose the current max allowable width
     maxWidth = widths(a);
+    %reset the error vector matrix
     errorVector = [];
     
     for i = 1:length(ran)
         trial = i; %ran(i);
-
         if sum(bounce_array(trial).flags) < 1
             % Finding pre and post impact velocities / states
             pre = bounce_array(trial).states(4:6)';
@@ -50,7 +50,8 @@ for a = 1:length(widths)
             options = optimoptions('fmincon','FiniteDifferenceType','central', ...
                     'StepTolerance',1e-10, 'Display','off');
             P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon, options);
-
+            bestWidth(a, i) = P(3);
+            %add the trial's error to error vector
             count = count + 1;
             errorVector(count) = findError(P, Mass, J, pre, post);
 
@@ -58,6 +59,7 @@ for a = 1:length(widths)
 
     end
     
+    %find the average error across all trials for a certain max width
     avgError(a) = mean(errorVector);
 end
 
@@ -65,6 +67,19 @@ end
 % disp("Normal Impluse: " + P(2) + " [N*s]")
 
 %% Post Process Data
+avgW = mean(bestWidth, 1);
+figure();
 plot(widths, avgError)
-xlabel("Maximum Allowable Width [M]")
-ylabel("Average Error Normalized Velocity Error");
+%title("Maximum Allowable Width vs. Error Plot")
+xlabel("Maximum Allowable Width [m]")
+ylabel("Average Normalized Error Across All Trials")
+
+figure();
+hold on
+
+for j = 1:100
+    plot(avgW(j), bounce_array(j).states(4));
+end 
+
+xlabel("Avg Width")
+ylabel("X Velocity")

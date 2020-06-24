@@ -23,7 +23,7 @@ for n = 1:1000
     pre = bounce_array(n).states(1:6);
     post = bounce_array(n).states(7:12);
     J = [bounce_array(n).n; bounce_array(n).d];
-    [stick,Mu,Ep,errors,minerr] = ErrorEllipseFriday(n,pre,post,J); %we can eedit output of this code
+    [stick,Mu,Ep,errors] = ErrorEllipseFriday(n,pre,post,J); %we can eedit output of this code
     
     %     if stick == 1
     %         MuStickVec(end+1) = Mu;
