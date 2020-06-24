@@ -13,7 +13,7 @@
 
 function out = findError(P, M, J, v_pre, v_post)
     %Using Impact Law Find Predicted Velocity
-    predicted = v_pre + inv(M) * J' * P';
+    predicted = v_pre + inv(M) * J' * [P(1:2)'; P(3) * P(2)];
     %Find normalized Error Given observed and predicted velocities 
     out = norm(v_post - predicted)/norm(v_post);
 end
