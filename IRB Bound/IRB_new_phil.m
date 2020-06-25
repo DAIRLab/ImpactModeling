@@ -13,12 +13,12 @@ Mass = [m1, 0, 0;
         0, 0, I1]; 
     
 
-widths = linspace(0, 0.01, 20);
-numTrials = 100; %Number of Trials
+widths = [0.1];%linspace(0, 0.01, 1);
+numTrials = 1000; %Number of Trials
 ran = randi([1 2000], 1, numTrials);
 
 count = 0; %counter variable
-
+bestWidth = [];
 for a = 1:length(widths) 
     %choose the current max allowable width
     maxWidth = widths(a);
@@ -50,9 +50,18 @@ for a = 1:length(widths)
             options = optimoptions('fmincon','FiniteDifferenceType','central', ...
                     'StepTolerance',1e-10, 'Display','off');
             P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon, options);
-            bestWidth(a, i) = P(3);
-            %add the trial's error to error vector
+            %iterator for non flagged trials 
             count = count + 1;
+            %save some data for correlation plots
+            bestWidth(1, count) = P(1);
+            bestWidth(2,count) = P(2);
+            bestWidth(3,count) = P(3);
+            bestWidth(4, count) = 1/2 * pre' * Mass * pre;
+            bestWidth(5, count) = 1/2 * post' * Mass * post;
+            bestWidth(6, count) = bounce_array(trial).states(3);
+            bestWidth(7, count) = bounce_array(trial).states(6);
+            
+            %add the trial's error to error vector
             errorVector(count) = findError(P, Mass, J, pre, post);
 
          end
@@ -67,12 +76,12 @@ end
 % disp("Normal Impluse: " + P(2) + " [N*s]")
 
 %% Post Process Data
-avgW = max(bestWidth, [], 1);
-figure();
-plot(widths, avgError)
+%avgW = max(bestWidth, [], 1);
+%figure();
+%plot(widths, avgError)
 %title("Maximum Allowable Width vs. Error Plot")
-xlabel("Maximum Allowable Width [m]")
-ylabel("Average Normalized Error Across All Trials")
+%xlabel("Maximum Allowable Width [m]")
+%ylabel("Average Normalized Error Across All Trials")
 
 % figure();
 % hold on
@@ -94,46 +103,76 @@ ylabel("Average Normalized Error Across All Trials")
 % ylabel("Avg Optimal Width [m]")
 % xlabel("Pre-Impact Y Velocity [m]")
 % 
-% figure();
-% hold on
-% for j = 1:100
-%     plot(bounce_array(j).states(6), avgW(j), 'g*');
-%     disp(j)
-% end 
-% title("Optimal Width and Rotational Velocity Correlation")
-% ylabel("Avg Optimal Width [m]")
-% xlabel("Pre-Impact Rotational Velocity [m]")
-
 figure();
 hold on
-for j = 1:100
-    plot(bounce_array(j).states(4), avgW(j), 'r*');
-    disp(j)
+for j = 1:count
+    theta(j) = bestWidth(6,j);
+    if abs(theta(j))> pi
+        theta(j) = (rem(theta(j),pi)*180)/pi;
+    else
+        theta(j) = theta(j)*180/pi;
+    end
+    %plot(theta, bestWidth(3, j), 'b.');
 end 
-
- ylabel("Max Optimal Width [m]")
- xlabel("Pre-Impact X Velocity [m]")
- title("Optimal Width and X Velocity Correlation")
- 
- figure();
+plot(theta, bestWidth(3, :), 'b.');
+plot(linspace(-180,180), (sind(2*linspace(-180,180))+0.3)/100, 'r')
+title("Optimal Width and Impact Angle Correlation")
+ylabel("Avg Optimal Width [m]")
+xlabel("Pre-Impact Angle [degrees]")
+xlim([-180, 180]);
+ylim([-0.02, 0.02]);
+legend("Optimal Width Angle Pairs", "(Sin(2\theta) + 0.3)/100", "Location", "Southwest")
+%%
+figure();
 hold on
-for j = 1:100
-    plot(bounce_array(j).states(5), avgW(j), 'r*');
-    disp(j)
-end 
+plot(bestWidth(2,:), bestWidth(3,:), '.');
+plot(ones(1, 100) * 0.1086, linspace(-0.01, 0.01));
+legend('Optimal Width Normal Impulse Pairs', 'Minimum Impulse For Nonzero Optimal Width', ...
+    'Location', 'Northwest');
+xlabel("Normal Impulse")
+ylabel("Optimal Width [m]")
+title("Optimal Width and Normal Impulse Correlation")
 
- ylabel("Max Optimal Width [m]")
- xlabel("Pre-Impact Y Velocity [m]")
- title("Optimal Width and Y Velocity Correlation")
- 
- figure();
-hold on
-for j = 1:100
-    plot(bounce_array(j).states(6), avgW(j), 'r*');
-    disp(j)
-end 
+var1 = [bestWidth(2,:)', bestWidth(3,:)'];
+Q = corrcoef(var1)
+var2 = [bestWidth(1,:)', bestWidth(3,:)'];
+R = corrcoef(var2)
 
- ylabel("Max Optimal Width [m]")
- xlabel("Pre-Impact Rotational Velocity [m]")
- title("Optimal Width and Rotational Velocity Correlation")
+figure()
+plot(bestWidth(1,:), bestWidth(3,:), '.');
 
+xlabel("Tangential Impulse[N*s]")
+ylabel("Optimal Width [m]")
+%title("Optimal Width and Tangential Impulse Correlation")
+
+figure()
+plot(bestWidth(4,:), bestWidth(3,:), '.');
+
+xlabel("Pre Impact Energy [J]")
+ylabel("Optimal Width [m]")
+%title("Optimal Width and Tangential Impulse Correlation")
+
+figure()
+plot(bestWidth(5,:), bestWidth(3,:), '.');
+
+xlabel("Post Impact Energy [J]")
+ylabel("Optimal Width [m]")
+%title("Optimal Width and Tangential Impulse Correlation")
+
+figure()
+plot(bestWidth(7,:), bestWidth(3,:), '.');
+
+xlabel("Pre Impact \dot\theta [rad/s]")
+ylabel("Optimal Width [m]")
+%title("Optimal Width and Tangential Impulse Correlation")
+
+
+
+%% 
+nonZ = [];
+for i = 1:length(bestWidth(1,:))
+   if(abs(bestWidth(3,i)) > 0.0005)
+       nonZ = [nonZ, bestWidth(2,i)];
+   end
+end
+min(nonZ)
