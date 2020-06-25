@@ -1,4 +1,4 @@
-%plot maximum patch size vs error
+%plot various graphs to show correlations between error, impulse, moment
 
 load('ellipse_uniform.mat');
 
@@ -69,9 +69,7 @@ ylabel('Normalized Error')
 figure(2)
 scatter(1000*moment_n, P_n, 'filled', 'b')
 hold on
-line([-5 5],[0 0], 'Color', 'black'); 
-hold on
-line([0 0], [0 0.2], 'Color', 'black');
+line([0 0], [0.1 0.2], 'Color', 'black');
 title("Moment due to Normal Impulse vs Normal Impulse for " + count + " Random Trials")
 xlabel('Moment (Normal) [Nmm]')
 ylabel('Normal Impulse [N*s]')
@@ -81,7 +79,7 @@ scatter(1000*moment_n, P_t, 'filled', 'b')
 hold on
 line([-5 5],[0 0], 'Color', 'black'); 
 hold on
-line([0 0], [-.05 0.03], 'Color', 'black');
+line([0 0], [-.04 0.03], 'Color', 'black');
 title("Moment due to Normal Impulse vs Tangential Impulse for " + count + " Random Trials")
 xlabel("Moment (Normal) [Nmm]")
 ylabel("Tangential Impulse [N*s]")
@@ -89,9 +87,7 @@ ylabel("Tangential Impulse [N*s]")
 figure(4)
 scatter(1000*moment_t, P_n, 'filled','b')
 hold on
-line([-80 100],[0 0], 'Color', 'black');
-hold on
-line([0 0], [0 0.2], 'Color', 'black');
+line([0 0], [0.1 0.2], 'Color', 'black');
 title("Moment due to Tangential Impulse vs Normal Impulse for " + count + " Random Trials")
 xlabel("Moment (Tangential) [Nmm]")
 ylabel("Normal Impulse [N*s]")
@@ -99,9 +95,9 @@ ylabel("Normal Impulse [N*s]")
 figure(5)
 scatter(1000*moment_t, P_t, 'filled', 'b')
 hold on
-line([-80 100],[0 0], 'Color', 'black'); 
+line([-1.5 1],[0 0], 'Color', 'black'); 
 hold on
-line([0 0], [-.05 0.03], 'Color', 'black');
+line([0 0], [-.04 0.03], 'Color', 'black');
 title("Moment due to Tangential Impulse vs Tangential Impulse for " + count + " Random Trials")
 xlabel("Moment (Tangential) [Nmm]")
 ylabel("Tangential Impulse [N*s]")
@@ -109,9 +105,7 @@ ylabel("Tangential Impulse [N*s]")
 figure(6)
 scatter(1000*moment_net, P_n, 'filled', 'b')
 hold on
-line([-80 120],[0 0], 'Color', 'black'); 
-hold on
-line([0 0], [0 0.2], 'Color', 'black');
+line([0 0], [0.1 0.2], 'Color', 'black');
 title("Net Moment vs Normal Impulse for " + count + " Random Trials")
 xlabel("Net Moment [Nmm]")
 ylabel("Normal Impulse [N*s]")
@@ -119,9 +113,9 @@ ylabel("Normal Impulse [N*s]")
 figure(7)
 scatter(1000*moment_net, P_t, 'filled', 'b')
 hold on
-line([-80 120],[0 0], 'Color', 'black'); 
+line([-5 4],[0 0], 'Color', 'black'); 
 hold on
-line([0 0], [-.05 0.03], 'Color', 'black');
+line([0 0], [-.04 0.03], 'Color', 'black');
 title("Net Moment vs Tangential Impulse for " + count + " Random Trials")
 xlabel("Net Moment [Nmm]")
 ylabel("Tangential Impulse [N*s]")
