@@ -195,5 +195,28 @@ set(gca, 'FontSize', 12)
 % hold on
 % plot(x,y)
 
-
+% plot of tangential impulse with the area lines
+plot(1000*pos_vec(5,:).*impulses(1,:),impulses(1,:),'.')
+title({'Optimized tangential impulse vs moment due to tangent', ['The first ' num2str(numTrials) ' unflagged trials'], 'Wang model'})
+xlabel('Moment due to tangent')
+ylabel('Tangential Impulse')
+hold on
+plot([xlim],[0 0],'LineWidth',2,'Color','k')
+hold on
+plot([0 0],[ylim],'LineWidth',2,'Color','k')
+set(gca, 'FontSize', 12)
+hold on
+x = -40:0.1:30;
+%slope1 = abs(min(impulses(1,:))*min(pos_vec(5,:)));
+slope1 = 0.029;
+y = slope1*x;
+plot(x,y,'-','LineWidth',1.5,'Color',[0.4940, 0.1840, 0.5560]);
+hold on
+%slope2 = abs(min(impulses(1,:))*max(pos_vec(5,:)));
+slope2 = 0.0395;
+y2 = slope2*x;
+plot(x,y2,'-','LineWidth',1.5,'Color',[0, 0.5, 0]);
+ylim([-1.2 0.8])
+annotation('textbox',[.13 0.68 .4 .2],'String',['Violet Slope = ' num2str(slope1)],'EdgeColor','none','FontSize',12)
+annotation('textbox',[.13 0.645 .4 .2],'String',['Green Slope = ' num2str(slope2)],'EdgeColor','none','FontSize',12)
 
