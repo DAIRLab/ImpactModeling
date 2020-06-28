@@ -4,7 +4,7 @@
 load('ellipse_uniform.mat');
 
 %trial number to draw
-trial = 200;
+trial = 2;
 
 %set up pre-impact ellipse
 ang = bounce_array(trial).states(3);
