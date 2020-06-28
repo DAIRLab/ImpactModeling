@@ -14,7 +14,7 @@ Mass = [m1, 0, 0;
     
 
 widths = [0.1];%linspace(0, 0.01, 1);
-numTrials = 1000; %Number of Trials
+numTrials = 200; %Number of Trials
 ran = randi([1 2000], 1, numTrials);
 
 count = 0; %counter variable
@@ -60,10 +60,19 @@ for a = 1:length(widths)
             bestWidth(5, count) = 1/2 * post' * Mass * post;
             bestWidth(6, count) = bounce_array(trial).states(3);
             bestWidth(7, count) = bounce_array(trial).states(6);
-            
+            %ellipse_visual(pre(1), pre(2), pre(3), 'b');
             %add the trial's error to error vector
             errorVector(count) = findError(P, Mass, J, pre, post);
-
+            
+            disp("Trial: " + trial);
+            disp("Pre Impact Angle: " + (rem(bounce_array(trial).states(3), pi)*180)/pi);
+            disp("Post Impact Omega Dot: " + post(3));
+            predicted = pre + inv(Mass) * J' * [P(1:2)'; P(3) * P(2)];
+            disp("Predicted Post Impact Omega Dot: " + predicted(3));
+            disp("Optimal Width: " + P(3));
+            pause(0.5);
+            yesWidth(1,count) = abs(post(3) - predicted(3));
+            yesWidth(2,count) = P(3);
          end
 
     end
@@ -116,7 +125,7 @@ for j = 1:count
 end 
 plot(theta, bestWidth(3, :), 'b.');
 plot(linspace(-180,180), (sind(2*linspace(-180,180))+0.3)/100, 'r')
-title("Optimal Width and Impact Angle Correlation")
+%title("Optimal Width and Impact Angle Correlation")
 ylabel("Avg Optimal Width [m]")
 xlabel("Pre-Impact Angle [degrees]")
 xlim([-180, 180]);
@@ -168,11 +177,11 @@ ylabel("Optimal Width [m]")
 
 
 
-%% 
-nonZ = [];
-for i = 1:length(bestWidth(1,:))
-   if(abs(bestWidth(3,i)) > 0.0005)
-       nonZ = [nonZ, bestWidth(2,i)];
-   end
-end
-min(nonZ)
+% %% 
+% nonZ = [];
+% for i = 1:length(bestWidth(1,:))
+%    if(abs(bestWidth(3,i)) > 0.0005)
+%        nonZ = [nonZ, bestWidth(2,i)];
+%    end
+% end
+% min(nonZ)
