@@ -62,17 +62,24 @@ for a = 1:length(widths)
             bestWidth(7, count) = bounce_array(trial).states(6);
             %ellipse_visual(pre(1), pre(2), pre(3), 'b');
             %add the trial's error to error vector
-            errorVector(count) = findError(P, Mass, J, pre, post);
+            error = findError(P, Mass, J, pre, post);
             
-            disp("Trial: " + trial);
-            disp("Pre Impact Angle: " + (rem(bounce_array(trial).states(3), pi)*180)/pi);
-            disp("Post Impact Omega Dot: " + post(3));
+%             disp("Trial: " + trial);
+%             disp("Pre Impact Angle: " + (rem(bounce_array(trial).states(3), pi)*180)/pi);
+%             disp("Post Impact Omega Dot: " + post(3));
             predicted = pre + inv(Mass) * J' * [P(1:2)'; P(3) * P(2)];
-            disp("Predicted Post Impact Omega Dot: " + predicted(3));
-            disp("Optimal Width: " + P(3));
-            pause(0.5);
+            
+%             disp("Predicted Post Impact Omega Dot: " + predicted(3));
+%             disp("Optimal Width: " + P(3));
+
             yesWidth(1,count) = abs(post(3) - predicted(3));
             yesWidth(2,count) = P(3);
+            
+            checkWidth(1, count) = abs(post(3)) - abs(predicted(3));
+            checkWidth(2, count) = error;
+            posaTest = J' * [P(1:2)'; P(3) * P(2)];
+            checkWidth(3, count) = posaTest(3);
+            
          end
 
     end

@@ -43,18 +43,22 @@ for i = 1:Tlength
         ub = [];
         P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon);
 
-        errorVec(i) = findError(P, Mass, J, pre, post);
+        error = findError(P, Mass, J, pre, post);
 
-        disp("Trial: " + i);
-        disp("Pre Impact Angle: " + (rem(bounce_array(i).states(3), pi)*180)/pi);
-        disp("Post Impact Omega Dot: " + post(3));
-        predicted = pre + inv(Mass) * J' * P';
-        disp("Predicted Post Impact Omega Dot: " + predicted(3));
-        disp("Difference: " + abs(post(3) - predicted(3)));
+%         disp("Trial: " + i);
+%         disp("Pre Impact Angle: " + (rem(bounce_array(i).states(3), pi)*180)/pi);
+%         disp("Post Impact Omega Dot: " + post(3));
+         predicted = pre + inv(Mass) * J' * P';
+%         disp("Predicted Post Impact Omega Dot: " + predicted(3));
+%         disp("Difference: " + abs(post(3) - predicted(3)));
         %disp("Optimal Width: " + P(3));
         pause(0.5);
         count = count  + 1;
         noWidth(count) = abs(post(3) - predicted(3));
+        
+        checkNoWidth(1, count) = abs(post(3)) - abs(predicted(3));
+        checkNoWidth(2, count) = error;
+        
     end
 end
 
