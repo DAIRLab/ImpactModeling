@@ -14,7 +14,7 @@ Mass = [m1, 0, 0;
     
 
 widths = [0.1];%linspace(0, 0.01, 1);
-numTrials = 200; %Number of Trials
+numTrials = 2000; %Number of Trials
 ran = randi([1 2000], 1, numTrials);
 
 count = 0; %counter variable
@@ -28,6 +28,9 @@ for a = 1:length(widths)
     for i = 1:length(ran)
         trial = i; %ran(i);
         if sum(bounce_array(trial).flags) < 1
+            if (count == 167) 
+                disp(i);
+            end
             % Finding pre and post impact velocities / states
             pre = bounce_array(trial).states(4:6)';
             post = bounce_array(trial).states(10:12)';
@@ -56,14 +59,14 @@ for a = 1:length(widths)
             bestWidth(1, count) = P(1);
             bestWidth(2,count) = P(2);
             bestWidth(3,count) = P(3);
-            bestWidth(4, count) = 1/2 * pre' * Mass * pre;
-            bestWidth(5, count) = 1/2 * post' * Mass * post;
-            bestWidth(6, count) = bounce_array(trial).states(3);
-            bestWidth(7, count) = bounce_array(trial).states(6);
+%             bestWidth(4, count) = 1/2 * pre' * Mass * pre;
+%             bestWidth(5, count) = 1/2 * post' * Mass * post;
+%             bestWidth(6, count) = bounce_array(trial).states(3);
+%             bestWidth(7, count) = bounce_array(trial).states(6);
             %ellipse_visual(pre(1), pre(2), pre(3), 'b');
             %add the trial's error to error vector
             error = findError(P, Mass, J, pre, post);
-            
+            errorVec(count) = error;
 %             disp("Trial: " + trial);
 %             disp("Pre Impact Angle: " + (rem(bounce_array(trial).states(3), pi)*180)/pi);
 %             disp("Post Impact Omega Dot: " + post(3));
@@ -72,13 +75,13 @@ for a = 1:length(widths)
 %             disp("Predicted Post Impact Omega Dot: " + predicted(3));
 %             disp("Optimal Width: " + P(3));
 
-            yesWidth(1,count) = abs(post(3) - predicted(3));
-            yesWidth(2,count) = P(3);
-            
-            checkWidth(1, count) = abs(post(3)) - abs(predicted(3));
-            checkWidth(2, count) = error;
-            posaTest = J' * [P(1:2)'; P(3) * P(2)];
-            checkWidth(3, count) = posaTest(3);
+              yesWidth(1,count) = abs(post(3) - predicted(3));
+              yesWidth(2, count) = d(3) * P(1) + n(3) * P(2);
+%             
+%             checkWidth(1, count) = abs(post(3)) - abs(predicted(3));
+%             checkWidth(2, count) = error;
+%             posaTest = J' * [P(1:2)'; P(3) * P(2)];
+%             checkWidth(3, count) = posaTest(3);
             
          end
 
@@ -91,6 +94,51 @@ end
 % disp("Tangential Impulse: " + P(1) + " [N*s]")
 % disp("Normal Impluse: " + P(2) + " [N*s]")
 
+%% Look at error for IRB with w/ without a max constraint, should be nearly 0
+errorVec(1420) = 0;
+errorVec(310) = 0;
+errorVec(234) = 0;
+
+plot(1:count, errorVec(:), '.')
+xlabel("Unflagged Trial #")
+ylabel("(Normalized Error)^2")
+title("IRB w/ Width but no Max Width Constraint")
+
+
+
+%%
+
+
+
+
+figure()
+plot(yesWidth(1,:), yesWidth(2,:), '.');
+xlabel("|\omega_{observed} - \omega_{predicted}| ");
+ylabel("IRB Moment");
+title("Angular Velocity Error Vs. IRB Moment");
+%%
+figure()
+plot(bestWidth(1, :), bestWidth(3, :), '.');
+ylabel("Optimal Width");
+xlabel("Tangential Impulse");
+xlim([-0.03, 0.03])
+ylim([-0.01, 0.01])
+title("Not Squaring Error");
+%%
+clumps = 0;
+for i = 1:length(bestWidth)
+    if(abs(bestWidth(3,i)) < 0.0001)
+        clumps = clumps  + 1;
+        %disp(i);
+    end
+    if abs((bestWidth(1,i) - 0.01188)) < 0.0001
+        disp(i)
+    end
+end
+
+disp(clumps)
+
+% 85 squaring and 59 not squaring
 %% Post Process Data
 %avgW = max(bestWidth, [], 1);
 %figure();
