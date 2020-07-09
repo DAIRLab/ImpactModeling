@@ -6,7 +6,7 @@ achieve. It takes into account the torque that is generated from the
 impact.
 %}
 
-function [P,w] = IRB_NEW_torque(trial)
+function [P,w, error] = IRB_NEW_torque(trial)
 
 load('ellipse_uniform.mat');
 
@@ -39,7 +39,10 @@ Aeq = [];
 beq = [];
 lb = [];
 ub = [];
-P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon);
+options = optimoptions('fmincon','FiniteDifferenceType','central', ...
+                  'StepTolerance',1e-10, 'Display','off');
+P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon, options);
+
 
 w = abs(P(3))/P(2);
 
@@ -47,5 +50,7 @@ w = abs(P(3))/P(2);
 % disp("Normal Impulse: " + P(2) + " [N*s]")
 % disp("Torque: " + P(3) + "[N*m]")
 % disp("w: " + w + "[m]")
+
+error = sqrt(findError_torque(P, Mass, J, pre, post))* norm(post);
 
 end
