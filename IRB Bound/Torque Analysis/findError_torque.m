@@ -15,5 +15,5 @@ function out = findError_torque(P, M, J, v_pre, v_post)
     %Using Impact Law Find Predicted Velocity
     predicted = v_pre + inv(M) * J' * P';
     %Find normalized Error Given observed and predicted velocities 
-    out = norm(v_post - predicted);
+    out = (norm(v_post - predicted)/ norm(v_post))^2;
 end
