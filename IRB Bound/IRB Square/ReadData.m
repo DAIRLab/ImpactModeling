@@ -26,12 +26,9 @@ zDot = D(:,5);
 thDot = D(:,6);
 
 l = length(zDot);
-%plot(-x,z)
 
 for jj = 1:l
-     %hold on
-     %pause(0.05)
-     %plot(-x(jj),z(jj),'o')
+    
      the = th(jj);
      cc1 = -x(1);
      cc2 = z(1);
@@ -51,8 +48,6 @@ for jj = 1:l
      
      vx = [a(1),b(1),c(1),d(1),a(1)];
      vy = [a(2),b(2),c(2),d(2),a(2)];
-%     
-     %plot(vx,vy)
 
      R = [cos(the),sin(the);-sin(the),cos(the)];
 
@@ -64,30 +59,13 @@ for jj = 1:l
      vx = [a2(1),b2(1),c2(1),d2(1),a2(1)]+cc1;
      vy = [a2(2),b2(2),c2(2),d2(2),a2(2)]+cc2;
     
-     %plot(vx,vy)
-     %ylim([-0.1 0.25])
-     %xlim([0.2 0.75])
-     %axis equal
 end
-
-% for jj = 1:10
-%      hold on
-%      pause(0.1)
-% 
-% the = th(jj);
-% vx = [0, cos(the)];
-% vy = [0, sin(the)];
-% 
-% plot(vx,vy)
-% 
-% end
 
 %To identify the positions at which an impact occurred, we will take a look
 %at the changes in zDot over time - in essence, we will try to
 %find the parts where zDot changes sign. When an object hits the ground
 %from above, it velocity should reverse. Hence, we implement the
 %following code:
-
 
 imp = [];
 
@@ -115,58 +93,53 @@ end
 %output: two matrices that contains all the information for the pre and
 %post impacts
 impR2 = impR + 1;
+miny = [];
+minx = [];
 
-Pre = [impR', x(impR), z(impR), th(impR), xDot(impR), zDot(impR), thDot(impR)];
-Post = [impR2', x(impR2), z(impR2), th(impR2), xDot(impR2), zDot(impR2), thDot(impR2)];
+for hh = 1:length(impR)
+     
+     jj = impR(hh);
+    
+     the = th(jj);
+     cc1 = -x(1);
+     cc2 = z(1);
+     ax = 0.03;
+     ay = 0.03;
+     bx = 0.03;
+     by = - 0.03;
+     cx = - 0.03;
+     cy = - 0.03;
+     dx = - 0.03;
+     dy = 0.03;
 
-%plotting for all of the elements without assuming any time span
-% t = 0:1:l-1;
-% plot(t,z)
-% title("Tracking changes in z position");
-% ylabel("z position")
-% xlabel("time");
-% hold on
-% plot(impR,z(impR),'o')
+     a = [ax;ay];
+     b = [bx;by];
+     c = [cx;cy];
+     d = [dx;dy];
+     
+     vx = [a(1),b(1),c(1),d(1),a(1)];
+     vy = [a(2),b(2),c(2),d(2),a(2)];
 
-% the = pi/6;
-% c1 = 0.3
-% c2 = 0.3
-% ax = c1 + 0.03;
-% ay = c2 + 0.03;
-% bx = c1 + 0.03;
-% by = c2 - 0.03;
-% cx = c1 - 0.03;
-% cy = c2 - 0.03;
-% dx = c1 - 0.03;
-% dy = c2 + 0.03;
-% 
-% a = [ax;ay];
-% b = [bx;by];
-% c = [cx;cy];
-% d = [dx;dy];
-% 
-% xlim([0 .4])
-% ylim([0 .4])
-% 
-% R = [cos(the),sin(the);-sin(the),cos(the)];
-% 
-% a2 = R*a;
-% b2 = R*b;
-% c2 = R*c;
-% d2 = R*d;
-% 
-% vx = [a2(1),b2(1),c2(1),d2(1),a2(1)];
-% vy = [a2(2),b2(2),c2(2),d2(2),a2(2)];
-% plot(vx,vy)
+     R = [cos(the),sin(the);-sin(the),cos(the)];
+
+     a2 = R*a;
+     b2 = R*b;
+     c2 = R*c;
+     d2 = R*d;
+
+     vx = [a2(1),b2(1),c2(1),d2(1),a2(1)]+cc1;
+     vy = [a2(2),b2(2),c2(2),d2(2),a2(2)]+cc2;
+     
+     miny = [miny, min(vy)-cc2];
+     aa = find(vy == min(vy));
+     minx = [minx, vx(min(aa))-cc1];
+     
 end
 
 
+Pre = [impR', x(impR), z(impR), th(impR), xDot(impR), zDot(impR), thDot(impR), minx', miny'];
+Post = [impR2', x(impR2), z(impR2), th(impR2), xDot(impR2), zDot(impR2), thDot(impR2)];
+disp(miny)
+disp(minx)
 
-
-
-
-
-
-
-
-
+end
