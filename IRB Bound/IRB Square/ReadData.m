@@ -98,11 +98,10 @@ minx = [];
 
 for hh = 1:length(impR)
      
-     jj = impR(hh);
-    
-     the = th(jj);
-     cc1 = -x(1);
-     cc2 = z(1);
+     i = impR(hh);
+     the = th(i);
+     c1 = -x(i);
+     c2 = z(i);
      ax = 0.03;
      ay = 0.03;
      bx = 0.03;
@@ -122,24 +121,22 @@ for hh = 1:length(impR)
 
      R = [cos(the),sin(the);-sin(the),cos(the)];
 
-     a2 = R*a;
-     b2 = R*b;
-     c2 = R*c;
-     d2 = R*d;
+     a_2 = R*a;
+     b_2 = R*b;
+     c_2 = R*c;
+     d_2 = R*d;
 
-     vx = [a2(1),b2(1),c2(1),d2(1),a2(1)]+cc1;
-     vy = [a2(2),b2(2),c2(2),d2(2),a2(2)]+cc2;
+     vx = [a_2(1),b_2(1),c_2(1),d_2(1),a_2(1)]+c1;
+     vy = [a_2(2),b_2(2),c_2(2),d_2(2),a_2(2)]+c2;
      
-     miny = [miny, min(vy)-cc2];
+     miny = [miny, min(vy)];
      aa = find(vy == min(vy));
-     minx = [minx, vx(min(aa))-cc1];
+     minx = [minx, vx(min(aa))];
      
 end
 
 
 Pre = [impR', x(impR), z(impR), th(impR), xDot(impR), zDot(impR), thDot(impR), minx', miny'];
 Post = [impR2', x(impR2), z(impR2), th(impR2), xDot(impR2), zDot(impR2), thDot(impR2)];
-disp(miny)
-disp(minx)
 
 end
