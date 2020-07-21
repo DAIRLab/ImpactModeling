@@ -145,7 +145,7 @@ Pre = [impR(1)', x(impR(1)), z(impR(1)), th(impR(1)), xDot(impR(1)), zDot(impR(1
 Post = [impR2(1)', x(impR2(1)), z(impR2(1)), th(impR2(1)), xDot(impR2(1)), zDot(impR2(1)), thDot(impR2(1))];
 
 %need to transform contact position from global coordinates 
-d = [1, 0, z(impR(1) )- miny]; 
-n = [0, 1, minx - x(impR(1))];
+d = [1, 0, z(impR(1))- miny]; 
+n = [0, 1, minx + x(impR(1))];
 
 end
