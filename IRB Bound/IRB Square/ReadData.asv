@@ -1,4 +1,4 @@
-
+function [Pre, Post, j, n] = ReadData(n)
 
 %ReadData
 %Junior Team
@@ -6,15 +6,11 @@
 %This code takes as an input a csv file that contains information about the
 %object's position and velocity in the plane. The code will identify the
 %regions of the data where an impact has occurred, and will output the
-%pre-impact and post-impact set position and velocity of the object as well
-%formulate tangential (d) and normal (n) jacobian vectors for the impact. 
+%pre-impact and post-impact set position and velocity of the object
 
-
-function [Pre, Post, d, n] = ReadData(n)
-%load csv data
-D = readtable(['traj_' num2str(n) '.csv']);
-%go from table to matrix
-D = D{:, :};
+%Be sure to change this depending on which computer you are using this. Use
+%the command window to find the directory of where your files are
+D = readmatrix(traj_' num2str(n) '.csv']);
 
 %Column 1: x position 
 x = D(:,1);
@@ -100,7 +96,7 @@ impR2 = impR + 1;
 miny = [];
 minx = [];
 
-for hh = 1:1%length(impR)
+for hh = 1:length(impR)
      
      i = impR(hh);
      the = th(i);
@@ -133,7 +129,6 @@ for hh = 1:1%length(impR)
      vx = [a_2(1),b_2(1),c_2(1),d_2(1),a_2(1)]+c1;
      vy = [a_2(2),b_2(2),c_2(2),d_2(2),a_2(2)]+c2;
      
-     %find contact position of square
      miny = [miny, min(vy)];
      aa = find(vy == min(vy));
      minx = [minx, vx(min(aa))];
@@ -141,11 +136,7 @@ for hh = 1:1%length(impR)
 end
 
 
-Pre = [impR(1)', x(impR(1)), z(impR(1)), th(impR(1)), xDot(impR(1)), zDot(impR(1)), thDot(impR(1))];
-Post = [impR2(1)', x(impR2(1)), z(impR2(1)), th(impR2(1)), xDot(impR2(1)), zDot(impR2(1)), thDot(impR2(1))];
-
-%need to transform contact position from global coordinates 
-d = [1, 0, z(impR(1) )- miny]; 
-n = [0, 1, minx - x(impR(1))];
+Pre = [impR', x(impR), z(impR), th(impR), xDot(impR), zDot(impR), thDot(impR), minx', miny'];
+Post = [impR2', x(impR2), z(impR2), th(impR2), xDot(impR2), zDot(impR2), thDot(impR2)];
 
 end
