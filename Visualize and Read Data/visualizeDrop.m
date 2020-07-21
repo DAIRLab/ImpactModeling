@@ -1,5 +1,5 @@
 %% Visualize the Drop angle
-traj = readtable("traj_1.csv");    
+traj = readtable("traj_10.csv");    
 %convert from table to matrix
 traj = traj{:, :};
 height = 0.06/2;
