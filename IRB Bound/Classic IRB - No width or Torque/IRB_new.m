@@ -8,10 +8,10 @@ b0 = 0.05/2; %semi-minor axis
 m1 = 0.037;
 I1 = m1 * (a0^2 + b0^2) / 4;
 
-spacer = [100, 50, 10, 5, 2];
-Tlength = 1000;
+spacer =  logspace(-2, 2, 30);%100, 50, 10, 5, 2, 1, 0.5, 0.2];
+Tlength = 300;
 %errorVec = zeros (1,Tlength);
-for a = 1:5
+for a = 1:length(spacer)
     I1 = m1 * (a0^2 + b0^2) / 4;
     %I1 = I1 - a*I1/40;
     Mass = [m1, 0, 0;
@@ -68,6 +68,7 @@ for a = 1:5
             yesWidth(1,count) = abs(post(3) - predicted(3));
             yesWidth(2, count) = d(3) * P(1) + n(3) * P(2);
 
+
         end
     end
 end
@@ -75,6 +76,17 @@ end
 avErr =  mean(errorVec, 2);
 disp(avErr);
 
+%%
+figure()
+semilogx(spacer, avErr);
+hold on
+%semilogx(spacer(avErr == min(avErr)), min(avErr), 'r*');
+ylabel("Normalized l2 Norm Velocity Error");
+xlabel("Scale in Cost Function for \theta_{dot}");
+%title("IRB No Torque");
+
+
+%%
 figure()
 plot(1:count, errorVec(:), '.')
 xlabel("Unflagged Trial #")
