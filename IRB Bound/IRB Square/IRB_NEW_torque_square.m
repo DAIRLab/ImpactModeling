@@ -1,24 +1,24 @@
-function [P,w,error] = IRB_NEW_torque_square(Pre,Post,trial,p1,p2)
+function [P,w,error] = IRB_NEW_torque_square(squareData,trial,p1,p2)
 
 % Set up Constants
 sl = 0.06; %side length of square from data README
 rho = sqrt(sl^2/6); %using I/m where I = m *s^4 / 12
-m1 = 1; %cancels out as explained in variables section above
+m1 = 0.0485; %cancels out as explained in variables section above
 I1 = m1 * sl^2 / 6; % moment of inertia of square
 Mass = [m1, 0, 0;
         0, m1, 0; 
         0, 0, I1]; 
     
-d = [1 0 Pre(2)];
-n = [0 1 Pre(1)];
+d = squareData(trial).d;
+n = squareData(trial).n;
 
 n(3) = n(3)*p1;
 d(3) = d(3)*p2;
 
 J = [d;n;0 0 1]; %Jacobian
 
-pre = Pre(4:6)';
-post = Post(4:6)';
+pre = squareData(trial).states(6:8)';
+post = squareData(trial).states(13:15)';
 
 fun = @(P)(findError_torque3(P, Mass, J, pre, post));
 nonlcon = @(P)(constraint_torque(P, Mass, J, pre, post));
