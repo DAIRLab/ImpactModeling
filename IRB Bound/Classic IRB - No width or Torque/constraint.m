@@ -18,7 +18,7 @@ function [c, ceq] = constraint(P, M, J, v_pre, v_post)
     %initial energy from pre impact velocity 
     initialEnergy = 1/2 * v_pre' * M * v_pre;
     %Simplified Energy Ellipse Equaion, written in terms of <= 0
-    c(1) = 1/2 * ILP' * M * ILP - initialEnergy; %TODO
+    c(1) = 1/2 * ILP' * M * ILP - initialEnergy; 
     
     ceq = [];
 

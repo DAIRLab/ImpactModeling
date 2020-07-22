@@ -14,7 +14,8 @@ for k = 1:(length(goodTrials))
     i = goodTrials(k);
      
     [Pre, Post, d, n] = ReadData(i);
-    squareData(k).states = [goodTrials(k), Pre, Post];
-    squareData(k).n = n;
-    squareData(k).d = d;
+    squareDataPhil(k).states = [Pre, Post];
+    squareDataPhil(k).n = n;
+    squareDataPhil(k).d = d;
+    squareDataPhil(k).trial = goodTrials(k);
 end
