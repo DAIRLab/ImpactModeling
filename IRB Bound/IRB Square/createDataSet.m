@@ -2,6 +2,9 @@
 %number of trials you wish to collect data from
 trials = 20;
 
+%good trials... data andy and I collected from he visualizers manually
+goodTrials = [];
+
 %loop through trials
 for i = 1:trials
     %run the read data function to retrieve pre and post impact
