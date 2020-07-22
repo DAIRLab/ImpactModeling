@@ -3,10 +3,10 @@
 trials = 20;
 
 %good trials... data andy and I collected from he visualizers manually
-goodTrials = [find(trialData(:,1) == 1)];
+goodTrials = [find(trialData(:,1) == 1)',find(trialData(:,2) == 1)'];
 
 %loop through trials
-for k = 1:trials
+for k = 1:(length(goodTrials))
     %run the read data function to retrieve pre and post impact
     %positions/velocities as well as the normal and tangential Jacobians
     %for the impact
