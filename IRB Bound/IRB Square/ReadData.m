@@ -10,9 +10,9 @@
 %formulate tangential (d) and normal (n) jacobian vectors for the impact. 
 
 
-function [Pre, Post, d, n] = ReadData(n, impact)
+function [Pre, Post, d, n] = ReadData(i, impact)
 %load csv data
-D = readtable(['traj_' num2str(n) '.csv']);
+D = readtable(['traj_' num2str(i) '.csv']);
 %go from table to matrix
 D = D{:, :};
 

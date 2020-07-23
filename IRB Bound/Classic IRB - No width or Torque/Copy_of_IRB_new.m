@@ -49,15 +49,20 @@ for i = 1:Tlength
 
         P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon, options);
 
-        error = findError(P, Mass, J, pre, post);
+        error = findError(P, Mass, J, pre, post); %final error
+        predicted = pre + inv(Mass) * J' * P'; %predicted post impact state
 
         count = count  + 1;
         errorVec(count) = error;
-        disp("Observed:")
-        disp(post)
-        disp("Predicted:")
-        predicted = pre + inv(Mass) * J' * P';
-        disp(predicted);
+
+%         disp("Observed:")
+%         disp(post)
+%         disp("Predicted:")
+%         disp(predicted);
+
+        %vector for keeping track of variables to plot/look for
+        %correlations
+        useful(1,count) = squareDataPhil(trial).states(3);
 
     end
 end
@@ -67,8 +72,16 @@ disp(avErr);
 
 %%
 figure()
+plot(useful(1,:), errorVec, '.')
+ylabel("Normalized l2 Norm Velocity Error");
+xlabel("Pre-Impact Angle");
+title("IRB No Torque, Square Data");
+
+figure()
 plot(1:count, errorVec, '.');
 hold on
 ylabel("Normalized l2 Norm Velocity Error");
 xlabel("Trial");
 title("IRB No Torque, Square Data");
+
+
