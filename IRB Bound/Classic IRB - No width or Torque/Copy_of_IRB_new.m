@@ -14,7 +14,7 @@ Mass = [m1, 0, 0;
         0, m1, 0;
         0, 0, I1]; %generlaized Mass matrix
 
-Tlength = 41;
+Tlength = 92;
 errorVec = zeros (1,Tlength);
 
 count  = 0; 
