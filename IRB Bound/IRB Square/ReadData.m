@@ -10,7 +10,7 @@
 %formulate tangential (d) and normal (n) jacobian vectors for the impact. 
 
 
-function [Pre, Post, d, n] = ReadData(n)
+function [Pre, Post, d, n] = ReadData(n, impact)
 %load csv data
 D = readtable(['traj_' num2str(n) '.csv']);
 %go from table to matrix
@@ -100,7 +100,7 @@ impR2 = impR + 1;
 miny = [];
 minx = [];
 
-for hh = 1:1%length(impR)
+for hh = 1:length(impR)
      
      i = impR(hh);
      the = th(i);
@@ -141,11 +141,11 @@ for hh = 1:1%length(impR)
 end
 
 
-Pre = [impR(1)', x(impR(1)), z(impR(1)), th(impR(1)), xDot(impR(1)), zDot(impR(1)), thDot(impR(1))];
-Post = [impR2(1)', x(impR2(1)), z(impR2(1)), th(impR2(1)), xDot(impR2(1)), zDot(impR2(1)), thDot(impR2(1))];
+Pre = [x(impR(impact)), z(impR(impact)), th(impR(impact)), xDot(impR(impact)), zDot(impR(impact)), thDot(impR(impact))];
+Post = [x(impR2(impact)), z(impR2(impact)), th(impR2(impact)), xDot(impR2(impact)), zDot(impR2(impact)), thDot(impR2(impact))];
 
 %need to transform contact position from global coordinates 
-d = [1, 0, z(impR(1))- miny]; 
-n = [0, 1, minx + x(impR(1))];
+d = [1, 0, z(impR(impact))- miny(impact)]; 
+n = [0, 1, minx(impact) + x(impR(impact))];
 
 end
