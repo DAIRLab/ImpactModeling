@@ -1,10 +1,9 @@
 %% Create a data set for square impacts
 load('trialData.mat');
 %number of trials you wish to collect data from
-trials = 20;
 
 %good trials... data andy and I collected from he visualizers manually
-goodTrials = [find(trialData(:,1) == 1)',find(trialData(:,2) == 1)'];
+goodTrials = [find(trialData(:,1) == 1)', find(trialData(:,2) == 1)'];
 
 %loop through trials
 for k = 1:(length(find(trialData(:,1) == 1)))
