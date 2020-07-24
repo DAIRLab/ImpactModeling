@@ -1,7 +1,7 @@
 %% Create a data set for square impacts
-load('trialData.mat');
+%load('updatedTD.mat');
 %number of trials you wish to collect data from
-
+trialData = updatedTD;
 %good trials... data andy and I collected from he visualizers manually
 goodTrials = [find(trialData(:,1) == 1)', find(trialData(:,2) == 1)'];
 
