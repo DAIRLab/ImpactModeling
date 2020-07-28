@@ -1,6 +1,6 @@
     %% Visualize the Drop angle
     figure()
-for j = 14
+for j = 6
     pause(1);
     traj = readtable("traj_"+num2str(j) +".csv");    
     %convert from table to matrix
@@ -57,8 +57,8 @@ for j = 14
          plot(vx,vy, 'k')
          axis equal
          axis off
-         title(num2str(j));
-         pause(1/250);
+         title(num2str(i));
+         pause(0.5);
 
     end
     pause(1)

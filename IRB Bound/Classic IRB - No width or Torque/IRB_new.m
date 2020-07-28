@@ -9,11 +9,10 @@ m1 = 0.037;
 I1 = m1 * (a0^2 + b0^2) / 4;
 
 spacer =  logspace(-2, 2, 30);%100, 50, 10, 5, 2, 1, 0.5, 0.2];
-Tlength = 300;
+Tlength = 2000;
 %errorVec = zeros (1,Tlength);
-for a = 1:length(spacer)
+for a = 1%:length(spacer)
     I1 = m1 * (a0^2 + b0^2) / 4;
-    %I1 = I1 - a*I1/40;
     Mass = [m1, 0, 0;
     0, m1, 0;
     0, 0, I1];
@@ -34,8 +33,8 @@ for a = 1:length(spacer)
 
             J = [d;n]; %Jacobian
             
-            %fun = @(P)(findError(P, Mass, J, pre, post));
-            fun = @(P)(findErrorScaled(P, Mass, J, pre, post, scale));
+            fun = @(P)(findError(P, Mass, J, pre, post));
+            %fun = @(P)(findErrorScaled(P, Mass, J, pre, post, scale));
             nonlcon = @(P)(constraint(P, Mass, J, pre, post));
 
             P0 = [0 0];
@@ -67,7 +66,9 @@ for a = 1:length(spacer)
             %checkNoWidth(2, count) = error;
             yesWidth(1,count) = abs(post(3) - predicted(3));
             yesWidth(2, count) = d(3) * P(1) + n(3) * P(2);
-
+            useful(1, count) = wrapTo180(rad2deg(bounce_array(trial).states(3)));
+            useful(2,count) = abs(post(3) - pre(3));
+            useful(3, count) = abs(post(3));
 
         end
     end
@@ -75,6 +76,16 @@ end
 
 avErr =  mean(errorVec, 2);
 disp(avErr);
+figure()
+plot(useful(3,:), errorVec, '.')
+xlabel("Post Impact Angular Velocity");
+ylabel("Normalized l2 Norm Velocity Error");
+%%
+figure()
+plot(useful, errorVec, '.')
+xlabel("Wrapped Pre-Impact Angle")
+ylabel("Normalized l2 Norm Velocity Error");
+
 
 %%
 figure()

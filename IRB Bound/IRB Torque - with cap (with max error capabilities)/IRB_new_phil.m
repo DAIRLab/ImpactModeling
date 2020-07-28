@@ -13,7 +13,7 @@ Mass = [m1, 0, 0;
         0, 0, I1]; 
     
 
-widths = [0.1];%linspace(0, 0.01, 1);
+widths = 0.1; linspace(0, 0.02, 20);
 numTrials = 2000; %Number of Trials
 ran = randi([1 2000], 1, numTrials);
 
@@ -24,13 +24,10 @@ for a = 1:length(widths)
     maxWidth = widths(a);
     %reset the error vector matrix
     errorVector = [];
-    
+    count = 0;
     for i = 1:length(ran)
         trial = i; %ran(i);
         if sum(bounce_array(trial).flags) < 1
-            if (count == 167) 
-                disp(i);
-            end
             % Finding pre and post impact velocities / states
             pre = bounce_array(trial).states(4:6)';
             post = bounce_array(trial).states(10:12)';
@@ -56,9 +53,9 @@ for a = 1:length(widths)
             %iterator for non flagged trials 
             count = count + 1;
             %save some data for correlation plots
-            bestWidth(1, count) = P(1);
-            bestWidth(2,count) = P(2);
-            bestWidth(3,count) = P(3);
+             bestWidth(1, count) = P(1);
+             bestWidth(2,count) = P(2);
+             bestWidth(3,count) = P(3);
 %             bestWidth(4, count) = 1/2 * pre' * Mass * pre;
 %             bestWidth(5, count) = 1/2 * post' * Mass * post;
 %             bestWidth(6, count) = bounce_array(trial).states(3);
@@ -66,7 +63,7 @@ for a = 1:length(widths)
             %ellipse_visual(pre(1), pre(2), pre(3), 'b');
             %add the trial's error to error vector
             error = findError(P, Mass, J, pre, post);
-            errorVec(count) = error;
+            errorVec(a, count) = error;
 %             disp("Trial: " + trial);
 %             disp("Pre Impact Angle: " + (rem(bounce_array(trial).states(3), pi)*180)/pi);
 %             disp("Post Impact Omega Dot: " + post(3));
@@ -75,26 +72,32 @@ for a = 1:length(widths)
 %             disp("Predicted Post Impact Omega Dot: " + predicted(3));
 %             disp("Optimal Width: " + P(3));
 
-              yesWidth(1,count) = abs(post(3) - predicted(3));
-              yesWidth(2, count) = d(3) * P(1) + n(3) * P(2);
+%               yesWidth(1,count) = abs(post(3) - predicted(3));
+%               yesWidth(2, count) = d(3) * P(1) + n(3) * P(2);
+% %             
+                useful(1, count) = wrapTo180(rad2deg(bounce_array(trial).states(3)));
+%               useful(2, count) = P(3);
+%               useful(3, count) = bounce_array(trial).states(12) - bounce_array(trial).states(6);
+%               useful(4, count) = bounce_array(trial).states(12);
+% %             checkWidth(1, count) = abs(post(3)) - abs(predicted(3));
+% %             checkWidth(2, count) = error;
+% %             posaTest = J' * [P(1:2)'; P(3) * P(2)];
+% %             checkWidth(3, count) = posaTest(3);
 %             
-              useful(1, count) = bounce_array(trial).states(3);
-              useful(2, count) = P(3);
-              useful(3, count) = bounce_array(trial).states(12) - bounce_array(trial).states(6);
-              useful(4, count) = bounce_array(trial).states(12);
-%             checkWidth(1, count) = abs(post(3)) - abs(predicted(3));
-%             checkWidth(2, count) = error;
-%             posaTest = J' * [P(1:2)'; P(3) * P(2)];
-%             checkWidth(3, count) = posaTest(3);
-            
          end
 
     end
     
     %find the average error across all trials for a certain max width
-    avgError(a) = mean(errorVector);
-end
 
+end
+avErr = mean(errorVec, 2);
+
+figure()
+plot(useful, bestWidth(3,:), '.');
+xlabel("Wrapped Pre-Impact Angle");
+ylabel("Optimal Width [m]")
+%%
 % disp("Tangential Impulse: " + P(1) + " [N*s]")
 % disp("Normal Impluse: " + P(2) + " [N*s]")
 
