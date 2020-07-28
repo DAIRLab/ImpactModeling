@@ -63,25 +63,46 @@ for i = 1:Tlength
         %vector for keeping track of variables to plot/look for
         %correlations
         useful(1,count) = squareDataPhil(trial).states(3);
+        useful(2,count) = abs(post(3) - pre(3));
+        useful(3, count) = abs(post(3));
+
 
     end
 end
 
 avErr =  mean(errorVec, 2);
-disp(avErr);
+
+figure();
+plot(useful(2,:), errorVec, '.')
+xlabel("Change in Angular Velocity");
+ylabel("Normalized l2 Norm Velocity Error");
 
 %%
+for j = 1:count
+    wrappedAngle(j) = wrapTo180(rad2deg(useful(1,j)));
+end
+figure()
+hold on
+plot(1:count, wrappedAngle, '.')
+plot(linspace(0,count), zeros(1, 100), 'r-')
+plot(linspace(0,count), 90* ones(1, 100), 'r-')
+plot(linspace(0,count), -90 * ones(1,100), 'r-')
+
+ylabel("Wrapped Pre-Impact Angle");
+xlabel("Trial Number");
+title("Square Data");
+ylim([-180, 180]);
+xlim([0, count]);
+%%
+figure()
+plot(wrappedAngle, errorVec, '.');
+hold on
+ylabel("Normalized l2 Norm Velocity Error");
+xlabel("Wrapped Pre-Impact Angle");
+%title("IRB No Width, Square Data");
+
 figure()
 plot(useful(1,:), errorVec, '.')
 ylabel("Normalized l2 Norm Velocity Error");
 xlabel("Pre-Impact Angle");
 title("IRB No Torque, Square Data");
-
-figure()
-plot(1:count, errorVec, '.');
-hold on
-ylabel("Normalized l2 Norm Velocity Error");
-xlabel("Trial");
-title("IRB No Torque, Square Data");
-
-
