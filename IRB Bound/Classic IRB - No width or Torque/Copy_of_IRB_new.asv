@@ -71,16 +71,12 @@ for i = 1:Tlength
 end
 
 avErr =  mean(errorVec, 2);
-medErr = median(errorVec);
-text1 = ['Mean Error Across all Impacts = '  num2str(avErr)];
-text2 = ['Median Error Across all Impacts = '  num2str(medErr)];
+text = ['Mean Error Across all Impacts = '  num2str(avErr)];
 figure()
 hold on
-plot(1:count, errorVec, 'k.')
+plot(1:count, errorVec, '.')
 plot(linspace(1, count), ones(1,100)*avErr)
-plot(linspace(1, count), ones(1,100)*medErr)
-
-legend('Individual Errors From Each Trial', text1, text2);
+legend('Individual Errors From Each Trial', text);
 xlabel("Trial Number")
 ylabel("Normalized l2 Norm Velocity Error")
 %ylim([0, 3.5])

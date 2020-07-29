@@ -140,9 +140,25 @@ for hh = 1:length(impR)
      
 end
 
+Pre = [x(impR(impact)), z(impR(impact)), th(impR(impact))];
+Post = [x(impR2(impact)), z(impR2(impact)), th(impR2(impact))];
 
-Pre = [x(impR(impact)), z(impR(impact)), th(impR(impact)), xDot(impR(impact)), zDot(impR(impact)), thDot(impR(impact))];
-Post = [x(impR2(impact)), z(impR2(impact)), th(impR2(impact)), xDot(impR2(impact)), zDot(impR2(impact)), thDot(impR2(impact))];
+%using line fits and derivatives, find the pre post velocities
+frame = impR(impact); %data index of frame
+range = frame-6:frame+6;
+rate = 1/250;
+time = (frame-6)*rate:rate:(frame+6)*rate;    %time vector
+for var = 1:3
+    position = D(range, var);                    %position vector
+    %linearly fit  pre impact data
+    p1 = polyfit(time(1:7)', position(1:7), 1);   
+    %add velocity to pre vector
+    Pre(3+var)= p1(1);
+    %linearly fit post impact data
+    p2 = polyfit(time(8:end)', position(8:end), 1);
+    %add velocity to post vector
+    Post(3+var) = p2(1);
+end 
 
 %need to transform contact position from global coordinates 
 d = [1, 0, z(impR(impact))- miny(impact)]; 
