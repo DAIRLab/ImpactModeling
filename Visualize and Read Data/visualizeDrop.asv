@@ -1,7 +1,6 @@
     %% Visualize the Drop angle
     figure()
 for j = 1:length(bigErr)
-    pause(1)
     traj = readtable("traj_"+num2str(bigErr(j,1)) +".csv");    
     %convert from table to matrix
     traj = traj{:, :};
