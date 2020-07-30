@@ -1,5 +1,6 @@
     %% Visualize the Drop angle
     figure()
+    bigErr = [260,2; 268,2];
 for j = 1:length(bigErr)
     pause(1)
     traj = readtable("traj_"+num2str(bigErr(j,1)) +".csv");    
@@ -62,5 +63,5 @@ for j = 1:length(bigErr)
          pause(1/250);
 
     end
-    pause(10);
+    pause(1);
 end
