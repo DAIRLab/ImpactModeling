@@ -10,3 +10,4 @@ for i = 1:length(squareDataPhilUpdated)
         squareDataPhilChanged(count) = squareDataPhilUpdated(i);
     end
 end
+

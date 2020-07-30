@@ -2,7 +2,7 @@
 
 figure()
 
-for j = 1:5
+for j = 1:20
     pause(1)
     %load trajectory csv files
     traj_real = readtable("traj_"+num2str(j) +".csv");   
@@ -35,7 +35,7 @@ for j = 1:5
     thDot_sim = traj_sim(:,6);
     clf; 
     sgtitle(["Trial Number " num2str(j)])
-    for i = 1:(length(traj)-80)
+    for i = 1:(length(traj_real)-80)
         %----------REAL TRAJECTORY-----
          subplot(2,1,1);
          hold on
@@ -74,7 +74,7 @@ for j = 1:5
          plot(vx,vy, 'k')
          axis equal
          axis off
-         text = ["Trajectory"];
+         text = ["Observed Trajectory"];
          title(text);
          
          %------SIMULATED TRAJECTORY-------
@@ -115,7 +115,7 @@ for j = 1:5
          plot(vx,vy, 'k')
          axis equal
          axis off
-         text = ["Simulation"];
+         text = ["Simulated Trajectory"];
          title(text);
          
          pause(1/250);
