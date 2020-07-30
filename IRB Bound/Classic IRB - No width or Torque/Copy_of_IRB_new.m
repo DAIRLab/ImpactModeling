@@ -1,6 +1,6 @@
 %% Newer IRB with Square Data
 clear;
-load('squareDataPhilUpdated.mat');
+load('squareDataPhilChanged.mat');
 
 % Set up Constants
 stepSize = 0.01;
@@ -14,7 +14,7 @@ Mass = [m1, 0, 0;
         0, m1, 0;
         0, 0, I1]; %generlaized Mass matrix
 
-Tlength = length(squareDataPhilUpdated);
+Tlength = length(squareDataPhilChanged);
 errorVec = zeros (1,Tlength);
 
 count  = 0; 
@@ -26,11 +26,11 @@ for i = 1:Tlength
 
     if true%sum(bounce_array(trial).flags) < 1
         % Finding pre and post impact velocities / states
-        pre = squareDataPhilUpdated(trial).states(4:6)';
-        post = squareDataPhilUpdated(trial).states(10:12)';
+        pre = squareDataPhilChanged(trial).states(4:6)';
+        post = squareDataPhilChanged(trial).states(10:12)';
 
-        d = (squareDataPhilUpdated(trial).d);   %tangential
-        n = (squareDataPhilUpdated(trial).n);   %normal
+        d = (squareDataPhilChanged(trial).d);   %tangential
+        n = (squareDataPhilChanged(trial).n);   %normal
 
         J = [d;n]; %Jacobian
 
@@ -62,7 +62,7 @@ for i = 1:Tlength
 
         %vector for keeping track of variables to plot/look for
         %correlations
-        useful(1,count) = squareDataPhilUpdated(trial).states(3);
+        useful(1,count) = squareDataPhilChanged(trial).states(3);
         useful(2,count) = abs(post(3) - pre(3));
         useful(3, count) = abs(post(3));
 
@@ -84,14 +84,14 @@ legend('Individual Errors From Each Trial', text1, text2);
 xlabel("Trial Number")
 ylabel("Normalized l2 Norm Velocity Error")
 %ylim([0, 3.5])
-title("Updated Square Data Set, Classical IRB")
+title("Updated Square Data Set (Min Post \omega of 3), Classical IRB")
 
 c = 0;
 for i = 1:count
-    if errorVec(i) > 1
+    if errorVec(i) > 0.5
         c = c +1;
-        bigErr(c,1) = squareDataPhilUpdated(i).trial;
-        bigErr(c,2) = squareDataPhilUpdated(i).impact;
+        bigErr(c,1) = squareDataPhilChanged(i).trial;
+        bigErr(c,2) = squareDataPhilChanged(i).impact;
     end
 end
 % %%
