@@ -139,17 +139,227 @@ Pre = [impR', x(impR), z(impR), th(impR), xDot(impR), zDot(impR), thDot(impR), m
 Post = [impR2', x(impR2), z(impR2), th(impR2), xDot(impR2), zDot(impR2), thDot(impR2)];
 
 vect = (impR(1)-5):1:(impR(1)+5)
+time = (1/250)*vect;
+
+% Impact plot +- 5 points
 
 plot(-x(vect),z(vect),'r*')
+title({['First Impact for trial ', num2str(n)], '+- 5 data points'})
+xlabel('x position (m)')
+ylabel('z position (m)')
+set(gca, 'FontSize', 12)
+
+% x position and xDot vs time
+figure
+plot(time,-x(vect))
+hold on
+plot(time,xDot(vect))
+title('x position and xDot vs time')
+xlabel('Time (s)')
+ylabel('Magnitude')
+legend('x position', 'x velocity')
+set(gca, 'FontSize', 12)
+
+% z position and zDot vs time
+figure
+plot(time,z(vect))
+hold on
+plot(time,zDot(vect))
+title('z position and zDot vs time')
+xlabel('Time (s)')
+ylabel('Magnitude')
+legend('z position', 'z velocity')
+set(gca, 'FontSize', 12)
+
+%z position fitted
+figure 
+tiledlayout(2,1)
+nexttile
+p = polyfit(time(1:6),z(vect(1:6))',1)
+x1 = time(1):0.0001:time(6);
+y = p(1)*x1 + p(2);
+p2 = polyfit(time(6:11),z(vect(6:11))',1)
+x2 = time(6):0.0001:time(11);
+y2 = p2(1)*x2 + p2(2);
+plot(time(1:5),z(vect(1:5)),'ro','MarkerSize',8,'MarkerFaceColor','r')
+hold on
+plot(time(7:11),z(vect(7:11)),'bo','MarkerSize',8,'MarkerFaceColor','b')
+hold on
+plot(time(6),z(vect(6)),'ko','MarkerSize',8,'MarkerFaceColor','k')
+hold on
+plot(x1,y,'r')
+hold on
+plot(x2,y2,'b')
+hold on
+plot([time(6), time(6)], ylim, 'k--')
+legend('Pre-Impact points', 'Post-impact points', 'Impact point','Pre-linear fit','Post-linear fit')
+title({['Z position analysis for trial ', num2str(n)], '+- 5 data points'})
+xlabel('Time (s)')
+ylabel('Position (m)')
+set(gca, 'FontSize', 12)
+
+nexttile
+plot(time(1:5),zDot(vect(1:5)),'ro','MarkerSize',8,'MarkerFaceColor','r')
+hold on
+plot(time(7:11),zDot(vect(7:11)),'bo','MarkerSize',8,'MarkerFaceColor','b')
+hold on
+plot(time(6),zDot(vect(6)),'ko','MarkerSize',8,'MarkerFaceColor','k')
+hold on
+plot([time(1), time(6)], [p(1) p(1)], 'r-')
+hold on
+plot([time(6), time(11)], [p2(1) p2(1)], 'b-')
+hold on
+plot([time(6), time(6)], ylim, 'k--')
+legend('Pre-Impact velocities', 'Post-impact velocities', 'Impact velocity','Pre-linear fit diff.','Post-linear fit diff.','Location','Southeast')
+title({['Z velocity analysis for trial ', num2str(n)], '+- 5 data points'})
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+set(gca, 'FontSize', 12)
+
+
+%All positions fitted!
+figure 
+tiledlayout(2,3)
+
+%X position
+nexttile
+p3 = polyfit(time(1:6),x(vect(1:6))',1)
+x1 = time(1):0.0001:time(6);
+y3 = p3(1)*x1 + p3(2);
+p4 = polyfit(time(6:11),x(vect(6:11))',1)
+x2 = time(6):0.0001:time(11);
+y4 = p4(1)*x2 + p4(2);
+plot(time(1:5),x(vect(1:5)),'ro','MarkerSize',8,'MarkerFaceColor','r')
+hold on
+plot(time(7:11),x(vect(7:11)),'bo','MarkerSize',8,'MarkerFaceColor','b')
+hold on
+plot(time(6),x(vect(6)),'ko','MarkerSize',8,'MarkerFaceColor','k')
+hold on
+plot(x1,y3,'r')
+hold on
+plot(x2,y4,'b')
+hold on
+plot([time(6), time(6)], ylim, 'k--')
+legend('Pre-Impact points', 'Post-impact points', 'Impact point','Pre-linear fit','Post-linear fit')
+title({['X position analysis for trial ', num2str(n)], '+- 5 data points'})
+xlabel('Time (s)')
+ylabel('Position (m)')
+set(gca, 'FontSize', 12)
+xlim([time(1),time(11)])
+
+%Z position
+nexttile
+p = polyfit(time(1:6),z(vect(1:6))',1)
+x1 = time(1):0.0001:time(6);
+y = p(1)*x1 + p(2);
+p2 = polyfit(time(6:11),z(vect(6:11))',1)
+x2 = time(6):0.0001:time(11);
+y2 = p2(1)*x2 + p2(2);
+plot(time(1:5),z(vect(1:5)),'ro','MarkerSize',8,'MarkerFaceColor','r')
+hold on
+plot(time(7:11),z(vect(7:11)),'bo','MarkerSize',8,'MarkerFaceColor','b')
+hold on
+plot(time(6),z(vect(6)),'ko','MarkerSize',8,'MarkerFaceColor','k')
+hold on
+plot(x1,y,'r')
+hold on
+plot(x2,y2,'b')
+hold on
+plot([time(6), time(6)], ylim, 'k--')
+legend('Pre-Impact points', 'Post-impact points', 'Impact point','Pre-linear fit','Post-linear fit')
+title({['Z position analysis for trial ', num2str(n)], '+- 5 data points'})
+xlabel('Time (s)')
+ylabel('Position (m)')
+set(gca, 'FontSize', 12)
+xlim([time(1),time(11)])
+
+%Angular position
+nexttile
+p5 = polyfit(time(1:6),th(vect(1:6))',1)
+x1 = time(1):0.0001:time(6);
+y5 = p5(1)*x1 + p5(2);
+p6 = polyfit(time(6:11),th(vect(6:11))',1)
+x2 = time(6):0.0001:time(11);
+y6 = p6(1)*x2 + p6(2);
+plot(time(1:5),th(vect(1:5)),'ro','MarkerSize',8,'MarkerFaceColor','r')
+hold on
+plot(time(7:11),th(vect(7:11)),'bo','MarkerSize',8,'MarkerFaceColor','b')
+hold on
+plot(time(6),th(vect(6)),'ko','MarkerSize',8,'MarkerFaceColor','k')
+hold on
+plot(x1,y5,'r')
+hold on
+plot(x2,y6,'b')
+hold on
+plot([time(6), time(6)], ylim, 'k--')
+legend('Pre-Impact points', 'Post-impact points', 'Impact point','Pre-linear fit','Post-linear fit')
+title({['Angle analysis for trial ', num2str(n)], '+- 5 data points'})
+xlabel('Time (s)')
+ylabel('Angle (rads)')
+set(gca, 'FontSize', 12)
+xlim([time(1),time(11)])
+
+%X velocity
+nexttile
+plot(time(1:5),xDot(vect(1:5)),'ro','MarkerSize',8,'MarkerFaceColor','r')
+hold on
+plot(time(7:11),xDot(vect(7:11)),'bo','MarkerSize',8,'MarkerFaceColor','b')
+hold on
+plot(time(6),xDot(vect(6)),'ko','MarkerSize',8,'MarkerFaceColor','k')
+hold on
+plot([time(1), time(6)], [p3(1) p3(1)], 'r-')
+hold on
+plot([time(6), time(11)], [p4(1) p4(1)], 'b-')
+hold on
+plot([time(6), time(6)], ylim, 'k--')
+legend('Pre-Impact velocities', 'Post-impact velocities', 'Impact velocity','Pre-linear fit diff.','Post-linear fit diff.','Location','Southeast')
+title({['X velocity analysis for trial ', num2str(n)], '+- 5 data points'})
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+set(gca, 'FontSize', 12)
+xlim([time(1),time(11)])
+
+%Z velocity
+nexttile
+plot(time(1:5),zDot(vect(1:5)),'ro','MarkerSize',8,'MarkerFaceColor','r')
+hold on
+plot(time(7:11),zDot(vect(7:11)),'bo','MarkerSize',8,'MarkerFaceColor','b')
+hold on
+plot(time(6),zDot(vect(6)),'ko','MarkerSize',8,'MarkerFaceColor','k')
+hold on
+plot([time(1), time(6)], [p(1) p(1)], 'r-')
+hold on
+plot([time(6), time(11)], [p2(1) p2(1)], 'b-')
+hold on
+plot([time(6), time(6)], ylim, 'k--')
+legend('Pre-Impact velocities', 'Post-impact velocities', 'Impact velocity','Pre-linear fit diff.','Post-linear fit diff.','Location','Southeast')
+title({['Z velocity analysis for trial ', num2str(n)], '+- 5 data points'})
+xlabel('Time (s)')
+ylabel('Velocity (m/s)')
+set(gca, 'FontSize', 12)
+xlim([time(1),time(11)])
+
+%Angular Velocity
+nexttile
+plot(time(1:5),thDot(vect(1:5)),'ro','MarkerSize',8,'MarkerFaceColor','r')
+hold on
+plot(time(7:11),thDot(vect(7:11)),'bo','MarkerSize',8,'MarkerFaceColor','b')
+hold on
+plot(time(6),thDot(vect(6)),'ko','MarkerSize',8,'MarkerFaceColor','k')
+hold on
+plot([time(1), time(6)], [p5(1) p5(1)], 'r-')
+hold on
+plot([time(6), time(11)], [p6(1) p6(1)], 'b-')
+hold on
+plot([time(6), time(6)], ylim, 'k--')
+legend('Pre-Impact velocities', 'Post-impact velocities', 'Impact velocity','Pre-linear fit diff.','Post-linear fit diff.','Location','Southeast')
+title({['Angular velocity analysis for trial ', num2str(n)], '+- 5 data points'})
+xlabel('Time (s)')
+ylabel('Velocity (rads/s)')
+set(gca, 'FontSize', 12)
+xlim([time(1),time(11)])
 
 end
-
-
-
-
-
-
-
 
 
 
