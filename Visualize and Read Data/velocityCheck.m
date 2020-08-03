@@ -4,12 +4,12 @@
 %2. Compare to velocity in actual data set
 
 %% Impact 6
-traj = readtable("traj_386.csv");    
+traj = readtable("traj_6.csv");    
 %convert from table to matrix
 traj = traj{:, :};
 rate = 1/250; %capture rate
 %impact occurs between line 15-16
-impact = 56;
+impact = 14;
 %plot 10 frames before and after
 range = impact-10:impact+10;
 time = (impact-10)*rate:rate:(impact+10)*rate;  %time vector

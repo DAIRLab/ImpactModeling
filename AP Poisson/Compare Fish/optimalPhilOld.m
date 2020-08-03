@@ -84,8 +84,8 @@ minError = min(min(averageError));  %get the minimum error
 disp(bestMu / count);
 disp(bestEp / count);
 %convert the index to mu and epsilon values
-% bestEp = sample(a);
-% bestMu = sample(b);
+bestEp = sample(a);
+bestMu = sample(b);
 
 %create contour plot
 colormap(flipud(gray))  %match color from Nima paper

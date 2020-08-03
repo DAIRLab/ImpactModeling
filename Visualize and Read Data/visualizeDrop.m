@@ -1,9 +1,11 @@
     %% Visualize the Drop angle
-    figure()
     bigErr = [260,2; 268,2];
-for j = 1:length(bigErr)
+    figure;
+trials = 1:10
+
+for j = trials
     pause(1)
-    traj = readtable("traj_"+num2str(bigErr(j,1)) +".csv");    
+    traj = readtable("traj_"+num2str(trials(j))+".csv");    
     %convert from table to matrix
     traj = traj{:, :};
     height = 0.06/2;
@@ -58,8 +60,8 @@ for j = 1:length(bigErr)
          plot(vx,vy, 'k')
          axis equal
          axis off
-         text = ["Traj:" num2str(bigErr(j,1)) " Impact:" num2str(bigErr(j,2))];
-         title(text);
+         %text = ["Traj:" num2str(bigErr(j,1)) " Impact:" num2str(bigErr(j,2))];
+         %title(text);
          pause(1/250);
 
     end
