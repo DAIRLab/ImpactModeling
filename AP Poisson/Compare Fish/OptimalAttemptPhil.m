@@ -16,7 +16,8 @@ Mass = [m1, 0, 0;
 sumX = [0, 0];
 bests = [];
 count = 0;
-
+totalError = 0;
+trialError = 0;
 %set up mu and epsilon intervals for fmincon
 mu_lim = [0, 0.4];
 ep_lim = [0.2, 1];
@@ -57,10 +58,10 @@ for t = 1:numTrials
         count = count + 1;
         %add mu and epsilon to sum
         sumX = sumX + x;
-        
+        trialError = cost_function(x, Mass, M, n ,d, pre, J, Pt);
         bests(count, :) = [x bounce_array(trial).states(3)];
     end
-    
+    totalError = totalError + trialError;
 end
 
 % find the avarage optimal mu and epsilon
@@ -70,21 +71,22 @@ disp("Optimal Epsilon: " + best(2))
 
 % %% Post Process Results
 % %Take the average of totalError
-% averageError = totalError / count;
-% minError = min(min(averageError));  %get the minimum error
-% [a, b] = find(averageError == minError); %find its index
+averageError = totalError / count;
+minError = min(min(averageError));  %get the minimum error
+[a, b] = find(averageError == minError); %find its index
+
+ %convert the index to mu and epsilon values
+ bestEp = sample(a);
+ bestMu = sample(b);
 % 
-% %convert the index to mu and epsilon values
-% bestEp = sample(a);
-% bestMu = sample(b);
+ %create contour plot
+ colormap(flipud(gray))  %match color from Nima paper
+ contourf(sample(21:36), sample(1:15), averageError(21:36, 1:15)', 60);
+ colorbar; 
 % 
-% %create contour plot
-% colormap(flipud(gray))  %match color from Nima paper
-% contourf(sample(21:36), sample(1:15), averageError(21:36, 1:15)', 60);
-% colorbar; 
-% 
-% xlabel("Epsilon")
-% ylabel("Mu")
+xlabel("Epsilon")
+ylabel("Mu")
+
 optTwos = 0;
 q = 0;
 optZeros = 0;

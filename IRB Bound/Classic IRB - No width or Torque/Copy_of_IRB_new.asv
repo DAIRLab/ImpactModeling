@@ -1,7 +1,7 @@
 %% Newer IRB with Square Data
 clear;
-load('squareDataPhilSim.mat');
-dataSet = squareDataPhilSim;
+load('square.mat');
+
 % Set up Constants
 stepSize = 0.01;
 sl = 0.06; %side length of square from data README
@@ -19,6 +19,7 @@ errorVec = zeros (1,Tlength);
 
 count  = 0; 
 
+dataSet = s
 for i = 1:Tlength
 
     %Select trial
