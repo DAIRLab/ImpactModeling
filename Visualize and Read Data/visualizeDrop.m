@@ -1,11 +1,11 @@
     %% Visualize the Drop angle
     bigErr = [260,2; 268,2];
-    figure;
-trials = 1:10
+    clf;
+trials = 20;
 
 for j = trials
     pause(1)
-    traj = readtable("traj_"+num2str(trials(j))+".csv");    
+    traj = readtable("traj_"+num2str(j)+".csv");    
     %convert from table to matrix
     traj = traj{:, :};
     height = 0.06/2;
@@ -23,7 +23,7 @@ for j = trials
     %Column 6: thetaDot
     thDot = traj(:,6);
     clf; 
-    for i = 1:(length(traj)-80)
+    for i = 1:(length(traj)-50)
          hold on
          plot(-x(i),z(i),'r*')
          the = th(i);

@@ -9,7 +9,7 @@ m1 = 0.037;
 I1 = m1 * (a0^2 + b0^2) / 4;
 
 spacer =  logspace(-2, 2, 30);%100, 50, 10, 5, 2, 1, 0.5, 0.2];
-Tlength = 2000;
+Tlength = 10;
 %errorVec = zeros (1,Tlength);
 for a = 1%:length(spacer)
     I1 = m1 * (a0^2 + b0^2) / 4;
@@ -59,7 +59,7 @@ for a = 1%:length(spacer)
     %         disp("Difference: " + abs(post(3) - predicted(3)));
             %disp("Optimal Width: " + P(3));
             count = count  + 1;
-            errorVec(a, count) = error;
+            errorVec(a, count) = error*norm(post);
             %noWidth(count) = abs(post(3) - predicted(3));
 
             %checkNoWidth(1, count) = abs(post(3)) - abs(predicted(3));
@@ -69,17 +69,23 @@ for a = 1%:length(spacer)
             useful(1, count) = wrapTo180(rad2deg(bounce_array(trial).states(3)));
             useful(2,count) = abs(post(3) - pre(3));
             useful(3, count) = abs(post(3));
-
+            disp("Actual:")
+            disp(post)
+            disp("Predicted:")
+            disp(predicted)
         end
     end
 end
 
 avErr =  mean(errorVec, 2);
+errorVec(1420) = 0;
 disp(avErr);
+
 figure()
-plot(useful(3,:), errorVec, '.')
-xlabel("Post Impact Angular Velocity");
-ylabel("Normalized l2 Norm Velocity Error");
+plot(useful(1,:), errorVec, '.')
+xlabel("Pre Impact Angle (Degrees)");
+ylabel("l2 Norm Velocity Error");
+xlim([-180, 180])
 %%
 figure()
 plot(useful, errorVec, '.')

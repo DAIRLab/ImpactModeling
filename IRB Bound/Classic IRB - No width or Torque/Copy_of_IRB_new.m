@@ -1,7 +1,7 @@
 %% Newer IRB with Square Data
 clear;
-load('squareDataPhilSim.mat');
-dataSet = squareDataPhilSim;
+load('squareDataPhil.mat');
+dataSet = squareDataPhil;
 % Set up Constants
 stepSize = 0.01;
 sl = 0.06; %side length of square from data README
@@ -85,7 +85,7 @@ xlabel("Trial Number")
 ylabel("Normalized l2 Norm Velocity Error")
 %ylim([0, 3.5])
 %title("Updated Square Data Set (Min Post \omega of 3), Classical IRB")
-xlim([0 275]);
+xlim([0 count]);
 
 c = 0;
 for i = 1:count
