@@ -13,7 +13,7 @@ Mass = [m1, 0, 0;
         0, 0, I1]; 
     
 
-widths = 0.1; linspace(0, 0.02, 20);
+widths = 0.1; %linspace(0, 0.02, 20);
 numTrials = 2000; %Number of Trials
 ran = randi([1 2000], 1, numTrials);
 
@@ -76,9 +76,10 @@ for a = 1:length(widths)
 %               yesWidth(2, count) = d(3) * P(1) + n(3) * P(2);
 % %             
                 useful(1, count) = wrapTo180(rad2deg(bounce_array(trial).states(3)));
-%               useful(2, count) = P(3);
-%               useful(3, count) = bounce_array(trial).states(12) - bounce_array(trial).states(6);
-%               useful(4, count) = bounce_array(trial).states(12);
+                useful(2, count) = P(3);
+                useful(3, count) = bounce_array(trial).states(12) - bounce_array(trial).states(6);
+%               
+                useful(4, count) = bounce_array(trial).states(12);
 % %             checkWidth(1, count) = abs(post(3)) - abs(predicted(3));
 % %             checkWidth(2, count) = error;
 % %             posaTest = J' * [P(1:2)'; P(3) * P(2)];
@@ -105,13 +106,14 @@ ylabel("Optimal Width [m]")
 errorVec(1420) = 0;
 errorVec(310) = 0;
 errorVec(234) = 0;
-
+%%
 figure()
 plot(useful(1, :), useful(2, :), '.')
-title("IRB W/ Width (No Max Constraint)")
-xlabel('Pre Impact Angle')
-ylabel('Optimal Width')
+xlabel('Pre Impact Angle [degrees]')
+ylabel('Optimal Width [m]')
+xlim([-180, 180])
 
+%%
 figure()
 plot(useful(3, :), useful(2, :), '.')
 title("IRB W/ Width (No Max Constraint)")
