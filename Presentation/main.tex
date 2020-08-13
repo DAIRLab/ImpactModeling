@@ -1,0 +1,112 @@
+\documentclass{beamer}
+
+\usepackage[utf8]{inputenc}
+%Load useful packages
+\usepackage{graphicx} % Allows including images
+\usepackage{booktabs} % Allows the use of \toprule, \midrule and \bottomrule in tables
+\usepackage{subcaption}
+\usepackage{subfiles}
+\usepackage{url}
+\usepackage{amssymb}
+\usepackage{animate}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric, arrows}
+\usepackage{amsmath}
+\usepackage{natbib}
+
+%Information to be included in the title page:
+\title{Impact Modeling}
+\author[me]{\textbf{Junior Team}\\ \footnotesize{Natalie Aziz, Joah Kim, Andy Eskenazi, and Philip Sieg\\} \small{Advised by Will and Dr. Posa}}
+\institute{School of Engineering and Applied Science\\University of Pennsylvania}
+\date{August 12, 2020}
+%Logo in every slide
+\logo{%
+  \makebox[0.98\paperwidth]{
+    \includegraphics[height=0.7cm,keepaspectratio]{logos/penn_eng_logo.jpg}%
+    \hfill%
+    \includegraphics[height=0.7cm,keepaspectratio]{logos/dairLogo.png}%
+  }
+}
+
+%Contents before every section's starting slide
+\AtBeginSection[]
+{
+  \begin{frame}
+    \frametitle{Table of Contents}
+    \begin{minipage}{\textwidth}
+        \tableofcontents[currentsection]
+    \end{minipage}
+  \end{frame}
+}
+% shape, colour of item, nested item bullets in itemize only
+\setbeamertemplate{itemize item}[square] \setbeamercolor{itemize item}{bg=blue}
+\setbeamertemplate{itemize subitem}[circle] \setbeamercolor{itemize subitem}{fg=blue}
+\setbeamertemplate{itemize subsubitem}[triangle] \setbeamercolor{itemize subsubitem}{fg=blue}
+\setbeamertemplate{footline}[frame number]
+\setbeamertemplate{navigation symbols}{}
+% font size of nested and nested-within-nested bulltes in both itemize and enumerate
+% options are \tiny, \small, \scriptsize, \normalsize, \footnotesize, \large, \Large, \LARGE, \huge and \Huge
+\setbeamerfont{itemize/enumerate subbody}{size=\scriptsize} 
+\setbeamerfont{itemize/enumerate subsubbody}{size=\scriptsize}
+
+\setbeamerfont{subsection in toc}{size=\footnotesize}
+%%setting up some useful slide creation commands
+%split slide
+\newenvironment{splitframe}[5]
+%[1] ==> 1 parameter passed through {}
+%[2] ==> 2 parameters passed through {}{}
+%[4] ==> 4 parameters passed through {}{}{}{}
+    {
+    \begin{frame}{#3}
+    \begin{columns}
+    \column{#1\linewidth}
+    \centering
+    #4
+    \column{#2\linewidth}
+    \centering
+    #5
+    \end{columns}
+    \centering
+    \vspace{\baselineskip} % adds one line space
+    }
+    %Inside the first pair of braces (ABOVE) is set what your new environment will do before the text within, then inside the second pair of braces (BELOW) declare what your new environment will do after the text. Note second pair can be empty braces too.
+    {
+    \end{frame}
+    }
+
+\begin{document}
+
+\frame{\titlepage}
+
+\subfile{peeps}
+
+\begin{frame}
+    \frametitle{Table of Contents}
+    \begin{minipage}{\textwidth}
+        \tableofcontents
+    \end{minipage}
+\end{frame}
+
+\subfile{sec1}
+
+\subfile{sec2}
+
+\subfile{sec3}
+
+\subfile{sec4}
+
+\subfile{sec5}
+
+\subfile{sec6}
+
+\begin{frame}
+\frametitle{References}
+    \tiny
+    \bibliographystyle{plain}
+    \bibliography{references}
+    \small
+    \\
+    Thank you to Matt and Will for their feedback and support on this presentation!
+\end{frame}
+
+\end{document}
