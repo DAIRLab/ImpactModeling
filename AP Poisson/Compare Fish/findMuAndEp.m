@@ -47,7 +47,7 @@ for t = 1:numTrials
             epsilon = epsilonRange(b);
             out_juniors = APPoisson_juniors(Mass, n, d, pre, mu, epsilon);
             %[out_nima, z] = APPoisson_nima(Mass, n', d', pre', ha, mu, epsilon);
-            error(a,b) = norm(post - out_juniors)/norm(post);
+            error(a,b) = norm(post - out_juniors)^2;%/norm(post);
             %error(a,b) = norm(post - out_nima)/norm(post);
         end
     end
@@ -58,13 +58,15 @@ for t = 1:numTrials
     totalError = totalError + error;
     end
 end
-
+%%
+disp("Average Best Mu")
 disp(mean(bestMu))
+disp("Average Best Epsilon")
 disp(mean(bestEpsilon))
 
 totalError = totalError / count; 
 %%
-contourf(epsilonRange, muRange, totalError', 30);
+contourf(muRange, epsilonRange, totalError, 30);
 colorbar;
 xlabel('Epsilon')
 ylabel('Mu')

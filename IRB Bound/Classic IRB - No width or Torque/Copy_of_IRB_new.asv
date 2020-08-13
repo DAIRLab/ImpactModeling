@@ -16,10 +16,10 @@ Mass = [m1, 0, 0;
 
 Tlength = length(dataSet);
 errorVec = zeros (1,Tlength);
-badTrials = [];
+
 count  = 0; 
 
-for i = 1:Tlength
+for i = 281;%1:Tlength
 
     %Select trial
     trial = i;
@@ -54,23 +54,20 @@ for i = 1:Tlength
 
         count = count  + 1;
         errorVec(count) = error;
-% 
-%         disp("Observed:")
-%         disp(post)
-%         disp("Predicted:")
-%         disp(predicted);
-%         disp("Non-normalized Error:")
-%         disp(norm(post-predicted));
+
+        disp("Observed:")
+        disp(post)
+        disp("Predicted:")
+        disp(predicted);
+        disp("Non-normalized Error:")
+        di
 
         %vector for keeping track of variables to plot/look for
         %correlations
         useful(1,count) = dataSet(trial).states(3);
         useful(2,count) = abs(post(3) - pre(3));
         useful(3, count) = abs(post(3));
-        
-        if error > 0.5
-            badTrials  = [badTrials, i];
-        end
+
 
     end
 end

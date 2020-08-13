@@ -1,10 +1,11 @@
     %% Visualize the Drop angle
     bigErr = [260,2; 268,2];
-    clf;
-trials = 20;
+    trials = 191;
+    figure();
 
-for j = trials
+for j = badTrials(19)
     pause(1)
+    clf;
     traj = readtable("traj_"+num2str(j)+".csv");    
     %convert from table to matrix
     traj = traj{:, :};

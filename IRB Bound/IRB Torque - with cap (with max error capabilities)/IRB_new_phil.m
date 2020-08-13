@@ -63,6 +63,9 @@ for a = 1:length(widths)
             %ellipse_visual(pre(1), pre(2), pre(3), 'b');
             %add the trial's error to error vector
             error = findError(P, Mass, J, pre, post);
+            if error > 0.05*10^(-9)
+                error = 0;
+            end
             errorVec(a, count) = error;
 %             disp("Trial: " + trial);
 %             disp("Pre Impact Angle: " + (rem(bounce_array(trial).states(3), pi)*180)/pi);
@@ -80,6 +83,7 @@ for a = 1:length(widths)
                 useful(3, count) = bounce_array(trial).states(12) - bounce_array(trial).states(6);
 %               
                 useful(4, count) = bounce_array(trial).states(12);
+                useful(5, count) = P(3)*P(2) + n(3) * P(1) + d(2) * P(2);
 % %             checkWidth(1, count) = abs(post(3)) - abs(predicted(3));
 % %             checkWidth(2, count) = error;
 % %             posaTest = J' * [P(1:2)'; P(3) * P(2)];
@@ -95,9 +99,9 @@ end
 avErr = mean(errorVec, 2);
 
 figure()
-plot(useful, bestWidth(3,:), '.');
-xlabel("Wrapped Pre-Impact Angle");
-ylabel("Optimal Width [m]")
+plot(useful(5,:), errorVec, '.');
+xlabel("Total Moment");
+ylabel("Normalized Error")
 %%
 % disp("Tangential Impulse: " + P(1) + " [N*s]")
 % disp("Normal Impluse: " + P(2) + " [N*s]")
