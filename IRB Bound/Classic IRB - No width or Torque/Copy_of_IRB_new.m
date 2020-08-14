@@ -53,8 +53,8 @@ for i = 1:Tlength
         predicted = pre + inv(Mass) * J' * P'; %predicted post impact state
 
         count = count  + 1;
-        errorVec(count) = error;
-% 
+        errorVec(count) = error*norm(post);
+% % 
 %         disp("Observed:")
 %         disp(post)
 %         disp("Predicted:")
@@ -68,7 +68,7 @@ for i = 1:Tlength
         useful(2,count) = abs(post(3) - pre(3));
         useful(3, count) = abs(post(3));
         
-        if error > 0.5
+        if error*norm(post)  > 5
             badTrials  = [badTrials, i];
         end
 

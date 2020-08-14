@@ -77,19 +77,19 @@ end
 avErr =  mean(errorVec, 2);
 errorVec(1420) = 0;
 disp(avErr);
-
+disp(median(errorVec))
 figure()
 plot3(useful(3,:), useful(4,:), errorVec, '.')
-xlabel("CMagnitude of Post Impact Angular Velocity");
+xlabel("Magnitude of Post Impact Angular Velocity");
 ylabel("Norm of Post Impact Velocity")
 zlabel("l2 Norm Velocity Error");
 hold on
-[x y] = meshgrid(0:10:150); % Generate x and y data
-z = ones(size(x, 1))*mean(errorVec) / mean(useful(4,:)); % Generate z data
-s = surf(x, y, z) % Plot the surface
-set(s,'facealpha',0.2)
+% [x y] = meshgrid(0:10:150); % Generate x and y data
+% z = ones(size(x, 1))*mean(errorVec) / mean(useful(4,:)); % Generate z data
+% s = surf(x, y, z) % Plot the surface
+% set(s,'facealpha',0.2)
 
-disp(mean(errorVec) / mean(useful(4,:)));
+%disp(mean(errorVec) / mean(useful(4,:)));
 
 
 figure
@@ -97,6 +97,11 @@ plot(useful(3,:), errorVec./useful(4,:), '.')
 xlabel("Norm of Post Impact Velocity")
 ylabel("l2 Norm Velocity Error");
 
+figure
+plot(useful(1,:), errorVec, '.')
+xlabel("Pre Impact Wrapped Angle")
+ylabel("l2 Norm Velocity Error");
+xlim([-180,180]);
 
 %%
 figure()

@@ -3,7 +3,7 @@
     trials = 191;
     figure();
 
-for j = badTrials(19)
+for j = badTrials(end)
     pause(1)
     clf;
     traj = readtable("traj_"+num2str(j)+".csv");    
@@ -23,8 +23,7 @@ for j = badTrials(19)
     zDot = traj(:,5);
     %Column 6: thetaDot
     thDot = traj(:,6);
-    clf; 
-    for i = 1:(length(traj)-50)
+    for i = 1:(length(traj)-80)
          hold on
          plot(-x(i),z(i),'r*')
          the = th(i);
@@ -61,10 +60,10 @@ for j = badTrials(19)
          plot(vx,vy, 'k')
          axis equal
          axis off
-         %text = ["Traj:" num2str(bigErr(j,1)) " Impact:" num2str(bigErr(j,2))];
-         %title(text);
-         pause(1/250);
+         text = ["Traj:" num2str(dataSet(j).trial) " Impact:" num2str(dataSet(j).impact)];
+         title(text);
+         pause(10/250);
 
     end
-    pause(1);
+    pause(5);
 end

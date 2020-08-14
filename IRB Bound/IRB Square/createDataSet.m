@@ -16,7 +16,7 @@ for k = 1:(length(find(trialData(:,1) == 1)))
     squareDataPhilUpdated(k).states = [Pre, Post];
     squareDataPhilUpdated(k).n = n;
     squareDataPhilUpdated(k).d = d;
-    squareDataPhilUpdated(k).trial = goodTrials(k);  
+    squareDataPhilUpdated(k).trial = i;  
     squareDataPhilUpdated(k).impact = 1;
 end
 
