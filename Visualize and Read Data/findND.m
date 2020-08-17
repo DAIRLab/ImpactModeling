@@ -26,7 +26,7 @@ th = traj(:,3);  %Column 3: theta
 vx = traj(:,4);  %Column 4: x velocity --> constant
 vy = traj(:,5);  %Column 5: y velocity --> increasing due to gravity
 w = traj(:,6);  %Column 6: angular velocity --> assume constant ?
-tol = 0.0001; 
+tol = 0.001; 
 
 impact1 = zeros(1, 6); %[x, y, th, vx, vy, w]
 
@@ -86,26 +86,26 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
      a = [ax;ay];
      b = [bx;by];
      c = [cx;cy];
-     d = [dx;dy];
+     f = [dx;dy];
      
-     cornersX = [a(1),b(1),c(1),d(1),a(1)];
-     cornersY = [a(2),b(2),c(2),d(2),a(2)];
+     cornersX = [a(1),b(1),c(1),f(1),a(1)];
+     cornersY = [a(2),b(2),c(2),f(2),a(2)];
 
      R = [cos(theta),sin(theta);-sin(theta),cos(theta)];
 
      a_2 = R*a;
      b_2 = R*b;
      c_2 = R*c;
-     d_2 = R*d;
+     f_2 = R*f;
 
-     cornersX = [a_2(1),b_2(1),c_2(1),d_2(1),a_2(1)]+c1;
-     cornersY = [a_2(2),b_2(2),c_2(2),d_2(2),a_2(2)]+c2;
+     cornersX = [a_2(1),b_2(1),c_2(1),f_2(1),a_2(1)]+c1;
+     cornersY = [a_2(2),b_2(2),c_2(2),f_2(2),a_2(2)]+c2;
      
      ycontact = min(cornersY);
      xcontact = cornersX(find(ycontact==cornersY));
      
   % CALCULATE EXACT IMPACT STATE
-  while((abs(ycontact) > tol) && (t <= 1/250)) %terminate if exceeds the time of a single frame
+  while((abs(ycontact) > tol) && (t <= 1/250)) %terminate if exceeds time of a single frame
      xPos = xVel*t + xPos;
      yPos = 0.5*g*(t^2) + yVel*t + yPos;
      yVel = g*t + yVel;
@@ -125,20 +125,20 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
      a = [ax;ay];
      b = [bx;by];
      c = [cx;cy];
-     d = [dx;dy];
+     f = [dx;dy];
 
-     cornersX = [a(1),b(1),c(1),d(1),a(1)];
-     cornersY = [a(2),b(2),c(2),d(2),a(2)];
+     cornersX = [a(1),b(1),c(1),f(1),a(1)];
+     cornersY = [a(2),b(2),c(2),f(2),a(2)];
 
      R = [cos(theta),sin(theta);-sin(theta),cos(theta)];
 
      a_2 = R*a;
      b_2 = R*b;
      c_2 = R*c;
-     d_2 = R*d;
+     f_2 = R*f;
 
-     cornersX = [a_2(1),b_2(1),c_2(1),d_2(1),a_2(1)]+c1;
-     cornersY = [a_2(2),b_2(2),c_2(2),d_2(2),a_2(2)]+c2;
+     cornersX = [a_2(1),b_2(1),c_2(1),f_2(1),a_2(1)]+c1;
+     cornersY = [a_2(2),b_2(2),c_2(2),f_2(2),a_2(2)]+c2;
 
      ycontact = min(cornersY);
      xcontact = cornersX(find(ycontact==cornersY));
