@@ -105,11 +105,11 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
      xcontact = cornersX(find(ycontact==cornersY));
      
   % CALCULATE EXACT IMPACT STATE
-  while((abs(ycontact) > tol) && (t <= 1/250))
+  while((abs(ycontact) > tol) && (t <= 1/250)) %terminate if exceeds the time of a single frame
      xPos = xVel*t + xPos;
      yPos = 0.5*g*(t^2) + yVel*t + yPos;
      yVel = g*t + yVel;
-     theta = omega*t + theta; %multiply by sqrt(2)? for omega*r ?
+     theta = omega*t + theta; 
       
      c1 = -xPos;
      c2 = yPos;
@@ -147,7 +147,7 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
      t = dt + t;
   end
 
-  if t > 1/250
+  if t > 1/250 %if solution was not found, output zeros
     n = zeros(1,3);
     d = n;
   else
