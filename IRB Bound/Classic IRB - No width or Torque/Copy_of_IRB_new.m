@@ -68,13 +68,18 @@ for i = 1:Tlength
         useful(2,count) = abs(post(3) - pre(3));
         useful(3, count) = abs(post(3));
         useful(4, count) = norm(post);
-        
+        useful(5, count) = wrapTo180(rad2deg(dataSet(trial).states(3)));
         if error*norm(post)  > 5
             badTrials  = [badTrials, i];
         end
 
     end
 end
+
+figure()
+plot(1:count, useful(5,:), 'k.')
+xlabel("Trial Number");
+ylabel("Pre-Impact Angle");
 
 figure()
 plot(useful(4, :), errorVec, '.')
