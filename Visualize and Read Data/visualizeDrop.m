@@ -3,7 +3,7 @@
     trials = 191;
     figure();
 
-for j = badTrials(end)
+for j = 2%badTrials(end)
     pause(1)
     clf;
     traj = readtable("traj_"+num2str(j)+".csv");    
@@ -60,8 +60,8 @@ for j = badTrials(end)
          plot(vx,vy, 'k')
          axis equal
          axis off
-         text = ["Traj:" num2str(dataSet(j).trial) " Impact:" num2str(dataSet(j).impact)];
-         title(text);
+%          text = ["Traj:" num2str(dataSet(j).trial) " Impact:" num2str(dataSet(j).impact)];
+%          title(text);
          pause(10/250);
 
     end
