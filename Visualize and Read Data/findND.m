@@ -17,7 +17,7 @@ traj = traj{:, :};
 
 
 side = 0.06/2; %meters
-dt = 1/100000; %seconds (must be less than 1/250 because the framerate is 250Hz)
+dt = 1/10000000; %seconds (must be less than 1/250 because the framerate is 250Hz)
 t = 0; %start time at 0
 g = -9.8; %m/s^2
 x = traj(:,1); %Column 1: x position
@@ -26,7 +26,7 @@ th = traj(:,3);  %Column 3: theta
 vx = traj(:,4);  %Column 4: x velocity --> constant
 vy = traj(:,5);  %Column 5: y velocity --> increasing due to gravity
 w = traj(:,6);  %Column 6: angular velocity --> assume constant ?
-tol = 0.001; 
+tol = 0.00088; 
 
 impact1 = zeros(1, 6); %[x, y, th, vx, vy, w]
 
@@ -72,7 +72,7 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
   
   %START andy's method of calculating corners
 
-     c1 = -xPos;
+     c1 = xPos;
      c2 = yPos;
      ax = side;
      ay = side;
@@ -111,7 +111,7 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
      yVel = g*t + yVel;
      theta = omega*t + theta; 
       
-     c1 = -xPos;
+     c1 = xPos;
      c2 = yPos;
      ax = side;
      ay = side;
@@ -152,6 +152,7 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
     d = n;
   else
     d(3) = yPos - ycontact;
-    n(3) = xPos - xcontact;
+    n(3) = xcontact - xPos;
+%     n(3) = xPos - xcontact;
   end
 end
