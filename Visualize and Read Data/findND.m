@@ -9,7 +9,7 @@
 % Output: d - tangential 
 %         n - normal
 
-function [n, d] = findNDupdated(tr, impact)
+function [n, d] = findND(tr, impact)
 
 %load data
 traj = readtable("traj_" + tr + ".csv");    
@@ -65,6 +65,7 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
               imp(5) = vy(count - buffer);
               imp(6) = w(count - buffer);
           end
+          count = count + 1;
       else
          %move on to next row
          count = count + 1;
