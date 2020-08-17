@@ -18,7 +18,7 @@ traj = traj{:, :};
 
 height = 0.06/2; %meters
 width = 0.06/2; %meters
-dt = 1/7500; %seconds (must be less than 1/250 because the framerate is 250Hz)
+dt = 1/750; %seconds (must be less than 1/250 because the framerate is 250Hz)
 t = 0; %start time at 0
 g = -9.8; %m/s^2
 x = traj(:,1); %Column 1: x position
@@ -99,7 +99,7 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
       xPos = xVel*t + xPos;
       yPos = 0.5*g*(t^2) + yVel*t + yPos;
       yVel = g*t + yVel;
-      theta = omega*t + theta; 
+      theta = omega*t*width*sqrt(2) + theta; %multiply by sqrt(2)? for omega*r ?
       
       R = [cos(theta), -sin(theta), sin(theta), cos(theta)];
       T(1,:)=R.*cX;
