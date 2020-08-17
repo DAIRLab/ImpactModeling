@@ -8,7 +8,7 @@
 % Output: d - tangential 
 %         n - normal
 
-function [n, d] = findND(tr)
+function [n, d] = findNDupdated(tr)
 
 %load data
 traj = readtable("traj_" + tr + ".csv");    
@@ -16,9 +16,8 @@ traj = readtable("traj_" + tr + ".csv");
 traj = traj{:, :};
 
 
-height = 0.06/2; %meters
-width = 0.06/2; %meters
-dt = 1/7500; %seconds (must be less than 1/250 because the framerate is 250Hz)
+side = 0.06/2; %meters
+dt = 1/100000; %seconds (must be less than 1/250 because the framerate is 250Hz)
 t = 0; %start time at 0
 g = -9.8; %m/s^2
 x = traj(:,1); %Column 1: x position
@@ -27,7 +26,7 @@ th = traj(:,3);  %Column 3: theta
 vx = traj(:,4);  %Column 4: x velocity --> constant
 vy = traj(:,5);  %Column 5: y velocity --> increasing due to gravity
 w = traj(:,6);  %Column 6: angular velocity --> assume constant ?
-tol = 0.001; 
+tol = 0.0001; 
 
 impact1 = zeros(1, 6); %[x, y, th, vx, vy, w]
 
@@ -71,60 +70,88 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
   yVel = impact1(5);
   omega = impact1(6);
   
-  R = [cos(theta), -sin(theta), sin(theta), cos(theta)];
-  cX = [-width, width, width, -width];
-  cY = [-height, -height, height, height];
-  T(1,:)=R.*cX;
-  T(2,:)=R.*(cY);
+  %START andy's method of calculating corners
 
-  
-  %initialize corners
-  xll = xPos + T(1,1); %lower left
-  xlr = xPos + T(1,2); %lower right
-  xur = xPos + T(1,3); %upper left
-  xul = xPos + T(1,4); %upper left
-  yll = yPos + T(2,1); 
-  ylr = yPos + T(2,2);
-  yur = yPos + T(2,3);
-  yul = yPos + T(2,4);
-  
-  cornersX = [xll, xlr, xur, xul];
-  cornersY = [yll, ylr, yur, yul];
-  
-  ycontact = min(cornersY);
-  xcontact = cornersX(find(ycontact==cornersY)); %corresponding xcontact
+     c1 = -xPos;
+     c2 = yPos;
+     ax = side;
+     ay = side;
+     bx = side;
+     by = -side;
+     cx = -side;
+     cy = -side;
+     dx = -side;
+     dy = side;
 
+     a = [ax;ay];
+     b = [bx;by];
+     c = [cx;cy];
+     d = [dx;dy];
+     
+     cornersX = [a(1),b(1),c(1),d(1),a(1)];
+     cornersY = [a(2),b(2),c(2),d(2),a(2)];
+
+     R = [cos(theta),sin(theta);-sin(theta),cos(theta)];
+
+     a_2 = R*a;
+     b_2 = R*b;
+     c_2 = R*c;
+     d_2 = R*d;
+
+     cornersX = [a_2(1),b_2(1),c_2(1),d_2(1),a_2(1)]+c1;
+     cornersY = [a_2(2),b_2(2),c_2(2),d_2(2),a_2(2)]+c2;
+     
+     ycontact = min(cornersY);
+     xcontact = cornersX(find(ycontact==cornersY));
+     
   % CALCULATE EXACT IMPACT STATE
-  while(abs(ycontact) > tol)
-      xPos = xVel*t + xPos;
-      yPos = 0.5*g*(t^2) + yVel*t + yPos;
-      yVel = g*t + yVel;
-      theta = omega*t + theta; 
+  while((abs(ycontact) > tol) && (t <= 1/250))
+     xPos = xVel*t + xPos;
+     yPos = 0.5*g*(t^2) + yVel*t + yPos;
+     yVel = g*t + yVel;
+     theta = omega*t + theta; %multiply by sqrt(2)? for omega*r ?
       
-      R = [cos(theta), -sin(theta), sin(theta), cos(theta)];
-      T(1,:)=R.*cX;
-      T(2,:)=R.*(cY);
-      
-      xll = xPos + T(1,1);
-      xlr = xPos + T(1,2);
-      xur = xPos + T(1,3);
-      xul = xPos + T(1,4);
-      yll = yPos + T(2,1);
-      ylr = yPos + T(2,2);
-      yur = yPos + T(2,3);
-      yul = yPos + T(2,4);
+     c1 = -xPos;
+     c2 = yPos;
+     ax = side;
+     ay = side;
+     bx = side;
+     by = -side;
+     cx = -side;
+     cy = -side;
+     dx = -side;
+     dy = side;
 
-      cornersX = [xll, xlr, xur, xul];
-      cornersY = [yll, ylr, yur, yul];
+     a = [ax;ay];
+     b = [bx;by];
+     c = [cx;cy];
+     d = [dx;dy];
 
-      ycontact = min(cornersY);
-      xcontact = cornersX(find(ycontact==cornersY)); %corresponding xcontact
-  
-      %update t
-      t = dt + t;
+     cornersX = [a(1),b(1),c(1),d(1),a(1)];
+     cornersY = [a(2),b(2),c(2),d(2),a(2)];
+
+     R = [cos(theta),sin(theta);-sin(theta),cos(theta)];
+
+     a_2 = R*a;
+     b_2 = R*b;
+     c_2 = R*c;
+     d_2 = R*d;
+
+     cornersX = [a_2(1),b_2(1),c_2(1),d_2(1),a_2(1)]+c1;
+     cornersY = [a_2(2),b_2(2),c_2(2),d_2(2),a_2(2)]+c2;
+
+     ycontact = min(cornersY);
+     xcontact = cornersX(find(ycontact==cornersY));
+    
+     %update t
+     t = dt + t;
   end
 
-  d(3) = yPos - ycontact;
-  n(3) = xPos - xcontact;
-  
+  if t > 1/250
+    n = zeros(1,3);
+    d = n;
+  else
+    d(3) = yPos - ycontact;
+    n(3) = xPos - xcontact;
+  end
 end
