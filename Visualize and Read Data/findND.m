@@ -5,10 +5,11 @@
 %           calculations.
 %           **Only finds first impact for now
 % Input: tr - trial number
+%        impact - impact to analyze
 % Output: d - tangential 
 %         n - normal
 
-function [n, d] = findND(tr)
+function [n, d] = findNDupdated(tr, impact)
 
 %load data
 traj = readtable("traj_" + tr + ".csv");    
@@ -31,7 +32,7 @@ tol = 0.00005;
 buffer = 2; %how many frames to go back
 
 
-impact1 = zeros(1, 6); %[x, y, th, vx, vy, w]
+imp = zeros(1, 6); %[x, y, th, vx, vy, w]
 
 % initialize n and d 
 n = [0, 1, 0]; %eventually [0, 1, xcom - xcontact]
@@ -50,28 +51,32 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
 
 % EXTRAPOLATE IMPACT
   count = 1;
-  while(sum(impact1)==0) %while impact vector has not been modified
+  impactCount = 0;
+  while(sum(imp)==0) %while impact vector has not been modified
       s0 = sign(vy(count));
-      if (s0 == -1) && (sign(vy(count+1)) == 1)
-          % use pre-impact data  --> FOR NOW: try going back a frame
-          impact1(1) = x(count - 2); 
-          impact1(2) = y(count - 2);
-          impact1(3) = th(count - 2);
-          impact1(4) = vx(count - 2);
-          impact1(5) = vy(count - buffer);
-          impact1(6) = w(count - buffer);
+      if (s0 == -1) && (sign(vy(count+1)) == 1) %checking for impact
+          impactCount = impactCount + 1;
+          if impact == impactCount  %checking for correct impact
+              % use pre-impact data  --> FOR NOW: try going back a frame
+              imp(1) = x(count - buffer); 
+              imp(2) = y(count - buffer);
+              imp(3) = th(count - buffer);
+              imp(4) = vx(count - buffer);
+              imp(5) = vy(count - buffer);
+              imp(6) = w(count - buffer);
+          end
       else
          %move on to next row
          count = count + 1;
       end
   end
 
-  xPos = impact1(1); %com
-  yPos = impact1(2); %com
-  theta = impact1(3);
-  xVel = impact1(4);
-  yVel = impact1(5);
-  omega = impact1(6);
+  xPos = imp(1); %com
+  yPos = imp(2); %com
+  theta = imp(3);
+  xVel = imp(4);
+  yVel = imp(5);
+  omega = imp(6);
   
   %START andy's method of calculating corners
 
@@ -156,6 +161,5 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
   else
     d(3) = yPos - ycontact;
     n(3) = xcontact - xPos;
-%     n(3) = xPos - xcontact;
   end
 end
