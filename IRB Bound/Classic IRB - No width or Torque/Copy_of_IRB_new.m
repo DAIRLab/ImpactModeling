@@ -67,6 +67,7 @@ for i = 1:Tlength
         useful(1,count) = dataSet(trial).states(3);
         useful(2,count) = abs(post(3) - pre(3));
         useful(3, count) = abs(post(3));
+        useful(4, count) = norm(post);
         
         if error*norm(post)  > 5
             badTrials  = [badTrials, i];
@@ -74,6 +75,12 @@ for i = 1:Tlength
 
     end
 end
+
+figure()
+plot(useful(4, :), errorVec, '.')
+xlabel("Norm of Post Impact Veloicty")
+ylabel("l2 Norm Velocity Error")
+
 
 avErr =  mean(errorVec, 2);
 medErr = median(errorVec);
