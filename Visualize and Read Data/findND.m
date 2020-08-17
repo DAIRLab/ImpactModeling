@@ -8,7 +8,7 @@
 % Output: d - tangential 
 %         n - normal
 
-function [n, d] = findNDupdated(tr)
+function [n, d] = findND(tr)
 
 %load data
 traj = readtable("traj_" + tr + ".csv");    
@@ -26,7 +26,10 @@ th = traj(:,3);  %Column 3: theta
 vx = traj(:,4);  %Column 4: x velocity --> constant
 vy = traj(:,5);  %Column 5: y velocity --> increasing due to gravity
 w = traj(:,6);  %Column 6: angular velocity --> assume constant ?
-tol = 0.00088; 
+% tol = 0.00088; 
+tol = 0.00005;
+buffer = 2; %how many frames to go back
+
 
 impact1 = zeros(1, 6); %[x, y, th, vx, vy, w]
 
@@ -50,13 +53,13 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
   while(sum(impact1)==0) %while impact vector has not been modified
       s0 = sign(vy(count));
       if (s0 == -1) && (sign(vy(count+1)) == 1)
-          % use pre-impact data
-          impact1(1) = x(count); 
-          impact1(2) = y(count);
-          impact1(3) = th(count);
-          impact1(4) = vx(count);
-          impact1(5) = vy(count);
-          impact1(6) = w(count);
+          % use pre-impact data  --> FOR NOW: try going back a frame
+          impact1(1) = x(count - 2); 
+          impact1(2) = y(count - 2);
+          impact1(3) = th(count - 2);
+          impact1(4) = vx(count - 2);
+          impact1(5) = vy(count - buffer);
+          impact1(6) = w(count - buffer);
       else
          %move on to next row
          count = count + 1;
@@ -105,7 +108,7 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
      xcontact = cornersX(find(ycontact==cornersY));
      
   % CALCULATE EXACT IMPACT STATE
-  while((abs(ycontact) > tol) && (t <= 1/250)) %terminate if exceeds time of a single frame
+  while((abs(ycontact) > tol) && (t <= buffer/250)) %terminate if exceeds buffer frames
      xPos = xVel*t + xPos;
      yPos = 0.5*g*(t^2) + yVel*t + yPos;
      yVel = g*t + yVel;
@@ -142,12 +145,12 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
 
      ycontact = min(cornersY);
      xcontact = cornersX(find(ycontact==cornersY));
-    
+     xcontact = xcontact(1);
      %update t
      t = dt + t;
   end
 
-  if t > 1/250 %if solution was not found, output zeros
+  if t > buffer/250 %if solution was not found, output zeros
     n = zeros(1,3);
     d = n;
   else
