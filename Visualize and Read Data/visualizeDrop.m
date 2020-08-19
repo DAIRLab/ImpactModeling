@@ -1,9 +1,9 @@
     %% Visualize the Drop angle
-    bigErr = [260,2; 268,2];
+    %bigErr = [260,2; 268,2];
     trials = 191;
     figure();
 
-for j = 2%badTrials(end)
+for j = 14%badTrials(end)
     pause(1)
     clf;
     traj = readtable("traj_"+num2str(j)+".csv");    

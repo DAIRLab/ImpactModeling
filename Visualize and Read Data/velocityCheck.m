@@ -66,28 +66,30 @@ plot(time(11:12), position_y(11:12, 1), 'k*')
 
 
 %pre-impact trend
-p1 = polyfit(time(1:11)', position_y(1:11), 1); 
-plot(time(1:11), p1(1)*time(1:11)+p1(2),'b-');
-v_pre = p1(1);
-leg1 = ['Pre Impact Trend, m = '  num2str(v_pre)];
+p1 = polyfit(time(1:11)', position_y(1:11), 2); 
+plot(time(1:11),p1(1)*(time(1:11)).^2+p1(2)*time(1:11)+p1(3),'b-');
+v_pre = 2*p1(1)*time(1:11)+p1(2);
+disp(p1)
+%leg1 = ['Pre Impact Trend, m = '  num2str(v_pre)];
 
 %post-impact trend
-p2 = polyfit(time(12:end)', position_y(12:end), 1); 
-plot(time(12:end), p2(1)*time(12:end)+p2(2), 'r-')
-v_post = p2(1);
-leg2 = ['Post Impact Trend, m = '  num2str(v_post)];
+p2 = polyfit(time(12:end)', position_y(12:end), 2);
+plot(time(12:end), p2(1)*(time(12:end)).^2+p2(2)*time(12:end)+p2(3), 'r-')
+v_post =  2*p2(1)*time(12:end)+p2(2);
+disp(p2)
+%leg2 = ['Post Impact Trend, m = '  num2str(v_post)];
 xlabel("Time [s]")
 ylabel("Y Position [m]")
 title("Y Position")
-legend('Y Positions Observed', 'Pre and Post Impact Y Positions', leg1, leg2)
+legend('Y Positions Observed', 'Pre and Post Impact Y Positions');%, leg1, leg2)
 
 %%
 subplot(2,1,2)
 hold on
 plot(time, velocities_y, 'k.');
 plot(time(11:12), velocities_y(11:12, 1), 'k*')
-plot(time(1:11), ones(11,1)*v_pre, 'b-');
-plot(time(12:end), ones(10,1)*v_post, 'r-');
+plot(time(1:11), v_pre, 'b-');
+plot(time(12:end), v_post, 'r-');
 xlabel("Time [s]")
 ylabel("Y Velocity [m/s]")
 title("Y Velocity")
