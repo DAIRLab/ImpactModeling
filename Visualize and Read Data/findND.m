@@ -5,10 +5,11 @@
 %           calculations.
 %           **Only finds first impact for now
 % Input: tr - trial number
+%        impact - impact to analyze
 % Output: d - tangential 
 %         n - normal
 
-function [n, d] = findNDupdated(tr)
+function [n, d] = findND(tr, impact)
 
 %load data
 traj = readtable("traj_" + tr + ".csv");    
@@ -17,7 +18,8 @@ traj = traj{:, :};
 
 
 side = 0.06/2; %meters
-dt = 1/10000; %seconds (must be less than 1/250 because the framerate is 250Hz)
+
+dt = 1/10000000; %seconds (must be less than 1/250 because the framerate is 250Hz)
 t = 0; %start time at 0
 g = -9.8; %m/s^2
 x = traj(:,1); %Column 1: x position
@@ -26,9 +28,12 @@ th = traj(:,3);  %Column 3: theta
 vx = traj(:,4);  %Column 4: x velocity --> constant
 vy = traj(:,5);  %Column 5: y velocity --> increasing due to gravity
 w = traj(:,6);  %Column 6: angular velocity --> assume constant ?
-tol = 0.001; 
+% tol = 0.00088; 
+tol = 0.00005;
+buffer = 2; %how many frames to go back
 
-impact1 = zeros(1, 6); %[x, y, th, vx, vy, w]
+
+imp = zeros(1, 6); %[x, y, th, vx, vy, w]
 
 % initialize n and d 
 n = [0, 1, 0]; %eventually [0, 1, xcom - xcontact]
@@ -47,32 +52,37 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
 
 % EXTRAPOLATE IMPACT
   count = 1;
-  while(sum(impact1)==0) %while impact vector has not been modified
+  impactCount = 0;
+  while(sum(imp)==0) %while impact vector has not been modified
       s0 = sign(vy(count));
-      if (s0 == -1) && (sign(vy(count+1)) == 1)
-          % use pre-impact data
-          impact1(1) = x(count); 
-          impact1(2) = y(count);
-          impact1(3) = th(count);
-          impact1(4) = vx(count);
-          impact1(5) = vy(count);
-          impact1(6) = w(count);
+      if (s0 == -1) && (sign(vy(count+1)) == 1) %checking for impact
+          impactCount = impactCount + 1;
+          if impact == impactCount  %checking for correct impact
+              % use pre-impact data  --> FOR NOW: try going back a frame
+              imp(1) = x(count - buffer); 
+              imp(2) = y(count - buffer);
+              imp(3) = th(count - buffer);
+              imp(4) = vx(count - buffer);
+              imp(5) = vy(count - buffer);
+              imp(6) = w(count - buffer);
+          end
+          count = count + 1;
       else
          %move on to next row
          count = count + 1;
       end
   end
 
-  xPos = impact1(1); %com
-  yPos = impact1(2); %com
-  theta = impact1(3);
-  xVel = impact1(4);
-  yVel = impact1(5);
-  omega = impact1(6);
+  xPos = imp(1); %com
+  yPos = imp(2); %com
+  theta = imp(3);
+  xVel = imp(4);
+  yVel = imp(5);
+  omega = imp(6);
   
   %START andy's method of calculating corners
 
-     c1 = -xPos;
+     c1 = xPos;
      c2 = yPos;
      ax = side;
      ay = side;
@@ -105,13 +115,13 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
      xcontact = cornersX(find(ycontact==cornersY));
      
   % CALCULATE EXACT IMPACT STATE
-  while((abs(ycontact) > tol) && (t <= 1/250)) %terminate if exceeds time of a single frame
+  while((abs(ycontact) > tol) && (t <= buffer/250)) %terminate if exceeds buffer frames
      xPos = xVel*t + xPos;
      yPos = 0.5*g*(t^2) + yVel*t + yPos;
      yVel = g*t + yVel;
      theta = omega*t + theta; 
       
-     c1 = -xPos;
+     c1 = xPos;
      c2 = yPos;
      ax = side;
      ay = side;
@@ -142,16 +152,16 @@ d = [1, 0, 0]; %eventually [1, 0, ycom - ycontact]
 
      ycontact = min(cornersY);
      xcontact = cornersX(find(ycontact==cornersY));
-    
+     xcontact = xcontact(1);
      %update t
      t = dt + t;
   end
 
-  if t > 1/250 %if solution was not found, output zeros
+  if t > buffer/250 %if solution was not found, output zeros
     n = zeros(1,3);
     d = n;
   else
     d(3) = yPos - ycontact;
-    n(3) = xPos - xcontact;
+    n(3) = xcontact - xPos;
   end
 end
