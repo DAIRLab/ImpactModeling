@@ -80,6 +80,7 @@ disp(avErr);
 disp(median(errorVec))
 figure()
 plot3(useful(3,:), useful(4,:), errorVec, '.')
+grid on
 xlabel("Magnitude of Post Impact Angular Velocity");
 ylabel("Norm of Post Impact Velocity")
 zlabel("l2 Norm Velocity Error");
@@ -93,8 +94,8 @@ hold on
 
 
 figure
-plot(useful(3,:), errorVec./useful(4,:), '.')
-xlabel("Norm of Post Impact Velocity")
+plot(useful(2,:), errorVec, '.')
+xlabel("Change In Angular Velocity")
 ylabel("l2 Norm Velocity Error");
 
 figure

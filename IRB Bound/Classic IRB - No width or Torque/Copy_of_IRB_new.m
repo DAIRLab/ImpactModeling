@@ -1,7 +1,7 @@
 %% Newer IRB with Square Data
 clear;
-load('squareDataPhilUpdated.mat');
-dataSet = squareDataPhilUpdated;
+load('squareDataMatt.mat');
+dataSet = squareDataMatt;
 % Set up Constants
 stepSize = 0.01;
 sl = 0.06; %side length of square from data README
