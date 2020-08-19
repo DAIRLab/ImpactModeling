@@ -155,7 +155,7 @@ for var = 1:3
         %For y position, we can't just use a simple linear fit. Instead, we
         %subtract out 1/2 g * (t - t_0)^2 to account for the parobolic
         %freelfall and then perform a linear fit
-        position = position - 9.8 * 0.5 * (time(:)- ones(length(time),1)*time(1)).^2;  
+        position = position + 9.8 * 0.5 * (time(:)- ones(length(time),1)*time(1)).^2;  
         
     end 
     
@@ -169,8 +169,8 @@ for var = 1:3
     Post(3+var) = p2(1);   
     
     if var == 2 
-        Pre(3 + var) = Pre(3 + var) + 9.8*(time(7)- time(1));
-        Post(3 + var) = Post(3 + var) + 9.8*(time(8) - time(1));
+        Pre(3 + var) = Pre(3 + var) - 9.8*(time(7)- time(1));
+        Post(3 + var) = Post(3 + var) - 9.8*(time(8) - time(1));
     end 
     
 end 
