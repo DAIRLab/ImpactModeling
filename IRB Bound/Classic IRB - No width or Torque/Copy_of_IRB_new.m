@@ -5,7 +5,7 @@ dataSet = squareDataMatt;
 % Set up Constants
 stepSize = 0.01;
 sl = 0.06; %side length of square from data README
-m1 = 0.0485; %WHAT IS THE MASS????? Right now we have an area ratio 
+m1 = 0.200; %WHAT IS THE MASS????? Right now we have an area ratio 
                                     %approximation from ellipse
 
 I1 = m1 * sl^2 / 6; %Moment of Inertia
@@ -34,7 +34,7 @@ for i = 1:Tlength
 
         J = [d;n]; %Jacobian
 
-        fun = @(P)(findError(P, Mass, J, pre, post));
+        fun = @(P)(findErrorSquare(P, Mass, J, pre, post));
         nonlcon = @(P)(constraint(P, Mass, J, pre, post));
 
         P0 = [0 0];
@@ -49,11 +49,11 @@ for i = 1:Tlength
 
         P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon, options);
 
-        error = findError(P, Mass, J, pre, post); %final error
+        error = findErrorSquare(P, Mass, J, pre, post); %final error
         predicted = pre + inv(Mass) * J' * P'; %predicted post impact state
 
         count = count  + 1;
-        errorVec(count) = error*norm(post);
+        errorVec(count) = error;
 % % 
 %         disp("Observed:")
 %         disp(post)
