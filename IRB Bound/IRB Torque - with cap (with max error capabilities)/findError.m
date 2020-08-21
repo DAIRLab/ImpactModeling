@@ -17,7 +17,7 @@ function out = findError(P, M, J, v_pre, v_post)
     
     a0 = 0.07/2; %semi-major axis
     b0 = 0.05/2; %semi-minor axis
-    Rg = sqrt(a0 * b0); %radius of gyration 
+    Rg = sqrt(a0^2 * b0^2)/2; %radius of gyration 
     
     %Find normalized Error Given observed and predicted velocities with 
     %omega scaled by the radius of gyration

@@ -99,11 +99,13 @@ plot(useful(2,:), errorVec, '.')
 xlabel("Change In Angular Velocity")
 ylabel("Scaled l2 Norm Velocity Error");
 
+
 figure
 plot(useful(1,:), errorVec, '.')
 xlabel("Pre Impact Wrapped Angle")
-ylabel("l2 Norm Velocity Error");
-xlim([-180,180]);
+ylabel("Scaled l2 Norm Velocity Error");
+
+
 
 %%
 figure()
