@@ -14,6 +14,7 @@
 \maketitle
 
 \section*{Introduction}
+After presenting, we began to incorporate some of the ideas and feedback received from the group. We also began to prepare for out meeting with Nima scheduled next week. 
 
 \section{Un-Normalized Error}
 One common question in response to our different plots is are these trends simply due to normalization? For example, in figure \ref{fig:originalPlot}, it is possible that this trend is simply due to the amplification of errors due to the small denominators when in the normalization step. If we plot the un-normalized error however, we still see the same trend (Fig \ref{fig:newerPlot}), showing that this can't be due to normalization. 
@@ -58,9 +59,10 @@ As Matt pointed out in our presentation, the linear fitting method for extractin
 \begin{align*}
     \mbox{Position Vector: } y = [y_0,\ y_1,\ ...,\ y_n] \\
     \mbox{Time Vector: } t = [t_0,\ t_1,\ ...,\ t_n] \\
-    \mbox{Filter Position Vector:  } y \pluseq \frac{1}{2}g(t-t_0)^2 \\
-    \mbox{Apply a  Linear Fit to Positions: } polyfit(t, y) = mt+ b \\
-    \mbox{Calculate Velocity: } v_*  = m - g (t_* - t_0) 
+    \mbox{Filter Position Vector:  } y_* = y +\frac{1}{2}g(t-t_0)^2 \\
+    \mbox{Apply a  Linear Fit: } polyfit(t, y_*),\ y_* = mt+ b \\
+    \mbox{Rewrite Position Vector: } y = mt + b - \frac{1}{2}g(t-t_0)^2 \\
+    \mbox{Calculate Velocity: } v(t_n)  = m - g (t_n - t_0) 
 \end{align*}
 
 
