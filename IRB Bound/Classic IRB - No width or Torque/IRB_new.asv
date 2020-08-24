@@ -5,7 +5,7 @@ load('ellipse_uniform.mat');
 % Set up Constants
 a0 = 0.07/2; %semi-major axis
 b0 = 0.05/2; %semi-minor axis
-Rg = sqrt(a0^2 + b0^2)*0.5;
+Rg = sqrt(a0 * b0);
 m1 = 0.037;
 I1 = m1 * (a0^2 + b0^2) / 4;
 highError = [];
@@ -19,7 +19,6 @@ for a = 1%:length(spacer)
     0, m1, 0;
     0, 0, I1];
     count  = 0; 
-    ct = 0;
     scale = spacer(a);
     for i = 1:Tlength
 
@@ -65,8 +64,7 @@ for a = 1%:length(spacer)
             errorVec(a, count) = error*norm([post(1:2);Rg*post(3)]);
             %noWidth(count) = abs(post(3) - predicted(3));
             if errorVec(a, count) > 1.4
-                ct = ct + 1;
-                highError(ct, :) = [i, errorVec(a, count)];
+                highError[
             end
             
             %checkNoWidth(1, count) = abs(post(3)) - abs(predicted(3));
