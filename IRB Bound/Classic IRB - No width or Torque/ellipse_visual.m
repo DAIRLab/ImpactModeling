@@ -1,4 +1,7 @@
-function [xvec,yvec] = ellipse_visual(ang,x0,y0)
+function [xvec,yvec] = ellipse_visual(vec)
+ang = vec(3);
+x0 = vec(1);
+y0 = vec(2);
 % Ellipse adds ellipses to the current plot
 %
 % ellipse_visual(ang,x0,y0) adds an ellipse with semimajor axis of ra,

@@ -33,8 +33,10 @@ for a = 1%:length(spacer)
 
             d = (bounce_array(trial).d);   %tangential
             n = (bounce_array(trial).n);   %normal
-
-            J = [d;n]; %Jacobian
+            %J = [1, 0, 0.0284;
+            %    0, 1, 0.0001];
+            %J = [d;n]; %Jacobian
+            J = getJacobian(bounce_array(trial).states(1:3));
             
             fun = @(P)(findError(P, Mass, J, pre, post));
             %fun = @(P)(findErrorScaled(P, Mass, J, pre, post, scale));
@@ -62,13 +64,13 @@ for a = 1%:length(spacer)
     %         disp("Difference: " + abs(post(3) - predicted(3)));
             %disp("Optimal Width: " + P(3));
             count = count  + 1;
-            errorVec(a, count) = error*norm([post(1:2);Rg*post(3)]);
+
+            errorVec(a, count) = error;%*norm([post(1:2);Rg*post(3)]);
             %noWidth(count) = abs(post(3) - predicted(3));
             if errorVec(a, count) > 1.4
                 ct = ct + 1;
-                highError(ct, :) = [i, errorVec(a, count)];
+                highError(ct, :) = [i];%, errorVec(a, count), P];
             end
-            
             %checkNoWidth(1, count) = abs(post(3)) - abs(predicted(3));
             %checkNoWidth(2, count) = error;
             yesWidth(1,count) = abs(post(3) - predicted(3));
@@ -83,8 +85,6 @@ end
 
 avErr =  mean(errorVec, 2);
 errorVec(1420) = 0;
-disp(avErr);
-disp(median(errorVec))
 figure()
 plot3(useful(3,:), useful(4,:), errorVec, '.')
 grid on
@@ -99,19 +99,31 @@ hold on
 
 %disp(mean(errorVec) / mean(useful(4,:)));
 
+text = "Using Our Jacobian";
 
 figure
 plot(useful(2,:), errorVec, '.')
 xlabel("Change In Angular Velocity")
 ylabel("Scaled l2 Norm Velocity Error");
-
+title(text)
 
 figure
 plot(useful(1,:), errorVec, '.')
 xlabel("Pre Impact Wrapped Angle")
 ylabel("Scaled l2 Norm Velocity Error");
+title(text)
 
-
+figure
+hold on
+plot(1:count, errorVec, '.')
+plot(linspace(1,count), ones(1,100)*median(errorVec))
+plot(linspace(1,count), ones(1,100)*mean(errorVec))
+xlabel("Trial Number")
+ylabel("Scaled l2 Norm Velocity Error");
+t1 = ["Median Error: " + num2str(median(errorVec))];
+t2 = ["Mean Error: " + num2str(mean(errorVec))];
+legend("Individual Trial Error", t1, t2);
+title(text)
 
 %%
 figure()
