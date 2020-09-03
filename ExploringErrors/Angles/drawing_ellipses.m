@@ -4,10 +4,10 @@
 load('ellipse_uniform.mat');
 
 %trial number to draw
-trial = 2;
+trial = 1086;
 
 %set up pre-impact ellipse
-ang = bounce_array(trial).states(3);
+ang = bounce_array(trial).states(3) + deg2rad(1);
 x0 = bounce_array(trial).states(1);
 y0 = bounce_array(trial).states(2);
 d = (bounce_array(trial).d);   %tangential

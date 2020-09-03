@@ -24,5 +24,5 @@ function out = findError(P, M, J, v_pre, v_post)
     %omega scaled by the radius of gyration
     v_post_scaled = [v_post(1:2); Rg * v_post(3)];
     predicted_scaled = [predicted(1:2); Rg * predicted(3)];
-    out = norm(v_post_scaled - predicted_scaled)/norm(v_post_scaled);
+    out = norm(v_post_scaled - predicted_scaled);%/norm(v_post_scaled);
 end

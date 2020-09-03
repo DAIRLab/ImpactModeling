@@ -1,4 +1,7 @@
-function [xvec,yvec] = ellipse_visual(ang,x0,y0,C)
+function [xvec,yvec] = ellipse_visual(vec)
+x0 = vec(1);
+y0 = vec(2);
+ang = vec(3);
 % Ellipse adds ellipses to the current plot
 %
 % ellipse_visual(ang,x0,y0) adds an ellipse with semimajor axis of ra,
@@ -8,12 +11,12 @@ function [xvec,yvec] = ellipse_visual(ang,x0,y0,C)
 % ra and rb are already pre-established as ra = 0.035 and rb = 0.025
 %
 % h=ellipse_visual(...) returns the handles to the ellipses.
-
+figure;
+hold on 
 % Setting up variables
 ra = 0.035;
 rb = 0.025;
 Nb = 1000;
-if isstr(C),C=C(:);end;
  
 % work on the variable sizes
 x0=x0(:);
@@ -22,7 +25,6 @@ ra=ra(:);
 rb=rb(:);
 ang=ang(:);
 Nb=Nb(:);
-if isstr(C),C=C(:);end;
 if length(ra)~=length(rb),
   error('length(ra)~=length(rb)');
 end;
@@ -64,7 +66,7 @@ for k=1:maxk
     ypos=y0(k);
     radm=ra(k);
     radn=rb(k);
-    an=ang(k)
+    an=ang(k);
   else
     rada=ra(fix((k-1)/size(x0,1))+1);
     radb=rb(fix((k-1)/size(x0,1))+1);
@@ -81,10 +83,11 @@ for k=1:maxk
   p=line(radm*cos(the)*co-si*radn*sin(the)+xpos,radm*cos(the)*si+co*radn*sin(the)+ypos);
   xvec = [radm*cos(the)*co-si*radn*sin(the)+xpos, xvec];
   yvec = [radm*cos(the)*si+co*radn*sin(the)+ypos, yvec];
-  set(p,'color',C(rem(k-1,size(C,1))+1,:));
   axis equal
   if nargout > 0
     h(k)=p;
   end
-  
+  hold on 
+  plot(ones(1, 100)*x0, linspace(0, 0.07));
+  plot(xvec(yvec == min(yvec)), min(yvec), 'r*');
 end;

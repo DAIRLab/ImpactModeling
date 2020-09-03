@@ -24,11 +24,12 @@ Mass = [m1, 0, 0;
 count = 0;
 Tlength = length(highError);
 percentages = -0.01:0.001:0.01;
+angles = 0;%linspace(-0.0174533, 0.0174533, 20);
 
-for i = 1:Tlength
+for i = 241%1:Tlength
 
         %Select trial
-        trial = highError(i, 1);
+        trial = 241;%highError(i, 1);
         
         if sum(bounce_array(trial).flags) < 1
             minError = 100; 
@@ -36,15 +37,15 @@ for i = 1:Tlength
             pre = bounce_array(trial).states(4:6)';
             post = bounce_array(trial).states(10:12)';
 
-            for j = 1:length(percentages)
+            for j = 1:length(angles)
                 
                 %Find jacobian using Andy's method and updated angle (from
                 %percentages)
-                angle = bounce_array(trial).states(3) + ... 
-                    percentages(j) * bounce_array(trial).states(3);
+%                 angle = bounce_array(trial).states(3) + ... 
+%                     percentages(j) * bounce_array(trial).states(3
+                angle = bounce_array(trial).states(3) + angles(j);
                 
-                J = getJacobian(bounce_array(trial).states(1), ...
-                bounce_array(trial).states(2), angle);
+                J = getJacobian([bounce_array(trial).states(1:2), angle]);
 
                 
                 %Run IRB model with certian Jacobian
@@ -63,12 +64,18 @@ for i = 1:Tlength
 
                 P = fmincon(fun, P0, A, b, Aeq, beq, lb, ub, nonlcon, options);
 
-                normError = findError(P, Mass, J, pre, post);
-                error = normError*norm([post(1:2);Rg*post(3)]);
+                error = findError(P, Mass, J, pre, post);
                 
                 if (error < minError)
-                    bestPercentage = percentages(j);
+                    bestPercentage = angles(j);
                     minError = error;
+                    disp("Best P")
+                    disp(P)
+                    disp("Lowest Error")
+                    disp(error)
+                    bestPredicted = pre + inv(Mass) * J' * P';
+                    bestJ = J;
+                    bestA = angle;
                 end
                 
                 
@@ -86,4 +93,4 @@ plot(1:count, out(:, 2),'.');
 plot(1:count, out(:, 3), '.');
 xlabel("Trial")
 ylabel("Scaled l2 Norm Velocity Error");
-legend("Original Error (Classic IRB)", "New Error with up to +/-1% Change in Angle")
+legend("Original Error (Classic IRB)", "New Error with up to +/- 1 Degree Change in Angle")
